@@ -1,0 +1,28 @@
+# ==========================================================
+# EstateHub — Configuration Template
+# Copy this file to config.properties and fill in your real values.
+# NEVER commit real credentials to version control.
+# ==========================================================
+
+# Database Configuration (MySQL 8)
+DB_DRIVER=com.mysql.cj.jdbc.Driver
+DB_URL=jdbc:mysql://localhost:3306/real_estate_marketplace?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+DB_USER=root
+DB_PASS=your_secure_mysql_password
+DB_POOL_MIN_IDLE=5
+DB_POOL_MAX_TOTAL=20
+
+# Gmail SMTP Configuration (For OTP & Notifications)
+# Note: For Gmail, generate a 16-character App Password from Google Account > Security > 2-Step Verification > App Passwords
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_AUTH=true
+SMTP_STARTTLS=true
+SMTP_EMAIL=your_email@gmail.com
+SMTP_APP_PASSWORD=your_16_char_gmail_app_password
+SMTP_FROM_NAME=EstateHub Notifications
+
+# Application URLs & Upload Directories
+APP_BASE_URL=http://localhost:8080/EstateHub
+UPLOAD_BASE_DIR=/var/estatehub/uploads
+UPLOAD_MAX_FILE_SIZE_MB=10

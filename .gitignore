@@ -1,0 +1,27 @@
+# Compiled class files
+target/
+*.class
+
+# Log files
+*.log
+logs/
+
+# Secrets and local config files
+src/main/resources/config.properties
+.env
+.env.local
+
+# IDE & Editor files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Uploaded user files
+uploads/
