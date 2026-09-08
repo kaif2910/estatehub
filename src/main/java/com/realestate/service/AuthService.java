@@ -102,7 +102,7 @@ public class AuthService {
                 user.setStatus(User.Status.ACTIVE);
                 
                 // Register the admin in the database so foreign keys work!
-                userDAO.registerUser(user);
+                userDAO.createUser(user);
                 user = userDAO.findByEmail(email); // Fetch again to get the real auto-incremented userId
             } else {
                 return new AuthResult(false, "No account found with this email address", null);
