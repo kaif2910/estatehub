@@ -21,41 +21,25 @@ public class DBConnection {
     static {
         try {
             Dotenv dotenv = null;
-            // 1. Try standard OS Environment Variables first (Railway, Render, etc.)
-            String envUrl = System.getenv("DB_URL");
-            String envUser = System.getenv("DB_USER");
-            String envPass = System.getenv("DB_PASS");
-
-            if (envUrl != null && !envUrl.isEmpty()) {
-                dbUrl = envUrl;
-                dbUser = envUser;
-                dbPass = envPass;
-            } else {
-                try {
-                    // Try to find .env by traversing up from user.dir
-                    java.io.File currentDir = new java.io.File(System.getProperty("user.dir")).getAbsoluteFile();
-                    while (currentDir != null) {
-                        java.io.File envFile = new java.io.File(currentDir, ".env");
-                        if (envFile.exists()) {
-                            dotenv = Dotenv.configure().directory(currentDir.getAbsolutePath()).ignoreIfMissing().load();
-                            break;
-                        }
-                        currentDir = currentDir.getParentFile();
+            // Try to find .env by traversing up from user.dir (local development only)
+            try {
+                java.io.File currentDir = new java.io.File(System.getProperty("user.dir")).getAbsoluteFile();
+                while (currentDir != null) {
+                    java.io.File envFile = new java.io.File(currentDir, ".env");
+                    if (envFile.exists()) {
+                        dotenv = Dotenv.configure().directory(currentDir.getAbsolutePath()).ignoreIfMissing().load();
+                        break;
                     }
-                    if (dotenv == null) {
-                        dotenv = Dotenv.configure().ignoreIfMissing().load();
-                    }
-                    if (dotenv.get("DB_URL") != null) {
-                        dbUrl = dotenv.get("DB_URL");
-                        dbUser = dotenv.get("DB_USER");
-                        dbPass = dotenv.get("DB_PASS");
-                    }
-                } catch (Exception e) {
-                    LOGGER.log(Level.INFO, "No local .env file found, proceeding with defaults");
+                    currentDir = currentDir.getParentFile();
                 }
+                if (dotenv == null) {
+                    dotenv = Dotenv.configure().ignoreIfMissing().load();
+                }
+            } catch (Exception e) {
+                LOGGER.log(Level.INFO, "No local .env file found, proceeding with env vars/defaults");
             }
 
-            // 1. Helper to fetch non-empty value from Env Vars -> Dotenv -> config.properties
+            // Helper to fetch non-empty value from Env Vars -> Dotenv -> config.properties
             String envUrl = getEnvValue("DB_URL", "DATABASE_URL", "MYSQL_URL", dotenv);
             String envUser = getEnvValue("DB_USER", "MYSQLUSER", "DB_USERNAME", dotenv);
             String envPass = getEnvValue("DB_PASS", "DB_PASSWORD", "MYSQLPASSWORD", dotenv);
