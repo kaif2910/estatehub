@@ -52,16 +52,11 @@ public class LoginServlet extends HttpServlet {
             }
 
             if (!user.isEmailVerified()) {
-                com.realestate.service.OtpService otpService = new com.realestate.service.OtpService();
-                otpService.generateAndSendOtp(user, "REGISTRATION");
-                
-                session.setAttribute("pendingOtpUserId", user.getUserId());
-                session.setAttribute("pendingOtpEmail", user.getEmail());
-                session.setAttribute("pendingOtpName", user.getName());
-                session.setAttribute("successMessage", "First time login requires Email OTP verification. Please enter the code sent to your email.");
-                
-                response.sendRedirect(request.getContextPath() + "/views/otp-verify.jsp");
-                return;
+                com.realestate.dao.UserDAO userDAO = new com.realestate.dao.UserDAO();
+                user.setEmailVerified(true);
+                user.setVerificationStatus(User.VerificationStatus.VERIFIED);
+                userDAO.setEmailVerified(user.getUserId(), true);
+                userDAO.updateUserVerificationStatus(user.getUserId(), User.VerificationStatus.VERIFIED, "Auto-verified on login");
             }
 
             session.setAttribute("currentUser", user);
