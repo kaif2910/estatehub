@@ -95,11 +95,17 @@
         <c:remove var="successMessage" scope="session"/>
     </div>
 </c:if>
+<div class="mb-4 p-3 rounded-lg bg-purple-50 border border-purple-200 text-purple-900 text-center font-label-md text-label-md w-full flex flex-col items-center gap-1">
+    <div class="flex items-center gap-1.5 font-bold text-purple-700">
+        <span class="material-symbols-outlined text-[18px]">key</span>
+        <span>Demo Verification OTP Code: <code class="bg-purple-200 text-purple-950 px-2 py-0.5 rounded tracking-widest text-base font-bold">123456</code></span>
+    </div>
+    <span class="text-xs text-purple-700">You can enter <strong>123456</strong> or your email OTP to verify instantly.</span>
+</div>
+
 <form class="w-full flex flex-col items-center" id="otp-form" action="${pageContext.request.contextPath}/verify-otp" method="POST">
 <input type="hidden" name="email" value="${not empty sessionScope.pendingOtpEmail ? sessionScope.pendingOtpEmail : sessionScope.otpEmail}" />
-<!-- Use a single input for simplicity with the backend, hide the digit boxes or adapt them -->
-<!-- We'll adapt it to standard single input for robustness, styled to match the look or keep the 6 boxes and combine them on submit -->
-<input type="text" name="otpCode" class="w-full h-14 text-center font-headline-xl text-headline-xl text-on-surface bg-surface-container-lowest rounded-lg shadow-md transition-all outline-none ring-2 ring-primary-container mb-gutter-md" placeholder="Enter 6-digit OTP" maxlength="6" required />
+<input type="text" name="otpCode" class="w-full h-14 text-center font-headline-xl text-headline-xl text-on-surface bg-surface-container-lowest rounded-lg shadow-md transition-all outline-none ring-2 ring-primary-container mb-gutter-md" placeholder="123456" value="123456" maxlength="6" required />
 
 <div class="w-full flex items-center justify-between py-2 px-3 rounded-lg bg-surface-container-low mb-gutter-md">
 <div class="flex items-center gap-2">
@@ -111,7 +117,7 @@
 </div>
 <div class="flex items-center gap-1 text-tertiary-container">
 <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">lock</span>
-<span class="font-caption text-caption font-semibold">Gmail 2FA Secured</span>
+<span class="font-caption text-caption font-semibold">Demo Code Supported</span>
 </div>
 </div>
 <div class="w-full flex flex-col gap-gutter-sm mb-gutter-lg">

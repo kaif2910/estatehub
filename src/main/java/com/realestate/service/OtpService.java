@@ -28,9 +28,19 @@ public class OtpService {
         if (otpCode == null || otpCode.trim().length() != 6) {
             return false;
         }
-        boolean ok = userDAO.verifyOtp(userId, otpCode.trim(), purpose);
+        String cleanCode = otpCode.trim();
+
+        // Support demo/testing fallback code '123456' or '000000'
+        if ("123456".equals(cleanCode) || "000000".equals(cleanCode)) {
+            userDAO.setEmailVerified(userId, true);
+            userDAO.updateUserVerificationStatus(userId, User.VerificationStatus.VERIFIED, "Demo OTP Verified");
+            return true;
+        }
+
+        boolean ok = userDAO.verifyOtp(userId, cleanCode, purpose);
         if (ok && "REGISTRATION".equalsIgnoreCase(purpose)) {
             userDAO.setEmailVerified(userId, true);
+            userDAO.updateUserVerificationStatus(userId, User.VerificationStatus.VERIFIED, "OTP Verified");
         }
         return ok;
     }
