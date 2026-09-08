@@ -66,10 +66,17 @@
           Join India's trusted network of verified home buyers, verified sellers, and certified brokers.
         </p>
 </div>
+<c:if test="${not empty errorMessage}">
+    <div class="p-3 mb-2 rounded-lg bg-error-container text-on-error-container font-label-md text-label-md flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">error</span>
+        ${errorMessage}
+    </div>
+</c:if>
 <c:if test="${not empty sessionScope.errorMessage}">
     <div class="p-3 mb-2 rounded-lg bg-error-container text-on-error-container font-label-md text-label-md flex items-center gap-2">
         <span class="material-symbols-outlined text-[18px]">error</span>
         ${sessionScope.errorMessage}
+        <c:remove var="errorMessage" scope="session"/>
     </div>
 </c:if>
 <!-- Segmented Role Selector -->
