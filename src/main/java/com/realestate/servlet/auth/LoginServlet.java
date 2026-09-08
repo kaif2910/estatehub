@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet {
             
             if (user.getRole() == User.Role.ADMIN) {
                 com.realestate.service.OtpService otpService = new com.realestate.service.OtpService();
-                otpService.generateAndSendOtp(user, "ADMIN_LOGIN");
+                otpService.generateAndSendOtp(user, "REGISTRATION");
                 
                 session.setAttribute("pendingAdminUserId", user.getUserId());
                 session.setAttribute("pendingAdminEmail", user.getEmail());

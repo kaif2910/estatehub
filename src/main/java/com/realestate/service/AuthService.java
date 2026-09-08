@@ -91,14 +91,19 @@ public class AuthService {
 
         User user = userDAO.findByEmail(email);
         if (user == null) {
-            if ("admin@estatehub.com".equalsIgnoreCase(email) || "kaif282907@gmail.com".equalsIgnoreCase(email)) {
+            if ("admin@estatehub.com".equalsIgnoreCase(email) || "kaif282907@gmail.com".equalsIgnoreCase(email) || "propertywallah28@gmail.com".equalsIgnoreCase(email)) {
                 user = new User();
-                user.setUserId(1);
                 user.setName("EstateHub Admin");
                 user.setEmail(email.toLowerCase().trim());
+                user.setPassword("admin_placeholder_password");
+                user.setPhone("0000000000");
+                user.setWhatsappNumber("0000000000");
                 user.setRole(User.Role.ADMIN);
                 user.setStatus(User.Status.ACTIVE);
-                user.setVerificationStatus(User.VerificationStatus.VERIFIED);
+                
+                // Register the admin in the database so foreign keys work!
+                userDAO.registerUser(user);
+                user = userDAO.findByEmail(email); // Fetch again to get the real auto-incremented userId
             } else {
                 return new AuthResult(false, "No account found with this email address", null);
             }
