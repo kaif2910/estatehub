@@ -19,14 +19,27 @@ public class DBConnection {
 
     static {
         try {
-            Dotenv dotenv = Dotenv.configure()
-                                  .directory("C:\\Users\\admin\\OneDrive\\Desktop\\sem1\\EstateHub")
-                                  .ignoreIfMissing()
-                                  .load();
-            if (dotenv.get("DB_URL") != null) {
-                dbUrl = dotenv.get("DB_URL");
-                dbUser = dotenv.get("DB_USER");
-                dbPass = dotenv.get("DB_PASS");
+            // 1. Try standard OS Environment Variables first (Railway, Render, etc.)
+            String envUrl = System.getenv("DB_URL");
+            String envUser = System.getenv("DB_USER");
+            String envPass = System.getenv("DB_PASS");
+
+            if (envUrl != null && !envUrl.isEmpty()) {
+                dbUrl = envUrl;
+                dbUser = envUser;
+                dbPass = envPass;
+            } else {
+                // 2. Try Dotenv for local development without hardcoding Windows paths
+                try {
+                    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+                    if (dotenv.get("DB_URL") != null) {
+                        dbUrl = dotenv.get("DB_URL");
+                        dbUser = dotenv.get("DB_USER");
+                        dbPass = dotenv.get("DB_PASS");
+                    }
+                } catch (Exception e) {
+                    LOGGER.log(Level.INFO, "No local .env file found, proceeding with defaults");
+                }
             }
             
             // Fallback to config.properties if not in env

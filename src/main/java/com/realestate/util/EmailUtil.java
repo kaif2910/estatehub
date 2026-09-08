@@ -21,12 +21,10 @@ public class EmailUtil {
 
     static {
         try {
-            dotenv = Dotenv.configure()
-                           .directory("C:\\Users\\admin\\OneDrive\\Desktop\\sem1\\EstateHub")
-                           .ignoreIfMissing()
-                           .load();
+            // Do not hardcode path, just use local directory for dev if it exists
+            dotenv = Dotenv.configure().ignoreIfMissing().load();
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Could not load .env", e);
+            LOGGER.log(Level.INFO, "No local .env file found for EmailUtil");
         }
         
         try (InputStream input = EmailUtil.class.getClassLoader().getResourceAsStream("config.properties")) {
@@ -39,9 +37,16 @@ public class EmailUtil {
     }
 
     private static String getSecret(String key, String defaultValue) {
-        if (dotenv != null && dotenv.get(key) != null) {
+        // 1. Try OS Environment Variables first
+        String sysEnv = System.getenv(key);
+        if (sysEnv != null && !sysEnv.isEmpty()) {
+            return sysEnv;
+        }
+        // 2. Try Dotenv for local dev
+        if (dotenv != null && dotenv.get(key) != null && !dotenv.get(key).isEmpty()) {
             return dotenv.get(key);
         }
+        // 3. Fallback to default
         return configProps.getProperty(key, defaultValue);
     }
 
