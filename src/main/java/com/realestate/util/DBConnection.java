@@ -19,6 +19,7 @@ public class DBConnection {
 
     static {
         try {
+            Dotenv dotenv = null;
             // 1. Try standard OS Environment Variables first (Railway, Render, etc.)
             String envUrl = System.getenv("DB_URL");
             String envUser = System.getenv("DB_USER");
@@ -31,7 +32,7 @@ public class DBConnection {
             } else {
                 // 2. Try Dotenv for local development without hardcoding Windows paths
                 try {
-                    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+                    dotenv = Dotenv.configure().ignoreIfMissing().load();
                     if (dotenv.get("DB_URL") != null) {
                         dbUrl = dotenv.get("DB_URL");
                         dbUser = dotenv.get("DB_USER");
@@ -46,9 +47,15 @@ public class DBConnection {
             try (InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("config.properties")) {
                 if (input != null) {
                     properties.load(input);
-                    if (dotenv.get("DB_URL") == null) dbUrl = properties.getProperty("DB_URL", dbUrl);
-                    if (dotenv.get("DB_USER") == null) dbUser = properties.getProperty("DB_USER", dbUser);
-                    if (dotenv.get("DB_PASS") == null) dbPass = properties.getProperty("DB_PASS", dbPass);
+                    if (System.getenv("DB_URL") == null && (dotenv == null || dotenv.get("DB_URL") == null)) {
+                        dbUrl = properties.getProperty("DB_URL", dbUrl);
+                    }
+                    if (System.getenv("DB_USER") == null && (dotenv == null || dotenv.get("DB_USER") == null)) {
+                        dbUser = properties.getProperty("DB_USER", dbUser);
+                    }
+                    if (System.getenv("DB_PASS") == null && (dotenv == null || dotenv.get("DB_PASS") == null)) {
+                        dbPass = properties.getProperty("DB_PASS", dbPass);
+                    }
                     String driver = properties.getProperty("DB_DRIVER", "com.mysql.cj.jdbc.Driver");
                     Class.forName(driver);
                 } else {
