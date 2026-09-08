@@ -65,12 +65,14 @@ public class EmailUtil {
      * Sends an HTML email using Gmail SMTP or logs to console if credentials not provided
      */
     public static boolean sendEmail(String recipientEmail, String subject, String htmlContent) {
-        final String brevoApiKey = getSecret("BREVO_API_KEY", "");
+        final String smtpHost = getSecret("SMTP_HOST", "smtp.gmail.com");
+        final String smtpPort = getSecret("SMTP_PORT", "587");
         final String smtpEmail = getSecret("SMTP_EMAIL", "");
+        final String smtpPassword = getSecret("SMTP_APP_PASSWORD", "");
         final String fromName = getSecret("SMTP_FROM_NAME", "EstateHub Support");
 
         // If credentials are not configured, simulate delivery in development/demo mode
-        if (brevoApiKey.isEmpty() || smtpEmail.isEmpty() || smtpEmail.contains("your_email")) {
+        if (smtpEmail.isEmpty() || smtpPassword.isEmpty() || smtpEmail.contains("your_email")) {
             LOGGER.info("[SIMULATED EMAIL DISPATCH]");
             LOGGER.info("To: " + recipientEmail);
             LOGGER.info("Subject: " + subject);
@@ -79,47 +81,33 @@ public class EmailUtil {
         }
 
         try {
-            // Build simple JSON payload manually to avoid extra dependencies
-            String jsonPayload = "{"
-                    + "\"sender\": {\"name\": \"" + escapeJson(fromName) + "\", \"email\": \"" + escapeJson(smtpEmail) + "\"},"
-                    + "\"to\": [{\"email\": \"" + escapeJson(recipientEmail) + "\"}],"
-                    + "\"subject\": \"" + escapeJson(subject) + "\","
-                    + "\"htmlContent\": \"" + escapeJson(htmlContent) + "\""
-                    + "}";
+            Properties props = new Properties();
+            props.put("mail.smtp.host", smtpHost);
+            props.put("mail.smtp.port", smtpPort);
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
-            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
-                    .uri(java.net.URI.create("https://api.brevo.com/v3/smtp/email"))
-                    .header("Accept", "application/json")
-                    .header("Content-Type", "application/json")
-                    .header("api-key", brevoApiKey)
-                    .POST(java.net.http.HttpRequest.BodyPublishers.ofString(jsonPayload))
-                    .build();
+            Session session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(smtpEmail, smtpPassword);
+                }
+            });
 
-            java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
-            java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(smtpEmail, fromName));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
+            message.setSubject(subject, "UTF-8");
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
 
-            if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                LOGGER.info("Email successfully sent via Brevo API to " + recipientEmail);
-                return true;
-            } else {
-                LOGGER.severe("Failed to send email via Brevo API. Status: " + response.statusCode() + " Response: " + response.body());
-                return false;
-            }
+            Transport.send(message);
+            LOGGER.info("Email successfully sent to " + recipientEmail);
+            return true;
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Exception occurred while sending email via Brevo API to " + recipientEmail + ": " + e.getMessage(), e);
+            LOGGER.log(Level.SEVERE, "Failed to send email via SMTP to " + recipientEmail + ": " + e.getMessage(), e);
             return false;
         }
-    }
-
-    private static String escapeJson(String input) {
-        if (input == null) return "";
-        return input.replace("\\", "\\\\")
-                    .replace("\"", "\\\"")
-                    .replace("\b", "\\b")
-                    .replace("\f", "\\f")
-                    .replace("\n", "\\n")
-                    .replace("\r", "\\r")
-                    .replace("\t", "\\t");
     }
 
     /**
