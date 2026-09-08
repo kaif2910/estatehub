@@ -105,11 +105,7 @@
 
 <form class="w-full flex flex-col items-center" id="otp-form" action="${pageContext.request.contextPath}/verify-otp" method="POST">
 <input type="hidden" name="email" value="${not empty sessionScope.pendingOtpEmail ? sessionScope.pendingOtpEmail : sessionScope.otpEmail}" />
-<<<<<<< Updated upstream
-<input type="text" name="otpCode" class="w-full h-14 text-center font-headline-xl text-headline-xl text-on-surface bg-surface-container-lowest rounded-lg shadow-md transition-all outline-none ring-2 ring-primary-container mb-gutter-md" placeholder="123456" value="123456" maxlength="6" required />
-=======
 <input type="text" name="otpCode" class="w-full h-14 text-center font-headline-xl text-headline-xl text-on-surface bg-surface-container-lowest rounded-lg shadow-md transition-all outline-none ring-2 ring-primary-container mb-gutter-md" placeholder="Enter 6-digit OTP (or 123456)" maxlength="6" required />
->>>>>>> Stashed changes
 
 <div class="w-full flex items-center justify-between py-2 px-3 rounded-lg bg-surface-container-low mb-gutter-md">
 <div class="flex items-center gap-2">

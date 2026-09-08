@@ -21,12 +21,6 @@ public class DBConnection {
     static {
         try {
             Dotenv dotenv = null;
-<<<<<<< Updated upstream
-            try {
-                dotenv = Dotenv.configure().ignoreIfMissing().load();
-            } catch (Exception e) {
-                LOGGER.log(Level.INFO, "No local .env file found, proceeding with env/config");
-=======
             // 1. Try standard OS Environment Variables first (Railway, Render, etc.)
             String envUrl = System.getenv("DB_URL");
             String envUser = System.getenv("DB_USER");
@@ -37,7 +31,6 @@ public class DBConnection {
                 dbUser = envUser;
                 dbPass = envPass;
             } else {
-                // 2. Try Dotenv for local development without hardcoding Windows paths
                 try {
                     // Try to find .env by traversing up from user.dir
                     java.io.File currentDir = new java.io.File(System.getProperty("user.dir")).getAbsoluteFile();
@@ -60,7 +53,6 @@ public class DBConnection {
                 } catch (Exception e) {
                     LOGGER.log(Level.INFO, "No local .env file found, proceeding with defaults");
                 }
->>>>>>> Stashed changes
             }
 
             // 1. Helper to fetch non-empty value from Env Vars -> Dotenv -> config.properties

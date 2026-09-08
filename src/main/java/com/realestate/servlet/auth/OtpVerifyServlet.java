@@ -33,10 +33,7 @@ public class OtpVerifyServlet extends HttpServlet {
         Integer adminUserId = (session != null) ? (Integer) session.getAttribute("pendingAdminUserId") : null;
         
         Integer userId = (adminUserId != null) ? adminUserId : regUserId;
-<<<<<<< Updated upstream
-        // Use REGISTRATION for both to avoid MySQL ENUM Data Truncation Error
-=======
->>>>>>> Stashed changes
+// Use REGISTRATION for both to avoid MySQL ENUM Data Truncation Error
         String purpose = "REGISTRATION";
         
         String otpCode = request.getParameter("otpCode");
