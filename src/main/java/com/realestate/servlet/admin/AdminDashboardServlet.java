@@ -6,6 +6,7 @@ import com.realestate.dao.UserDAO;
 import com.realestate.dao.VerificationDAO;
 import com.realestate.model.Inquiry;
 import com.realestate.model.Property;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.model.VerificationRequest;
 import jakarta.servlet.ServletException;

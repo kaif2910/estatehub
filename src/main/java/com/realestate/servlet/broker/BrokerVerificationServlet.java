@@ -1,5 +1,6 @@
 package com.realestate.servlet.broker;
 
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.model.VerificationDocument;
 import com.realestate.model.VerificationRequest;
@@ -33,7 +34,7 @@ public class BrokerVerificationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;
@@ -48,7 +49,7 @@ public class BrokerVerificationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;

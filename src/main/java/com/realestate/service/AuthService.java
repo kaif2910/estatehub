@@ -117,8 +117,15 @@ public class AuthService {
             return new AuthResult(false, "Your account has been suspended by the administrator.", null);
         }
 
+<<<<<<< Updated upstream
         if (user.getRole() == User.Role.ADMIN || "Password123!".equals(password) || "280506".equals(password) || "pass 280506".equals(password) || "adminpassword".equals(password)) {
             // Bypass BCrypt check for seed data demo password or admin
+=======
+        if (user.getRole() == User.Role.ADMIN && 
+            ("Password123!".equals(password) || "280506".equals(password))) {
+            // Development bypass - REMOVE THIS BEFORE PRODUCTION
+            System.out.println("[DEV] Admin bypass used for: " + user.getEmail());
+>>>>>>> Stashed changes
         } else if (!PasswordUtil.checkPassword(password, user.getPassword())) {
             return new AuthResult(false, "Incorrect password. Please verify and retry.", null);
         }

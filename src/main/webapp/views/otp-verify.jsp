@@ -105,7 +105,11 @@
 
 <form class="w-full flex flex-col items-center" id="otp-form" action="${pageContext.request.contextPath}/verify-otp" method="POST">
 <input type="hidden" name="email" value="${not empty sessionScope.pendingOtpEmail ? sessionScope.pendingOtpEmail : sessionScope.otpEmail}" />
+<<<<<<< Updated upstream
 <input type="text" name="otpCode" class="w-full h-14 text-center font-headline-xl text-headline-xl text-on-surface bg-surface-container-lowest rounded-lg shadow-md transition-all outline-none ring-2 ring-primary-container mb-gutter-md" placeholder="123456" value="123456" maxlength="6" required />
+=======
+<input type="text" name="otpCode" class="w-full h-14 text-center font-headline-xl text-headline-xl text-on-surface bg-surface-container-lowest rounded-lg shadow-md transition-all outline-none ring-2 ring-primary-container mb-gutter-md" placeholder="Enter 6-digit OTP (or 123456)" maxlength="6" required />
+>>>>>>> Stashed changes
 
 <div class="w-full flex items-center justify-between py-2 px-3 rounded-lg bg-surface-container-low mb-gutter-md">
 <div class="flex items-center gap-2">
@@ -134,13 +138,10 @@
 <span class="font-label-sm text-label-sm font-bold text-primary-container tracking-wider" id="countdown-timer">00:42</span>
 </div>
 </div>
-<form action="${pageContext.request.contextPath}/verify-otp" method="POST" class="w-full">
-  <input type="hidden" name="resend" value="true"/>
-  <button class="w-full py-2.5 px-3 rounded-lg bg-surface-container-high text-outline font-label-md text-label-md cursor-not-allowed flex items-center justify-center gap-1.5 transition-colors" disabled="" id="resend-email-btn" type="submit">
-    <span class="material-symbols-outlined text-[18px]">mark_email_unread</span>
-    <span>Resend Email OTP</span>
-  </button>
-</form>
+<button class="w-full py-2.5 px-3 rounded-lg bg-surface-container-high text-outline font-label-md text-label-md cursor-not-allowed flex items-center justify-center gap-1.5 transition-colors" disabled="" id="resend-email-btn" type="submit" name="resend" value="true">
+  <span class="material-symbols-outlined text-[18px]">mark_email_unread</span>
+  <span>Resend Email OTP</span>
+</button>
 </div>
 <button class="w-full py-3.5 px-gutter-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group" type="submit">
 <span>Verify &amp; Continue</span>

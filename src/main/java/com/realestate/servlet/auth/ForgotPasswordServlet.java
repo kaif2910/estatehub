@@ -1,6 +1,7 @@
 package com.realestate.servlet.auth;
 
 import com.realestate.dao.UserDAO;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.service.OtpService;
 import jakarta.servlet.ServletException;
@@ -41,13 +42,18 @@ public class ForgotPasswordServlet extends HttpServlet {
             return;
         }
 
-        otpService.generateAndSendOtp(user, "PASSWORD_RESET");
-        
-        HttpSession session = request.getSession(true);
-        session.setAttribute("resetUserId", user.getUserId());
-        session.setAttribute("resetEmail", user.getEmail());
-        session.setAttribute("successMessage", "Password reset OTP sent successfully!");
-        
-        response.sendRedirect(request.getContextPath() + "/views/reset-password.jsp");
+        String resetToken = java.util.UUID.randomUUID().toString();
+        long expiresAt = System.currentTimeMillis() + (30 * 60 * 1000); // 30 minutes
+        userDAO.updateResetToken(user.getUserId(), resetToken, expiresAt);
+
+        String resetLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/reset-password?token=" + resetToken;
+        String subject = "EstateHub Password Reset";
+        String htmlBody = "<p>Hello " + user.getName() + ",</p>" +
+                          "<p>Click the link below to reset your password. It is valid for 30 minutes.</p>" +
+                          "<p><a href='" + resetLink + "'>Reset Password</a></p>";
+        com.realestate.util.EmailUtil.sendEmail(user.getEmail(), subject, htmlBody);
+
+        request.setAttribute("successMessage", "Password reset link sent successfully! Please check your email.");
+        request.getRequestDispatcher("/views/forgot-password.jsp").forward(request, response);
     }
 }

@@ -55,7 +55,14 @@ public class SearchServlet extends HttpServlet {
         Integer bathrooms = parseInteger(bathroomsStr);
         BigDecimal minArea = parseBigDecimal(minAreaStr);
         BigDecimal maxArea = parseBigDecimal(maxAreaStr);
-        int page = pageStr != null ? Math.max(1, Integer.parseInt(pageStr)) : 1;
+        int page = 1;
+        if (pageStr != null) {
+            try {
+                page = Math.max(1, Integer.parseInt(pageStr));
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
+        }
         int pageSize = 12;
 
         List<Property> properties = propertyDAO.searchProperties(

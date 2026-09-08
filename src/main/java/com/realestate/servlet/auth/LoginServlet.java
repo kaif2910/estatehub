@@ -1,5 +1,6 @@
 package com.realestate.servlet.auth;
 
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.service.AuthService;
 import jakarta.servlet.ServletException;
@@ -18,17 +19,28 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("currentUser") != null) {
-            redirectBasedOnRole((User) session.getAttribute("currentUser"), request, response);
+        HttpSession session = request.getSession(true);
+        if (session.getAttribute("currentUser") != null) {
+            // Need to map SessionUser if we were to check role, but just going to dashboard
+            response.sendRedirect(request.getContextPath() + "/");
             return;
         }
+        com.realestate.util.CsrfTokenUtil.generateToken(session);
         request.getRequestDispatcher("/views/login.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        String csrfToken = request.getParameter("csrf_token");
+        
+        if (session == null || !com.realestate.util.CsrfTokenUtil.validateToken(session, csrfToken)) {
+            request.setAttribute("errorMessage", "Invalid CSRF token or session expired.");
+            request.getRequestDispatcher("/views/login.jsp").forward(request, response);
+            return;
+        }
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -36,7 +48,9 @@ public class LoginServlet extends HttpServlet {
 
         if (result.isSuccess()) {
             User user = result.getUser();
-            HttpSession session = request.getSession(true);
+            if (session == null) {
+                session = request.getSession(true);
+            }
             
             if (user.getRole() == User.Role.ADMIN) {
                 com.realestate.service.OtpService otpService = new com.realestate.service.OtpService();
@@ -59,7 +73,7 @@ public class LoginServlet extends HttpServlet {
                 userDAO.updateUserVerificationStatus(user.getUserId(), User.VerificationStatus.VERIFIED, "Auto-verified on login");
             }
 
-            session.setAttribute("currentUser", user);
+            session.setAttribute("currentUser", new com.realestate.model.SessionUser(user));
             session.setAttribute("userId", user.getUserId());
             session.setAttribute("name", user.getName());
             session.setAttribute("email", user.getEmail());

@@ -2,6 +2,7 @@ package com.realestate.servlet.customer;
 
 import com.realestate.dao.InquiryDAO;
 import com.realestate.model.Inquiry;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,7 +23,7 @@ public class InquiryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;
@@ -45,7 +46,7 @@ public class InquiryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;

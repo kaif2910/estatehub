@@ -21,8 +21,19 @@ public class EmailUtil {
 
     static {
         try {
-            // Do not hardcode path, just use local directory for dev if it exists
-            dotenv = Dotenv.configure().ignoreIfMissing().load();
+            // Try to find .env by traversing up from user.dir
+            java.io.File currentDir = new java.io.File(System.getProperty("user.dir")).getAbsoluteFile();
+            while (currentDir != null) {
+                java.io.File envFile = new java.io.File(currentDir, ".env");
+                if (envFile.exists()) {
+                    dotenv = Dotenv.configure().directory(currentDir.getAbsolutePath()).ignoreIfMissing().load();
+                    break;
+                }
+                currentDir = currentDir.getParentFile();
+            }
+            if (dotenv == null) {
+                dotenv = Dotenv.configure().ignoreIfMissing().load();
+            }
         } catch (Exception e) {
             LOGGER.log(Level.INFO, "No local .env file found for EmailUtil");
         }
@@ -36,7 +47,7 @@ public class EmailUtil {
         }
     }
 
-    private static String getSecret(String key, String defaultValue) {
+    public static String getSecret(String key, String defaultValue) {
         // 1. Try OS Environment Variables first
         String sysEnv = System.getenv(key);
         if (sysEnv != null && !sysEnv.isEmpty()) {

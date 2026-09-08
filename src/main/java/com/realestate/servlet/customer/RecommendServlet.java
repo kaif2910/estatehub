@@ -3,6 +3,7 @@ package com.realestate.servlet.customer;
 import com.realestate.dao.PreferenceDAO;
 import com.realestate.model.Preference;
 import com.realestate.model.RecommendationMatch;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.service.RecommendationService;
 import jakarta.servlet.ServletException;
@@ -24,7 +25,7 @@ public class RecommendServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;

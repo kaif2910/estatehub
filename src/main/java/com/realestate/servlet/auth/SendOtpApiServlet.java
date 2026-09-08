@@ -1,6 +1,7 @@
 package com.realestate.servlet.auth;
 
 import com.realestate.dao.UserDAO;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.util.EmailUtil;
 import jakarta.servlet.ServletException;

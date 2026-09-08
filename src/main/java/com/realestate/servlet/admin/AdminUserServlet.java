@@ -1,6 +1,7 @@
 package com.realestate.servlet.admin;
 
 import com.realestate.dao.UserDAO;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

@@ -1,6 +1,7 @@
 package com.realestate.servlet.auth;
 
 import com.realestate.dao.UserDAO;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.service.OtpService;
 import com.realestate.util.PasswordUtil;
@@ -27,53 +28,34 @@ public class ResetPasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        Integer userId = (session != null) ? (Integer) session.getAttribute("resetUserId") : null;
-        
-        if (userId == null) {
+        String token = request.getParameter("token");
+        String newPassword = request.getParameter("newPassword");
+
+        if (token == null || token.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/views/forgot-password.jsp");
             return;
         }
 
-        String otpCode = request.getParameter("otpCode");
-        String newPassword = request.getParameter("newPassword");
-
         if (newPassword == null || newPassword.length() < 6) {
             request.setAttribute("errorMessage", "Password must be at least 6 characters.");
+            request.setAttribute("token", token);
             request.getRequestDispatcher("/views/reset-password.jsp").forward(request, response);
             return;
         }
 
-        boolean verified = otpService.verifyOtp(userId, otpCode, "PASSWORD_RESET");
-        if (verified) {
-            User user = userDAO.findById(userId);
-            if (user != null) {
-                user.setPassword(PasswordUtil.hashPassword(newPassword));
-                
-                boolean updated = updatePasswordInDB(userId, user.getPassword());
-                if (updated) {
-                    session.removeAttribute("resetUserId");
-                    session.removeAttribute("resetEmail");
-                    session.setAttribute("successMessage", "Password reset successfully! You can now log in.");
-                    response.sendRedirect(request.getContextPath() + "/views/login.jsp");
-                    return;
-                }
+        User user = userDAO.getUserByResetToken(token);
+        if (user != null) {
+            user.setPassword(PasswordUtil.hashPassword(newPassword));
+            boolean updated = userDAO.updatePassword(user.getUserId(), user.getPassword());
+            if (updated) {
+                userDAO.clearResetToken(user.getUserId());
+                request.getSession().setAttribute("successMessage", "Password reset successfully! You can now log in.");
+                response.sendRedirect(request.getContextPath() + "/views/login.jsp");
+                return;
             }
         }
         
-        request.setAttribute("errorMessage", "Invalid or expired OTP code.");
+        request.setAttribute("errorMessage", "Invalid or expired reset link.");
         request.getRequestDispatcher("/views/reset-password.jsp").forward(request, response);
-    }
-    
-    private boolean updatePasswordInDB(int userId, String hashedPassword) {
-        try (java.sql.Connection conn = com.realestate.util.DBConnection.getConnection();
-             java.sql.PreparedStatement pstmt = conn.prepareStatement("UPDATE users SET password = ? WHERE user_id = ?")) {
-            pstmt.setString(1, hashedPassword);
-            pstmt.setInt(2, userId);
-            return pstmt.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 }

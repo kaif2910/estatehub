@@ -3,6 +3,11 @@
 <c:if test="${param.fromDraft == 'true'}">
     <c:set var="redirectAfterLogin" value="${pageContext.request.contextPath}/property/crud" scope="session"/>
 </c:if>
+<%
+    if (session.getAttribute("csrf_token") == null) {
+        com.realestate.util.CsrfTokenUtil.generateToken(session);
+    }
+%>
 <c:if test="${not empty sessionScope.currentUser}">
     <c:choose>
         <c:when test="${sessionScope.currentUser.role == 'ADMIN'}">
@@ -97,7 +102,7 @@
         <c:remove var="successMessage" scope="session"/>
     </div>
 </c:if>
-<form class="flex flex-col gap-gutter-md mt-4" id="login-form" action="${pageContext.request.contextPath}/login" method="POST">
+<form class="flex flex-col gap-gutter-md mt-4" id="login-form" action="${pageContext.request.contextPath}/login" method="POST"> <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
 <div class="flex flex-col gap-1.5">
 <label class="font-label-md text-label-md text-on-surface" for="identifier-input">Email Address</label>
 <div class="relative flex items-center rounded-lg bg-surface-container-low transition-colors duration-150 focus-within:bg-surface-container-lowest focus-within:shadow-md">

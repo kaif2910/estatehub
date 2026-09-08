@@ -4,6 +4,7 @@ import com.realestate.dao.CategoryDAO;
 import com.realestate.dao.PreferenceDAO;
 import com.realestate.model.Preference;
 import com.realestate.model.PropertyCategory;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,7 +26,7 @@ public class PreferenceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;
@@ -47,7 +48,7 @@ public class PreferenceServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;

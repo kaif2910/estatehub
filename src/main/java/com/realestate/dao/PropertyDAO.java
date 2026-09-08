@@ -148,18 +148,19 @@ public class PropertyDAO {
 
     public List<Property> findRecentlyViewed(int userId, int limit) {
         List<Property> list = new ArrayList<>();
-        String sql = "SELECT DISTINCT p.*, c.name AS category_name, u.name AS owner_name, u.email AS owner_email, u.phone AS owner_phone, u.whatsapp_number AS owner_whatsapp, u.role AS owner_role, u.verification_status AS owner_verification_status, " +
+        String sql = "SELECT p.*, c.name AS category_name, u.name AS owner_name, u.email AS owner_email, u.phone AS owner_phone, u.whatsapp_number AS owner_whatsapp, u.role AS owner_role, u.verification_status AS owner_verification_status, " +
                 "(SELECT image_url FROM property_images pi WHERE pi.property_id = p.property_id ORDER BY pi.is_primary DESC, pi.image_id ASC LIMIT 1) AS primary_image_url " +
-                "FROM property_views v " +
-                "JOIN properties p ON v.property_id = p.property_id " +
+                "FROM properties p " +
                 "JOIN property_categories c ON p.category_id = c.category_id " +
                 "JOIN users u ON p.user_id = u.user_id " +
-                "WHERE v.user_id = ? AND p.verification_status IN ('VERIFIED', 'PENDING') AND p.property_status = 'AVAILABLE' " +
-                "ORDER BY v.viewed_at DESC LIMIT ?";
+                "WHERE p.property_id IN (SELECT property_id FROM property_views WHERE user_id = ? " +
+                "  AND property_id IN (SELECT property_id FROM properties WHERE verification_status IN ('VERIFIED','PENDING') AND property_status = 'AVAILABLE')) " +
+                "ORDER BY (SELECT MAX(viewed_at) FROM property_views WHERE user_id = ? AND property_id = p.property_id) DESC LIMIT ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
-            ps.setInt(2, limit);
+            ps.setInt(2, userId);
+            ps.setInt(3, limit);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Property p = mapProperty(rs);

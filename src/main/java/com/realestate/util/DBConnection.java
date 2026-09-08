@@ -21,10 +21,46 @@ public class DBConnection {
     static {
         try {
             Dotenv dotenv = null;
+<<<<<<< Updated upstream
             try {
                 dotenv = Dotenv.configure().ignoreIfMissing().load();
             } catch (Exception e) {
                 LOGGER.log(Level.INFO, "No local .env file found, proceeding with env/config");
+=======
+            // 1. Try standard OS Environment Variables first (Railway, Render, etc.)
+            String envUrl = System.getenv("DB_URL");
+            String envUser = System.getenv("DB_USER");
+            String envPass = System.getenv("DB_PASS");
+
+            if (envUrl != null && !envUrl.isEmpty()) {
+                dbUrl = envUrl;
+                dbUser = envUser;
+                dbPass = envPass;
+            } else {
+                // 2. Try Dotenv for local development without hardcoding Windows paths
+                try {
+                    // Try to find .env by traversing up from user.dir
+                    java.io.File currentDir = new java.io.File(System.getProperty("user.dir")).getAbsoluteFile();
+                    while (currentDir != null) {
+                        java.io.File envFile = new java.io.File(currentDir, ".env");
+                        if (envFile.exists()) {
+                            dotenv = Dotenv.configure().directory(currentDir.getAbsolutePath()).ignoreIfMissing().load();
+                            break;
+                        }
+                        currentDir = currentDir.getParentFile();
+                    }
+                    if (dotenv == null) {
+                        dotenv = Dotenv.configure().ignoreIfMissing().load();
+                    }
+                    if (dotenv.get("DB_URL") != null) {
+                        dbUrl = dotenv.get("DB_URL");
+                        dbUser = dotenv.get("DB_USER");
+                        dbPass = dotenv.get("DB_PASS");
+                    }
+                } catch (Exception e) {
+                    LOGGER.log(Level.INFO, "No local .env file found, proceeding with defaults");
+                }
+>>>>>>> Stashed changes
             }
 
             // 1. Helper to fetch non-empty value from Env Vars -> Dotenv -> config.properties
@@ -96,6 +132,9 @@ public class DBConnection {
     }
 
     public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException ignored) {}
         return DriverManager.getConnection(dbUrl, dbUser, dbPass);
     }
 

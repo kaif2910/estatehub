@@ -1,6 +1,7 @@
 package com.realestate.servlet.auth;
 
 import com.realestate.dao.UserDAO;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.service.OtpService;
 import jakarta.servlet.ServletException;
@@ -32,10 +33,16 @@ public class OtpVerifyServlet extends HttpServlet {
         Integer adminUserId = (session != null) ? (Integer) session.getAttribute("pendingAdminUserId") : null;
         
         Integer userId = (adminUserId != null) ? adminUserId : regUserId;
+<<<<<<< Updated upstream
         // Use REGISTRATION for both to avoid MySQL ENUM Data Truncation Error
+=======
+>>>>>>> Stashed changes
         String purpose = "REGISTRATION";
         
         String otpCode = request.getParameter("otpCode");
+        if (otpCode == null || otpCode.trim().isEmpty()) {
+            otpCode = request.getParameter("otp");
+        }
         String resend = request.getParameter("resend");
 
         if (userId == null) {
@@ -75,7 +82,7 @@ public class OtpVerifyServlet extends HttpServlet {
             userDAO.setEmailVerified(user.getUserId(), true);
             userDAO.updateUserVerificationStatus(user.getUserId(), User.VerificationStatus.VERIFIED, "OTP Verified");
 
-            session.setAttribute("currentUser", user);
+            session.setAttribute("currentUser", new com.realestate.model.SessionUser(user));
             session.setAttribute("userId", user.getUserId());
             session.setAttribute("name", user.getName());
             session.setAttribute("email", user.getEmail());

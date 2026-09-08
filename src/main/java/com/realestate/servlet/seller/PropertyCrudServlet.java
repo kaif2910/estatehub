@@ -5,6 +5,7 @@ import com.realestate.dao.PropertyDAO;
 import com.realestate.model.Property;
 import com.realestate.model.PropertyCategory;
 import com.realestate.model.PropertyImage;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -31,13 +32,12 @@ public class PropertyCrudServlet extends HttpServlet {
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
     private final CategoryDAO categoryDAO = new CategoryDAO();
-    private static final String UPLOAD_DIR = "C:\\Users\\admin\\OneDrive\\Desktop\\sem1\\EstateHub\\uploads";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
 
         String action = request.getParameter("action");
         List<PropertyCategory> categories = categoryDAO.findAll();
@@ -66,7 +66,7 @@ public class PropertyCrudServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;
@@ -119,6 +119,29 @@ public class PropertyCrudServlet extends HttpServlet {
         p.setPropertyStatus(Property.PropertyStatus.AVAILABLE);
         p.setVerificationStatus(Property.VerificationStatus.PENDING); // submitted for admin approval
 
+        List<String> errors = new ArrayList<>();
+        if (p.getTitle() == null || p.getTitle().isEmpty()) {
+            errors.add("Property title is required");
+        }
+        if (p.getPrice() == null || p.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            errors.add("Price must be greater than zero");
+        }
+        if (p.getCity() == null || p.getCity().isEmpty()) {
+            errors.add("City is required");
+        }
+        if (p.getDescription() == null || p.getDescription().isEmpty()) {
+            errors.add("Description is required");
+        }
+        if (p.getCategoryId() <= 0) {
+            errors.add("Category is required");
+        }
+        
+        if (!errors.isEmpty()) {
+            session.setAttribute("errorMessage", String.join(", ", errors));
+            response.sendRedirect(request.getContextPath() + "/property/crud?action=add");
+            return;
+        }
+
         if (propIdStr != null && !propIdStr.trim().isEmpty()) {
             // Edit
             p.setPropertyId(Integer.parseInt(propIdStr));
@@ -166,7 +189,17 @@ public class PropertyCrudServlet extends HttpServlet {
                 }
                 
                 String fileName = System.currentTimeMillis() + "_" + getSubmittedFileName(part);
-                String savePath = UPLOAD_DIR + File.separator + fileName;
+                
+                String uploadDir = getServletContext().getRealPath("/uploads");
+                if (uploadDir == null) {
+                    uploadDir = System.getProperty("java.io.tmpdir") + File.separator + "estatehub-uploads";
+                }
+                File dir = new File(uploadDir);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                
+                String savePath = uploadDir + File.separator + fileName;
                 part.write(savePath);
                 
                 PropertyImage img = new PropertyImage();
@@ -190,7 +223,7 @@ public class PropertyCrudServlet extends HttpServlet {
         return "unknown";
     }
 
-    private void redirectDashboard(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void redirectDashboard(SessionUser user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (user.getRole() == User.Role.BROKER) {
             response.sendRedirect(request.getContextPath() + "/broker/dashboard");
         } else if (user.getRole() == User.Role.ADMIN) {

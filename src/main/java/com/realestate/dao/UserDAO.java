@@ -218,6 +218,40 @@ public class UserDAO {
         return false;
     }
 
+    public void updateResetToken(int userId, String token, long expiresAt) {
+        String sql = "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, token);
+            ps.setLong(2, expiresAt);
+            ps.setInt(3, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public User getUserByResetToken(String token) {
+        String sql = "SELECT * FROM users WHERE reset_token = ? AND reset_token_expires > ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, token);
+            ps.setLong(2, System.currentTimeMillis());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapUser(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void clearResetToken(int userId) {
+        updateResetToken(userId, null, 0);
+    }
+
     private User mapUser(ResultSet rs) throws SQLException {
         User u = new User();
         u.setUserId(rs.getInt("user_id"));

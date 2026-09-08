@@ -28,7 +28,7 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
         String role = request.getParameter("role");
-        String whatsapp = request.getParameter("whatsapp");
+        String whatsapp = request.getParameter("whatsappNumber");
         String otp = request.getParameter("otp");
 
         HttpSession session = request.getSession(true);

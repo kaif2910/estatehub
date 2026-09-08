@@ -5,6 +5,7 @@ import com.realestate.dao.PropertyDAO;
 import com.realestate.dao.VerificationDAO;
 import com.realestate.model.Inquiry;
 import com.realestate.model.Property;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.model.VerificationRequest;
 import jakarta.servlet.ServletException;
@@ -27,7 +28,7 @@ public class BrokerDashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;

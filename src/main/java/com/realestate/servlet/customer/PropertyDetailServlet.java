@@ -2,6 +2,7 @@ package com.realestate.servlet.customer;
 
 import com.realestate.dao.PropertyDAO;
 import com.realestate.model.Property;
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,7 +32,7 @@ public class PropertyDetailServlet extends HttpServlet {
         try {
             int propertyId = Integer.parseInt(idStr);
             HttpSession session = request.getSession(false);
-            User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+            SessionUser currentUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
             Integer userId = (currentUser != null) ? currentUser.getUserId() : null;
 
             Property property = propertyDAO.findById(propertyId, userId);

@@ -1,5 +1,6 @@
 package com.realestate.servlet.admin;
 
+import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.model.VerificationRequest;
 import com.realestate.service.VerificationService;
@@ -36,7 +37,7 @@ public class AdminVerificationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User adminUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+        SessionUser adminUser = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
         if (adminUser == null) {
             response.sendRedirect(request.getContextPath() + "/views/login.jsp");
             return;
