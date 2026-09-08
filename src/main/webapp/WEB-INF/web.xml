@@ -53,14 +53,14 @@
     <!-- Error Pages -->
     <error-page>
         <error-code>404</error-code>
-        <location>/views/error.jsp?code=404</location>
+        <location>/views/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>403</error-code>
-        <location>/views/error.jsp?code=403</location>
+        <location>/views/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/views/error.jsp?code=500</location>
+        <location>/views/error.jsp</location>
     </error-page>
 </web-app>

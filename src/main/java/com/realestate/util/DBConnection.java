@@ -13,51 +13,45 @@ public class DBConnection {
     private static final Logger LOGGER = Logger.getLogger(DBConnection.class.getName());
     private static Properties properties = new Properties();
 
-    private static String dbUrl = "jdbc:mysql://localhost:3306/real_estate_marketplace?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
-    private static String dbUser = "root";
-    private static String dbPass = "root";
+    // Default fallback: Live TiDB Cloud Database
+    private static String dbUrl = "jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/estatehub?useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
+    private static String dbUser = "rC8wYYwdB6os4Fw.root";
+    private static String dbPass = "KGMay56GUi5JLsgo";
 
     static {
         try {
             Dotenv dotenv = null;
-            // 1. Try standard OS Environment Variables first (Railway, Render, etc.)
-            String envUrl = System.getenv("DB_URL");
-            String envUser = System.getenv("DB_USER");
-            String envPass = System.getenv("DB_PASS");
-
-            if (envUrl != null && !envUrl.isEmpty()) {
-                dbUrl = envUrl;
-                dbUser = envUser;
-                dbPass = envPass;
-            } else {
-                // 2. Try Dotenv for local development without hardcoding Windows paths
-                try {
-                    dotenv = Dotenv.configure().ignoreIfMissing().load();
-                    if (dotenv.get("DB_URL") != null) {
-                        dbUrl = dotenv.get("DB_URL");
-                        dbUser = dotenv.get("DB_USER");
-                        dbPass = dotenv.get("DB_PASS");
-                    }
-                } catch (Exception e) {
-                    LOGGER.log(Level.INFO, "No local .env file found, proceeding with defaults");
-                }
+            try {
+                dotenv = Dotenv.configure().ignoreIfMissing().load();
+            } catch (Exception e) {
+                LOGGER.log(Level.INFO, "No local .env file found, proceeding with env/config");
             }
-            
-            // Fallback to config.properties if not in env
+
+            // 1. Helper to fetch non-empty value from Env Vars -> Dotenv -> config.properties
+            String envUrl = getEnvValue("DB_URL", "DATABASE_URL", "MYSQL_URL", dotenv);
+            String envUser = getEnvValue("DB_USER", "MYSQLUSER", "DB_USERNAME", dotenv);
+            String envPass = getEnvValue("DB_PASS", "DB_PASSWORD", "MYSQLPASSWORD", dotenv);
+
+            if (envUrl != null && !envUrl.trim().isEmpty()) {
+                dbUrl = formatJdbcUrl(envUrl.trim());
+            }
+            if (envUser != null && !envUser.trim().isEmpty()) {
+                dbUser = envUser.trim();
+            }
+            if (envPass != null) {
+                dbPass = envPass.trim();
+            }
+
+            // Load driver
             try (InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("config.properties")) {
                 if (input != null) {
                     properties.load(input);
-                    if (System.getenv("DB_URL") == null && (dotenv == null || dotenv.get("DB_URL") == null)) {
-                        dbUrl = properties.getProperty("DB_URL", dbUrl);
+                    String driver = properties.getProperty("DB_DRIVER");
+                    if (driver != null && !driver.trim().isEmpty()) {
+                        Class.forName(driver.trim());
+                    } else {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
                     }
-                    if (System.getenv("DB_USER") == null && (dotenv == null || dotenv.get("DB_USER") == null)) {
-                        dbUser = properties.getProperty("DB_USER", dbUser);
-                    }
-                    if (System.getenv("DB_PASS") == null && (dotenv == null || dotenv.get("DB_PASS") == null)) {
-                        dbPass = properties.getProperty("DB_PASS", dbPass);
-                    }
-                    String driver = properties.getProperty("DB_DRIVER", "com.mysql.cj.jdbc.Driver");
-                    Class.forName(driver);
                 } else {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                 }
@@ -69,6 +63,38 @@ public class DBConnection {
             } catch (ClassNotFoundException ignored) {}
         }
     }
+
+    private static String getEnvValue(String k1, String k2, String k3, Dotenv dotenv) {
+        String val = getSingleEnv(k1, dotenv);
+        if (val == null) val = getSingleEnv(k2, dotenv);
+        if (val == null) val = getSingleEnv(k3, dotenv);
+        return val;
+    }
+
+    private static String getSingleEnv(String key, Dotenv dotenv) {
+        if (key == null) return null;
+        String val = System.getenv(key);
+        if (val != null && !val.trim().isEmpty()) {
+            return val;
+        }
+        if (dotenv != null) {
+            try {
+                val = dotenv.get(key);
+                if (val != null && !val.trim().isEmpty()) {
+                    return val;
+                }
+            } catch (Exception ignored) {}
+        }
+        return null;
+    }
+
+    private static String formatJdbcUrl(String rawUrl) {
+        if (rawUrl.startsWith("mysql://")) {
+            return "jdbc:" + rawUrl;
+        }
+        return rawUrl;
+    }
+
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(dbUrl, dbUser, dbPass);
     }
