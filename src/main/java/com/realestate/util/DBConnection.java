@@ -21,8 +21,8 @@ public class DBConnection {
     static {
         try {
             Dotenv dotenv = null;
+            // Try to find .env by traversing up from user.dir (local development only)
             try {
-                // Try to find .env by traversing up from user.dir
                 java.io.File currentDir = new java.io.File(System.getProperty("user.dir")).getAbsoluteFile();
                 while (currentDir != null) {
                     java.io.File envFile = new java.io.File(currentDir, ".env");
@@ -36,10 +36,10 @@ public class DBConnection {
                     dotenv = Dotenv.configure().ignoreIfMissing().load();
                 }
             } catch (Exception e) {
-                LOGGER.log(Level.INFO, "No local .env file found, proceeding with defaults");
+                LOGGER.log(Level.INFO, "No local .env file found, proceeding with env vars/defaults");
             }
 
-            // 1. Helper to fetch non-empty value from Env Vars -> Dotenv -> config.properties
+            // Helper to fetch non-empty value from Env Vars -> Dotenv -> config.properties
             String envUrl = getEnvValue("DB_URL", "DATABASE_URL", "MYSQL_URL", dotenv);
             String envUser = getEnvValue("DB_USER", "MYSQLUSER", "DB_USERNAME", dotenv);
             String envPass = getEnvValue("DB_PASS", "DB_PASSWORD", "MYSQLPASSWORD", dotenv);
