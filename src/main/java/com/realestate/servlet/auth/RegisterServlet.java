@@ -39,10 +39,15 @@ public class RegisterServlet extends HttpServlet {
 
         if (result.isSuccess()) {
             com.realestate.model.User user = result.getUser();
+            
+            // Generate and send REAL OTP via Gmail
+            com.realestate.service.OtpService otpService = new com.realestate.service.OtpService();
+            otpService.generateAndSendOtp(user, "REGISTRATION");
+            
             session.setAttribute("pendingOtpUserId", user.getUserId());
             session.setAttribute("pendingOtpEmail", user.getEmail());
             session.setAttribute("pendingOtpName", user.getName());
-            session.setAttribute("successMessage", "Account created successfully! Enter your 6-digit OTP (or demo code 123456) to verify.");
+            session.setAttribute("successMessage", "Account created successfully! An OTP has been sent to your email to verify your account.");
             response.sendRedirect(request.getContextPath() + "/views/otp-verify.jsp");
         } else {
             request.setAttribute("errorMessage", result.getMessage());
