@@ -51,7 +51,6 @@ public class LoginServlet extends HttpServlet {
             if (session == null) {
                 session = request.getSession(true);
             }
-            
             if (user.getRole() == User.Role.ADMIN) {
                 com.realestate.service.OtpService otpService = new com.realestate.service.OtpService();
                 otpService.generateAndSendOtp(user, "REGISTRATION");
