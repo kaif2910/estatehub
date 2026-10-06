@@ -19,7 +19,7 @@
 <header class="fixed top-0 left-0 right-0 h-16 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50">
     <div class="h-16 w-full px-6 flex items-center justify-between gap-4">
         <div class="flex items-center gap-4 min-w-[260px]">
-            <img alt="Brand logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xg4rP1x__tmUvhhUEeM-xIYBlSjyhgL-aDvDihhuMxD0bc_kL9kHorsRYR5EvM9wdONnfScP46YL0QssDo1Yzd9XXTo1GpuWC9c1SGhoiGFmbBZZ-L95_tHf_7u7-NnrWpEVNDa3KKfH1MN1eMtrk2ZiwZGYM9sKA4zxHHA9vupb767aMCr2J7zivaAtyK3ypPdo3ZJ1n88WJ1YI5TA-loMe151e9ACRfxjid8X1QrA8mUitrWMg5qDMA"/>
+            <img alt="Brand logo" class="h-8 w-auto object-contain" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"/>
             <div class="flex flex-col">
                 <span class="font-headline-sm text-headline-sm text-primary leading-none tracking-tight">EstateHub</span>
                 <span class="font-caption text-caption text-on-surface-variant font-medium tracking-wide uppercase mt-0.5">Admin Console</span>
@@ -179,3 +179,4 @@
 </div>
 </body>
 </html>
+

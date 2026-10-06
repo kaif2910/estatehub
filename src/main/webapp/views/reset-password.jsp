@@ -18,7 +18,7 @@
 <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
 <div class="h-16 max-w-[1280px] mx-auto px-gutter-lg flex items-center justify-between">
 <div class="flex items-center gap-gutter-sm">
-<img alt="Brand logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xg4rP1x__tmUvhhUEeM-xIYBlSjyhgL-aDvDihhuMxD0bc_kL9kHorsRYR5EvM9wdONnfScP46YL0QssDo1Yzd9XXTo1GpuWC9c1SGhoiGFmbBZZ-L95_tHf_7u7-NnrWpEVNDa3KKfH1MN1eMtrk2ZiwZGYM9sKA4zxHHA9vupb767aMCr2J7zivaAtyK3ypPdo3ZJ1n88WJ1YI5TA-loMe151e9ACRfxjid8X1QrA8mUitrWMg5qDMA"/>
+<img alt="Brand logo" class="h-8 w-auto object-contain" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"/>
 <span class="font-headline-sm text-headline-sm text-primary tracking-tight">EstateHub</span>
 </div>
 <nav class="flex items-center gap-gutter-lg" data-active-classes="text-primary font-bold">
@@ -72,18 +72,7 @@
     </div>
 </c:if>
 <form class="flex flex-col gap-gutter-md" id="resetForm" action="${pageContext.request.contextPath}/reset-password" method="POST">
-<div class="flex flex-col gap-1.5">
-<label class="font-label-md text-label-md text-on-surface flex items-center justify-between" for="otpCode">
-<span>6-Digit Verification Code</span>
-<span class="font-caption text-caption text-secondary-container">Required</span>
-</label>
-<div class="relative flex items-center">
-<div class="absolute left-3.5 pointer-events-none text-on-surface-variant flex items-center justify-center">
-<span class="material-symbols-outlined text-[20px]">pin</span>
-</div>
-<input class="w-full h-12 pl-11 pr-4 bg-surface-container-low rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary-container transition-all" id="otpCode" name="otpCode" placeholder="Enter 6-digit OTP" required="" type="text" maxlength="6"/>
-</div>
-</div>
+<input type="hidden" name="token" value="${param.token != null ? param.token : requestScope.token}" />
 <div class="flex flex-col gap-1.5">
 <label class="font-label-md text-label-md text-on-surface flex items-center justify-between" for="newPassword">
 <span>New Password</span>
@@ -138,3 +127,4 @@
 </footer>
 </body>
 </html>
+

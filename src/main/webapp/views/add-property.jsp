@@ -61,7 +61,7 @@
 <header class="fixed top-0 left-0 right-0 w-full z-40 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,0,0,0.06)] border-b border-surface-container-high">
   <div class="h-20 max-w-[1280px] mx-auto px-6 flex items-center justify-between gap-4">
     <a href="${pageContext.request.contextPath}/" class="flex items-center gap-3">
-      <img alt="EstateHub Logo" class="h-9 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xg4rP1x__tmUvhhUEeM-xIYBlSjyhgL-aDvDihhuMxD0bc_kL9kHorsRYR5EvM9wdONnfScP46YL0QssDo1Yzd9XXTo1GpuWC9c1SGhoiGFmbBZZ-L95_tHf_7u7-NnrWpEVNDa3KKfH1MN1eMtrk2ZiwZGYM9sKA4zxHHA9vupb767aMCr2J7zivaAtyK3ypPdo3ZJ1n88WJ1YI5TA-loMe151e9ACRfxjid8X1QrA8mUitrWMg5qDMA"/>
+      <span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span>
       <span class="font-heading font-bold text-2xl text-primary tracking-tight">EstateHub</span>
     </a>
     
@@ -534,3 +534,4 @@
 
 </body>
 </html>
+
