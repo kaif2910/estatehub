@@ -18,7 +18,7 @@
 <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
 <div class="h-16 max-w-[1280px] mx-auto px-gutter-lg flex items-center justify-between">
 <div class="flex items-center gap-gutter-sm">
-<img alt="Brand logo" class="h-8 w-auto object-contain" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"/>
+<span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span>
 <span class="font-headline-sm text-headline-sm text-primary tracking-tight">EstateHub</span>
 </div>
 <nav class="flex items-center gap-gutter-lg" data-active-classes="text-primary font-bold">
@@ -156,4 +156,5 @@
 </footer>
 </body>
 </html>
+
 
