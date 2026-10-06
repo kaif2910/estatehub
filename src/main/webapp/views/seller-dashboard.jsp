@@ -77,7 +77,7 @@
 <div class="col-span-2 w-full flex md:flex-col items-center justify-between md:justify-center"><span class="font-caption text-caption text-on-surface-variant">${p.viewCount} Views</span></div>
 <div class="col-span-1 w-full flex items-center justify-end gap-1">
 <a href="${pageContext.request.contextPath}/property/crud?action=edit&id=${p.propertyId}" class="p-1.5 rounded-lg text-primary hover:bg-primary-fixed transition-colors" title="Edit"><span class="material-symbols-outlined text-[18px]">edit</span></a>
-<form action="${pageContext.request.contextPath}/property/crud" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this property?');">
+<form action="${pageContext.request.contextPath}/property/crud" method="POST" style="display:inline;" data-optimistic="delete-property">
 <input type="hidden" name="action" value="delete"/>
 <input type="hidden" name="propertyId" value="${p.propertyId}"/>
 <button type="submit" class="p-1.5 rounded-lg text-error hover:bg-error-container transition-colors" title="Delete"><span class="material-symbols-outlined text-[18px]">delete</span></button>
@@ -88,7 +88,8 @@
 </div>
 </div>
 </div></div></main>
-<footer class="w-full bg-surface-container-lowest shadow-[0_-1px_8px_rgba(0,0,0,0.03)] py-gutter-xl"><div class="max-w-[1280px] mx-auto px-gutter-lg flex flex-col md:flex-row items-center justify-between gap-gutter-md"><div class="flex flex-col sm:flex-row items-center gap-gutter-sm text-center sm:text-left"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">support_agent</span><span class="font-label-md text-label-md text-on-surface font-bold">EstateHub Broker Care Desk:</span></div><a class="font-label-md text-label-md text-primary hover:underline" href="tel:18002008899">1800-200-8899 (Mon-Sat, 9AM - 8PM)</a><span class="hidden sm:inline text-outline-variant">•</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" href="mailto:partners@estatehub.in">partners@estatehub.in</a></div></div></footer></body></html>
+<footer class="w-full bg-surface-container-lowest shadow-[0_-1px_8px_rgba(0,0,0,0.03)] py-gutter-xl"><div class="max-w-[1280px] mx-auto px-gutter-lg flex flex-col md:flex-row items-center justify-between gap-gutter-md"><div class="flex flex-col sm:flex-row items-center gap-gutter-sm text-center sm:text-left"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">support_agent</span><span class="font-label-md text-label-md text-on-surface font-bold">EstateHub Broker Care Desk:</span></div><a class="font-label-md text-label-md text-primary hover:underline" href="tel:18002008899">1800-200-8899 (Mon-Sat, 9AM - 8PM)</a><span class="hidden sm:inline text-outline-variant">•</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" href="mailto:partners@estatehub.in">partners@estatehub.in</a></div></div></footer><script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script></body></html>
+
 
 
 

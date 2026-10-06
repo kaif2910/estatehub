@@ -162,7 +162,7 @@
                                         </td>
                                         <td class="py-4 pr-5 pl-3 text-right">
                                             <div class="flex items-center justify-end gap-1.5">
-                                                <form action="${pageContext.request.contextPath}/admin/properties" method="post" class="inline">
+                                                <form action="${pageContext.request.contextPath}/admin/properties" method="post" class="inline" data-optimistic="moderate-property">
                                                     <input type="hidden" name="action" value="approve">
                                                     <input type="hidden" name="propertyId" value="${p.propertyId}">
                                                     <button type="submit" class="p-2 rounded-lg bg-tertiary-container text-on-tertiary hover:opacity-90 transition-opacity" title="Approve">
@@ -170,7 +170,7 @@
                                                     </button>
                                                 </form>
                                                 
-                                                <form action="${pageContext.request.contextPath}/admin/properties" method="post" class="inline flex items-center gap-2">
+                                                <form action="${pageContext.request.contextPath}/admin/properties" method="post" class="inline flex items-center gap-2" data-optimistic="moderate-property">
                                                     <input type="hidden" name="action" value="reject">
                                                     <input type="hidden" name="propertyId" value="${p.propertyId}">
                                                     <input type="text" name="rejectionReason" placeholder="Reason..." class="px-2 py-1 text-sm border rounded" required>
@@ -195,6 +195,7 @@
         </div>
     </main>
 </div>
+<script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script>
 </body>
 </html>
 

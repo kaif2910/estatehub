@@ -152,7 +152,7 @@
                                     <c:out value="${u.createdAt}"/>
                                 </td>
                                 <td class="py-3 px-4 text-right">
-                                    <form action="${pageContext.request.contextPath}/admin/users" method="post" class="inline">
+                                    <form action="${pageContext.request.contextPath}/admin/users" method="post" class="inline" data-optimistic="toggle-status">
                                         <input type="hidden" name="action" value="toggleStatus">
                                         <input type="hidden" name="userId" value="${u.userId}">
                                         <c:choose>
@@ -182,8 +182,9 @@
         </div>
     </main>
 </div>
-</body>
+<script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script></body>
 </html>
+
 
 
 

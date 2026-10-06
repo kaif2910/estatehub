@@ -292,6 +292,9 @@
                     <span class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md text-tertiary text-[11px] font-bold px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1">
                       <span class="material-symbols-outlined text-[14px]">verified</span> Verified
                     </span>
+                    <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/85 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-secondary-container transition-colors shadow-sm" data-optimistic="favorite" data-property-id="${p.propertyId}" data-context-path="${pageContext.request.contextPath}">
+                      <span class="material-symbols-outlined text-[18px]">favorite</span>
+                    </button>
                   </div>
 
                   <!-- PROPERTY DETAILS -->
@@ -496,6 +499,7 @@
   });
 </script>
 
+<script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script>
 </body>
 </html>
 
