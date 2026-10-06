@@ -16,7 +16,7 @@
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
-<div class="h-20 max-w-[1280px] mx-auto px-gutter-lg flex items-center justify-between gap-gutter-md">
+<div class="h-20 max-w-[1280px] mx-auto px-2 sm:px-gutter-lg flex items-center justify-between gap-1 sm:gap-gutter-md">
 <div class="flex items-center gap-gutter-md shrink-0">
 <img alt="Brand logo." class="h-8 w-auto object-contain" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"/>
 <div class="flex flex-col"><div class="flex items-center gap-gutter-xs"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">EstateHub</span><span class="bg-primary-fixed text-on-primary-fixed font-label-sm text-caption px-1.5 py-0.5 rounded">PARTNER DESK</span></div><div class="flex items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined text-[12px] text-tertiary-container">location_on</span><span class="font-body-sm text-caption text-on-surface-variant">Mumbai Cluster</span></div></div></div>
@@ -80,5 +80,6 @@
 </div>
 </div></div></main>
 <footer class="w-full bg-surface-container-lowest shadow-[0_-1px_8px_rgba(0,0,0,0.03)] py-gutter-xl"><div class="max-w-[1280px] mx-auto px-gutter-lg flex flex-col md:flex-row items-center justify-between gap-gutter-md"><div class="flex flex-col sm:flex-row items-center gap-gutter-sm text-center sm:text-left"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">support_agent</span><span class="font-label-md text-label-md text-on-surface font-bold">EstateHub Broker Care Desk:</span></div><a class="font-label-md text-label-md text-primary hover:underline" href="tel:18002008899">1800-200-8899 (Mon-Sat, 9AM - 8PM)</a><span class="hidden sm:inline text-outline-variant">•</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" href="mailto:partners@estatehub.in">partners@estatehub.in</a></div></div></footer></body></html>
+
 
 

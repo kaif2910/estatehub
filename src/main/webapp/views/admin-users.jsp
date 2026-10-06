@@ -111,7 +111,7 @@
             </c:if>
 
             <div class="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden p-6">
-                <table class="w-full text-left border-collapse">
+                <div class="overflow-x-auto w-full"><table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b bg-surface-container-low font-label-sm text-label-sm text-on-surface-variant">
                             <th class="py-3 px-4">Name</th>
@@ -172,12 +172,14 @@
                             </tr>
                         </c:if>
                     </tbody>
-                </table>
+                </table></div>
             </div>
         </div>
     </main>
 </div>
 </body>
 </html>
+
+
 
 

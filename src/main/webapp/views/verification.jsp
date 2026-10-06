@@ -16,7 +16,7 @@
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
-<div class="h-20 max-w-[1280px] mx-auto px-gutter-lg flex items-center justify-between gap-gutter-md">
+<div class="h-20 max-w-[1280px] mx-auto px-2 sm:px-gutter-lg flex items-center justify-between gap-1 sm:gap-gutter-md">
 <div class="flex items-center gap-gutter-md shrink-0">
 <span class="font-headline-sm text-headline-sm text-primary tracking-tight">EstateHub KYC Verification</span>
 </div>
@@ -83,5 +83,6 @@
 </main>
 </body>
 </html>
+
 
 
