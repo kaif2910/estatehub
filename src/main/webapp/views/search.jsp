@@ -6,7 +6,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Search Properties - EstateHub</title>
+<title>EstateHub AI Mode | Search Modern Properties</title>
+<meta name="description" content="Search modern properties with EstateHub AI Mode. Our platform connects you directly with sellers and brokers."/>
+<meta name="keywords" content="estatehub ai mode, search properties, real estate, buy, rent, flats"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
