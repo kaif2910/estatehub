@@ -18,7 +18,7 @@
 <header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
 <div class="h-20 max-w-[1280px] mx-auto px-2 sm:px-gutter-lg flex items-center justify-between gap-1 sm:gap-gutter-md">
 <div class="flex items-center gap-gutter-md shrink-0">
-<img alt="Brand logo." class="h-8 w-auto object-contain" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"/>
+<span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span>
 <div class="flex flex-col"><div class="flex items-center gap-gutter-xs"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">EstateHub</span><span class="bg-primary-fixed text-on-primary-fixed font-label-sm text-caption px-1.5 py-0.5 rounded">PARTNER DESK</span></div><div class="flex items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined text-[12px] text-tertiary-container">location_on</span><span class="font-body-sm text-caption text-on-surface-variant">Mumbai Cluster</span></div></div></div>
 <nav class="hidden xl:flex items-center gap-gutter-xs bg-surface-container-low p-1.5 rounded-xl">
 <a aria-current="page" class="px-3 py-2 transition-all bg-primary-container text-on-primary font-label-md rounded-lg" href="#">Dashboard (Overview)</a>
@@ -27,8 +27,17 @@
 <a class="px-3 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="${pageContext.request.contextPath}/views/inquiries.jsp">Leads & Inquiries</a>
 <a class="px-3 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="${pageContext.request.contextPath}/views/verification.jsp">KYC Verification</a>
 </nav>
+<div id="mobile-nav" class="hidden xl:hidden absolute top-20 left-0 right-0 bg-surface-container-lowest shadow-md flex-col p-4 gap-2 z-40">
+<a class="px-3 py-2 bg-primary-container text-on-primary font-label-md rounded-lg" href="#">Dashboard (Overview)</a>
+<a class="px-3 py-2 font-label-md text-on-surface-variant hover:text-on-surface transition-all" href="#">My Listings</a>
+<a class="px-3 py-2 font-label-md text-on-surface-variant hover:text-on-surface transition-all" href="${pageContext.request.contextPath}/views/add-property.jsp">Post New Property (+)</a>
+<a class="px-3 py-2 font-label-md text-on-surface-variant hover:text-on-surface transition-all" href="${pageContext.request.contextPath}/views/inquiries.jsp">Leads & Inquiries</a>
+</div>
 <div class="flex items-center gap-gutter-md shrink-0">
-<div class="flex items-center gap-2 pl-2"><div class="hidden md:flex flex-col text-right"><div class="flex items-center justify-end gap-1"><span class="font-label-md text-label-md text-on-surface leading-tight">${sessionScope.currentUser.name}</span><span class="material-symbols-outlined text-[16px] text-on-tertiary-container">verified</span></div><span class="font-caption text-caption text-on-surface-variant">Broker</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div>
+<button onclick="document.getElementById('mobile-nav').classList.toggle('hidden')" class="xl:hidden p-2 text-on-surface">
+        <span class="material-symbols-outlined text-[28px]">menu</span>
+    </button>
+    <div class="flex items-center gap-2 pl-2"><div class="hidden md:flex flex-col text-right"><div class="flex items-center justify-end gap-1"><span class="font-label-md text-label-md text-on-surface leading-tight">${sessionScope.currentUser.name}</span><span class="material-symbols-outlined text-[16px] text-on-tertiary-container">verified</span></div><span class="font-caption text-caption text-on-surface-variant">Broker</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div>
 <a href="${pageContext.request.contextPath}/logout" class="text-sm font-medium hover:underline text-primary">Logout</a>
 </div></div></header>
 <main class="w-full pt-20 bg-surface min-h-[calc(100vh-140px)]">
@@ -86,6 +95,8 @@
 </div>
 </div></div></main>
 <footer class="w-full bg-surface-container-lowest shadow-[0_-1px_8px_rgba(0,0,0,0.03)] py-gutter-xl"><div class="max-w-[1280px] mx-auto px-gutter-lg flex flex-col md:flex-row items-center justify-between gap-gutter-md"><div class="flex flex-col sm:flex-row items-center gap-gutter-sm text-center sm:text-left"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">support_agent</span><span class="font-label-md text-label-md text-on-surface font-bold">EstateHub Broker Care Desk:</span></div><a class="font-label-md text-label-md text-primary hover:underline" href="tel:18002008899">1800-200-8899 (Mon-Sat, 9AM - 8PM)</a><span class="hidden sm:inline text-outline-variant">•</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" href="mailto:partners@estatehub.in">partners@estatehub.in</a></div></div></footer></body></html>
+
+
 
 
 

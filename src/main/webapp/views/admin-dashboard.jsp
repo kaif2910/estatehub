@@ -18,7 +18,11 @@
 <body class="bg-background font-body-md text-on-surface antialiased min-h-screen">
 <header class="fixed top-0 left-0 right-0 h-16 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50">
     <div class="h-16 w-full px-6 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4 min-w-[260px]">
+        <div class="flex items-center gap-2 sm:gap-4 lg:min-w-[260px]">
+            <button onclick="document.getElementById('admin-sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebar-overlay').classList.toggle('hidden');" class="lg:hidden p-1 text-on-surface">
+                <span class="material-symbols-outlined text-[28px]">menu</span>
+            </button>
+            <div class="flex items-center gap-2 sm:gap-4">
             <span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span>
             <div class="flex flex-col">
                 <span class="font-headline-sm text-headline-sm text-primary leading-none tracking-tight">EstateHub</span>
@@ -42,7 +46,8 @@
         </div>
     </div>
 </header>
-<aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex flex-col justify-between overflow-y-auto">
+<div id="sidebar-overlay" class="fixed inset-0 bg-on-surface/50 z-30 hidden lg:hidden" onclick="document.getElementById('admin-sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-overlay').classList.add('hidden');"></div>
+<aside id="admin-sidebar" class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex flex-col justify-between overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="p-4 flex flex-col gap-6">
         <nav class="flex flex-col gap-1">
             <a aria-current="page" class="flex items-center justify-between px-3 py-2.5 transition-all group bg-primary-container text-on-primary font-label-md rounded-lg shadow-sm" href="${pageContext.request.contextPath}/admin/dashboard">
@@ -87,7 +92,7 @@
         </nav>
     </div>
 </aside>
-<div class="pl-64 flex flex-col min-h-screen">
+<div class="lg:pl-64 flex flex-col min-h-screen w-full">
     <main class="relative pt-16 flex-1 w-full px-8 pb-12 bg-background">
         <div class="flex flex-col w-full gap-8">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-surface-container-lowest p-6 rounded-xl shadow-sm">
@@ -253,6 +258,7 @@
 </div>
 </body>
 </html>
+
 
 
 
