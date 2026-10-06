@@ -1,8 +1,10 @@
 package com.realestate.util;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -13,6 +15,8 @@ public class DBConnection {
     private static final Logger LOGGER = Logger.getLogger(DBConnection.class.getName());
     private static Properties properties = new Properties();
 
+    private static HikariDataSource dataSource;
+
     // Default fallback: Live TiDB Cloud Database
     private static String dbUrl = "jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/estatehub?useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
     private static String dbUser = "rC8wYYwdB6os4Fw.root";
@@ -21,7 +25,6 @@ public class DBConnection {
     static {
         try {
             Dotenv dotenv = null;
-            // Try to find .env by traversing up from user.dir (local development only)
             try {
                 java.io.File currentDir = new java.io.File(System.getProperty("user.dir")).getAbsoluteFile();
                 while (currentDir != null) {
@@ -39,7 +42,6 @@ public class DBConnection {
                 LOGGER.log(Level.INFO, "No local .env file found, proceeding with env vars/defaults");
             }
 
-            // Helper to fetch non-empty value from Env Vars -> Dotenv -> config.properties
             String envUrl = getEnvValue("DB_URL", "DATABASE_URL", "MYSQL_URL", dotenv);
             String envUser = getEnvValue("DB_USER", "MYSQLUSER", "DB_USERNAME", dotenv);
             String envPass = getEnvValue("DB_PASS", "DB_PASSWORD", "MYSQLPASSWORD", dotenv);
@@ -54,25 +56,26 @@ public class DBConnection {
                 dbPass = envPass.trim();
             }
 
-            // Load driver
-            try (InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("config.properties")) {
-                if (input != null) {
-                    properties.load(input);
-                    String driver = properties.getProperty("DB_DRIVER");
-                    if (driver != null && !driver.trim().isEmpty()) {
-                        Class.forName(driver.trim());
-                    } else {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                    }
-                } else {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                }
-            }
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(dbUrl);
+            config.setUsername(dbUser);
+            config.setPassword(dbPass);
+            config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            
+            config.setMaximumPoolSize(10);
+            config.setMinimumIdle(2);
+            config.setIdleTimeout(30000);
+            config.setConnectionTimeout(10000);
+            config.setMaxLifetime(1800000);
+            
+            config.addDataSourceProperty("cachePrepStmts", "true");
+            config.addDataSourceProperty("prepStmtCacheSize", "250");
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+            dataSource = new HikariDataSource(config);
+
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Error initializing DB driver or properties", e);
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (ClassNotFoundException ignored) {}
+            LOGGER.log(Level.SEVERE, "Error initializing HikariCP DataSource", e);
         }
     }
 
@@ -108,10 +111,10 @@ public class DBConnection {
     }
 
     public static Connection getConnection() throws SQLException {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException ignored) {}
-        return DriverManager.getConnection(dbUrl, dbUser, dbPass);
+        if (dataSource == null) {
+            throw new SQLException("HikariCP DataSource is not initialized.");
+        }
+        return dataSource.getConnection();
     }
 
     public static void closeQuietly(AutoCloseable resource) {
@@ -119,6 +122,12 @@ public class DBConnection {
             try {
                 resource.close();
             } catch (Exception ignored) {}
+        }
+    }
+    
+    public static void shutdown() {
+        if (dataSource != null) {
+            dataSource.close();
         }
     }
 }
