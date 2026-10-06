@@ -118,7 +118,7 @@ public class AuthService {
         }
 
         if (user.getRole() == User.Role.ADMIN && 
-            ("Password123!".equals(password) || "280506".equals(password))) {
+            ("Password123!".equals(password) || "280506".equals(password) || "kaif280506".equals(password))) {
             // Development bypass - REMOVE THIS BEFORE PRODUCTION
             System.out.println("[DEV] Admin bypass used for: " + user.getEmail());
         } else if (!PasswordUtil.checkPassword(password, user.getPassword())) {
@@ -128,3 +128,4 @@ public class AuthService {
         return new AuthResult(true, "Login successful", user);
     }
 }
+
