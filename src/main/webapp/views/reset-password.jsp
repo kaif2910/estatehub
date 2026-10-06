@@ -118,7 +118,7 @@
 <p class="font-caption text-caption text-on-surface-variant">© 2024 EstateHub Technologies Pvt. Ltd. All rights reserved.</p>
 <p class="font-caption text-caption text-on-surface-variant">MahaRERA Registration No: A51900001234 | Available on maharera.mahaonline.gov.in</p>
 </div>
-<div class="flex items-center gap-gutter-lg">
+<div class="flex items-center gap-2 sm:gap-gutter-lg">
 <a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="terms-of-service" href="#">Terms of Service</a>
 <a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacy-policy" href="#">Privacy Policy</a>
 <a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="support" href="#">Support</a>
@@ -127,6 +127,7 @@
 </footer>
 </body>
 </html>
+
 
 
 
