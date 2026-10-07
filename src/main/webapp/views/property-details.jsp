@@ -335,54 +335,6 @@
 </div>
 </div>
 </section>
-<!-- 4. Floor Plan & Unit Layout Section -->
-<section class="bg-surface-container-lowest rounded-2xl p-gutter-lg shadow-sm space-y-4">
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-<div>
-<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Floor Plan &amp; Spatial Layout</h2>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Carefully proportioned ${property.bedrooms} BHK layout designed for maximum natural sunlight and spatial efficiency</p>
-</div>
-<div class="flex items-center gap-2">
-<button class="px-3 py-1.5 rounded-lg bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold flex items-center gap-1 shadow-sm">
-<span class="material-symbols-outlined text-[16px]">view_in_ar</span> View 3D Plan
-              </button>
-</div>
-</div>
-<!-- Floorplan Interactive Card -->
-<div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-surface-container-low p-4 rounded-xl">
-<div class="md:col-span-7 relative group cursor-pointer overflow-hidden rounded-lg bg-surface-container-lowest p-2 shadow-inner">
-<img class="w-full h-64 object-contain mx-auto group-hover:scale-105 transition-transform duration-300" alt="${property.title} Architectural Plan" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80"/>
-<div class="absolute bottom-2 right-2 bg-inverse-surface/80 text-surface-bright font-caption text-caption px-2 py-1 rounded flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">zoom_in</span> Click to Enlarge
-              </div>
-</div>
-<div class="md:col-span-5 space-y-3">
-<h3 class="font-label-md text-label-md font-bold text-on-surface">Room Specs & Dimensions</h3>
-<div class="space-y-2 font-body-sm text-body-sm">
-<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest">
-<span class="text-on-surface-variant">Carpet Area</span>
-<span class="font-bold text-on-surface">${property.areaSqft} sq.ft</span>
-</div>
-<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest">
-<span class="text-on-surface-variant">Bedrooms</span>
-<span class="font-bold text-on-surface">${property.bedrooms} BHK</span>
-</div>
-<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest">
-<span class="text-on-surface-variant">Bathrooms</span>
-<span class="font-bold text-on-surface">${property.bathrooms} Baths</span>
-</div>
-<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest">
-<span class="text-on-surface-variant">Furnishing</span>
-<span class="font-bold text-on-surface">${property.furnishing}</span>
-</div>
-<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest">
-<span class="text-on-surface-variant">Property Type</span>
-<span class="font-bold text-on-surface">${property.categoryName}</span>
-</div>
-</div>
-</div>
-</div>
-</section>
 <!-- 5. Locality & Commute Map Section -->
 <section class="bg-surface-container-lowest rounded-2xl p-gutter-lg shadow-sm space-y-4" id="localitySection">
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
