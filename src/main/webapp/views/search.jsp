@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -482,7 +482,7 @@
       var marker = L.marker([pLat, pLng]).addTo(map);
       var popupContent = 
         '<div style="width: 180px; font-family: Inter, sans-serif;">' +
-        '  <img src="' + item.image + '" style="width: 100%; height: 85px; object-fit: cover; border-radius: 6px; margin-bottom: 6px;"/>' +
+        '  <img src="' + item.image + '" style="width: 100%; height: 85px; object-fit: cover; border-radius: 6px; margin-bottom: 6px;" onerror="this.onerror=null; this.src=\'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80\';"/>' +
         '  <div style="font-weight: 700; font-size: 12px; color: #181c23; margin-bottom: 2px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">' + item.title + '</div>' +
         '  <div style="font-weight: 800; font-size: 13px; color: #450081; margin-bottom: 4px;">â‚¹ ' + item.price + '</div>' +
         '  <div style="font-size: 11px; color: #4b4452; margin-bottom: 6px;">ðŸ“ ' + item.location + ', ' + item.city + '</div>' +

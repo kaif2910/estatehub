@@ -134,7 +134,7 @@
                                     <tr class="hover:bg-surface-container-low/60 transition-colors group">
                                         <td class="py-4 px-3">
                                             <div class="relative w-28 h-18 aspect-video rounded-lg overflow-hidden bg-surface-container shadow-sm">
-                                                <img class="w-full h-full object-cover" src="${p.primaryImageUrl}"/>
+                                                <img class="w-full h-full object-cover" src="${p.primaryImageUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';"/>
                                             </div>
                                         </td>
                                         <td class="py-4 px-3">
