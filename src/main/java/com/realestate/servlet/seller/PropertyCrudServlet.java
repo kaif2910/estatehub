@@ -2,6 +2,7 @@ package com.realestate.servlet.seller;
 
 import com.realestate.dao.CategoryDAO;
 import com.realestate.dao.PropertyDAO;
+import com.realestate.util.CloudStorageService;
 import com.realestate.model.Property;
 import com.realestate.model.PropertyCategory;
 import com.realestate.model.PropertyImage;
@@ -179,36 +180,29 @@ public class PropertyCrudServlet extends HttpServlet {
     private int handleImageUploads(HttpServletRequest request, int propertyId) throws IOException, ServletException {
         int count = 0;
         
+        String uploadDir = getServletContext().getRealPath("/uploads");
+        if (uploadDir == null) {
+            uploadDir = System.getProperty("java.io.tmpdir") + File.separator + "estatehub-uploads";
+        }
+
         for (int i = 1; i <= 4; i++) {
             Part part = request.getPart("propertyPhoto" + i);
             if (part != null && part.getSize() > 0) {
-                // Ignore files > 10MB
                 if (part.getSize() > 1024 * 1024 * 10) {
                     request.getSession().setAttribute("errorMessage", "One or more images were too large (max 10MB) and were skipped.");
                     continue;
                 }
                 
-                String fileName = System.currentTimeMillis() + "_" + getSubmittedFileName(part);
-                
-                String uploadDir = getServletContext().getRealPath("/uploads");
-                if (uploadDir == null) {
-                    uploadDir = System.getProperty("java.io.tmpdir") + File.separator + "estatehub-uploads";
+                String imageUrl = CloudStorageService.uploadFile(part, uploadDir, request.getContextPath());
+                if (imageUrl != null) {
+                    PropertyImage img = new PropertyImage();
+                    img.setPropertyId(propertyId);
+                    img.setImageUrl(imageUrl);
+                    img.setFileName(getSubmittedFileName(part));
+                    img.setPrimary(count == 0); // First successfully uploaded image is primary
+                    propertyDAO.addImage(img);
+                    count++;
                 }
-                File dir = new File(uploadDir);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                
-                String savePath = uploadDir + File.separator + fileName;
-                part.write(savePath);
-                
-                PropertyImage img = new PropertyImage();
-                img.setPropertyId(propertyId);
-                img.setImageUrl(request.getContextPath() + "/uploads/" + fileName);
-                img.setFileName(fileName);
-                img.setPrimary(count == 0); // First successfully uploaded image is primary
-                propertyDAO.addImage(img);
-                count++;
             }
         }
         return count;

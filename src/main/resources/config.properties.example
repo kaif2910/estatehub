@@ -31,3 +31,8 @@ UPLOAD_MAX_FILE_SIZE_MB=10
 MAP_API_KEY=your_google_maps_api_key_here
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 
+# Cloudinary Permanent Cloud Storage (100% Free Account: https://cloudinary.com)
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_UPLOAD_PRESET=your_cloudinary_unsigned_preset
+
+
