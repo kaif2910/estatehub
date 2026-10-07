@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -61,7 +61,7 @@
 <div class="flex items-center gap-gutter-md">
 <div class="relative">
 <div class="w-14 h-14 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-headline-md text-headline-md shadow-md">${fn:substring(sessionScope.currentUser.name, 0, 1)}</div>
-<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-tertiary-container text-tertiary-fixed flex items-center justify-center shadow-sm" title="Verified Buyer">
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-tertiary-container text-tertiary-fixed flex items-center justify-center shadow-sm" title="Verified User">
 <span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">verified</span>
 </span>
 </div>
@@ -69,59 +69,27 @@
 <div class="flex items-center gap-2">
 <h1 class="font-headline-lg text-headline-lg text-on-surface">${sessionScope.currentUser.name}</h1>
 <span class="bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
-<span class="material-symbols-outlined text-[13px]">verified_user</span> RERA Pre-Approved Buyer
-              </span>
+<span class="material-symbols-outlined text-[13px]">verified_user</span> Verified Account
+</span>
 </div>
 <p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-2 mt-0.5">
-<span>Looking for 2, 3 BHK in Western Suburbs &amp; BKC</span>
+<span>Role: ${sessionScope.currentUser.role}</span>
 <span class="w-1 h-1 rounded-full bg-outline"></span>
-<span class="text-primary-container font-semibold">Budget: â‚¹1.5 Cr â€“ â‚¹4.0 Cr</span>
+<span class="text-primary-container font-semibold">${sessionScope.currentUser.email}</span>
 </p>
-</div>
-</div>
-<!-- Quick Activity Stats Strip -->
-<div class="flex items-center gap-gutter-sm">
-<div class="bg-surface-container-lowest px-3.5 py-2 rounded-lg shadow-sm flex items-center gap-2.5">
-<span class="material-symbols-outlined text-primary-container text-[20px]">calendar_month</span>
-<div class="text-left">
-<p class="font-caption text-caption text-on-surface-variant">Next Site Visit</p>
-<p class="font-label-sm text-label-sm text-on-surface font-bold">Tomorrow, 11:30 AM</p>
-</div>
-</div>
-<div class="bg-surface-container-lowest px-3.5 py-2 rounded-lg shadow-sm flex items-center gap-2.5">
-<span class="material-symbols-outlined text-secondary-container text-[20px]">mark_email_unread</span>
-<div class="text-left">
-<p class="font-caption text-caption text-on-surface-variant">Agent Replies</p>
-<p class="font-label-sm text-label-sm text-on-surface font-bold">3 Unread</p>
-</div>
 </div>
 </div>
 </div>
 <!-- Navigation Tabs Strip -->
 <div class="flex items-center gap-gutter-sm overflow-x-auto scrollbar-none pt-2">
-<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface py-3 px-3 transition-colors flex items-center gap-1.5 whitespace-nowrap" href="javascript:void(0)">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface py-3 px-3 transition-colors flex items-center gap-1.5 whitespace-nowrap" href="${pageContext.request.contextPath}/customer/dashboard">
 <span class="material-symbols-outlined text-[18px]">dashboard</span>
 <span>Dashboard</span>
 </a>
-<a class="font-label-md text-label-md text-on-primary bg-primary-container py-2.5 px-4 rounded-t-lg shadow-sm flex items-center gap-2 whitespace-nowrap font-bold" href="javascript:void(0)">
+<a class="font-label-md text-label-md text-on-primary bg-primary-container py-2.5 px-4 rounded-t-lg shadow-sm flex items-center gap-2 whitespace-nowrap font-bold" href="${pageContext.request.contextPath}/favorites">
 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">bookmark</span>
 <span>Favorites &amp; Shortlist</span>
-<span class="bg-secondary-container text-on-secondary font-caption text-[11px] px-1.5 py-0.5 rounded-full font-bold">8</span>
-</a>
-<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface py-3 px-3 transition-colors flex items-center gap-1.5 whitespace-nowrap" href="javascript:void(0)">
-<span class="material-symbols-outlined text-[18px]">saved_search</span>
-<span>Saved Searches</span>
-<span class="bg-surface-container-high text-on-surface-variant font-caption text-[11px] px-1.5 py-0.2 rounded-full">4</span>
-</a>
-<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface py-3 px-3 transition-colors flex items-center gap-1.5 whitespace-nowrap" href="javascript:void(0)">
-<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
-<span>AI Recommendations</span>
-<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
-</a>
-<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface py-3 px-3 transition-colors flex items-center gap-1.5 whitespace-nowrap" href="javascript:void(0)">
-<span class="material-symbols-outlined text-[18px]">tour</span>
-<span>My Site Visits</span>
-<span class="bg-surface-container-high text-on-surface-variant font-caption text-[11px] px-1.5 py-0.2 rounded-full">2</span>
+<span class="bg-secondary-container text-on-secondary font-caption text-[11px] px-1.5 py-0.5 rounded-full font-bold">${fn:length(favorites)}</span>
 </a>
 </div>
 </div>
@@ -133,35 +101,20 @@
 <div>
 <div class="flex items-center gap-3">
 <h2 class="font-headline-xl text-headline-xl text-on-surface">My Shortlisted Properties</h2>
-<span class="bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm px-2.5 py-0.5 rounded-full font-bold">8 Homes Saved</span>
+<span class="bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm px-2.5 py-0.5 rounded-full font-bold">${fn:length(favorites)} Homes Saved</span>
 </div>
 <p class="font-body-md text-body-md text-on-surface-variant mt-1">
-          Compare specs side-by-side, record private visit notes, or reach RERA registered builders directly.
-        </p>
-</div>
-<!-- Action Utility Bar -->
-<div class="flex flex-wrap items-center gap-2">
-<button class="px-3.5 py-2 rounded-lg bg-surface-container-lowest text-primary-container font-label-md text-label-md font-semibold shadow-sm hover:bg-surface-container-low transition-all flex items-center gap-1.5" id="toggle-compare-mode">
-<span class="material-symbols-outlined text-[18px]">compare_arrows</span>
-<span>Compare (2 Selected)</span>
-</button>
-<button class="px-3.5 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md font-semibold shadow-sm hover:bg-surface-container-low transition-all flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
-<span class="hidden sm:inline">Export PDF</span>
-</button>
-<button class="px-3.5 py-2 rounded-lg bg-tertiary-container text-tertiary-fixed font-label-md text-label-md font-semibold shadow-sm hover:bg-tertiary transition-all flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[18px]">share</span>
-<span>WhatsApp List</span>
-</button>
+Manage your saved listings and view detailed property information.
+</p>
 </div>
 </div>
 <!-- Filter & Sorter Toolbar -->
 <div class="bg-surface-container-lowest p-gutter-md rounded-xl shadow-sm mb-gutter-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-gutter-md">
 <!-- Quick Filter Chips -->
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="bg-primary-container text-on-primary font-label-sm text-label-sm px-3 py-1.5 rounded-full font-semibold shadow-sm">
-          All (8)
-        </button>
+<span class="bg-primary-container text-on-primary font-label-sm text-label-sm px-3 py-1.5 rounded-full font-semibold shadow-sm">
+All (${fn:length(favorites)})
+</span>
 <button class="bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
 <span class="w-2 h-2 rounded-full bg-secondary-container"></span>
 <span>Price Dropped (2)</span>
