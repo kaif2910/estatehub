@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -151,7 +151,7 @@
 <section class="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto lg:h-[460px] rounded-2xl overflow-hidden shadow-sm bg-surface-container-low">
 <!-- Large Hero Photo (60% Desktop) -->
 <div class="lg:col-span-7 relative group cursor-pointer overflow-hidden min-h-[300px] lg:min-h-full">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${property.title}" src="${property.primaryImageUrl}"/>
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${property.title}" src="${property.primaryImageUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';" />
 <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/60 via-transparent to-transparent"></div>
 <div class="absolute bottom-4 left-4 flex flex-wrap items-center gap-2">
 <span class="bg-inverse-surface/85 backdrop-blur-sm text-surface-bright px-3 py-1 rounded-lg font-label-sm text-label-sm flex items-center gap-1.5">
@@ -166,14 +166,14 @@
     <c:forEach items="${property.images}" var="img" varStatus="st">
       <c:if test="${st.index > 0 && st.index <= 4}">
         <div class="relative group cursor-pointer overflow-hidden rounded-lg">
-          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${img.imageUrl}" alt="${property.title}"/>
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${img.imageUrl}" alt="${property.title}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';" />
         </div>
       </c:if>
     </c:forEach>
   </c:when>
   <c:otherwise>
     <div class="relative group cursor-pointer overflow-hidden rounded-lg col-span-2 row-span-2">
-      <img class="w-full h-full object-cover" src="${property.primaryImageUrl}" alt="${property.title}"/>
+      <img class="w-full h-full object-cover" src="${property.primaryImageUrl}" alt="${property.title}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';" />
     </div>
   </c:otherwise>
 </c:choose>
@@ -189,7 +189,7 @@
 <div class="flex flex-col sm:flex-row sm:items-baseline justify-between pb-4 border-b border-surface-container-high gap-3">
 <div>
 <div class="flex items-baseline gap-2">
-<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold text-primary">₹ ${property.price}</span>
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold text-primary">â‚¹ ${property.price}</span>
 <span class="font-body-md text-body-md text-on-surface-variant font-medium">(${property.purpose})</span>
 </div>
 <p class="font-caption text-caption text-on-surface-variant mt-0.5">Verified Direct Owner Listing</p>
@@ -388,7 +388,7 @@
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
 <div>
 <h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Locality &amp; Commute Map</h2>
-<p class="font-body-sm text-body-sm text-on-surface-variant">${property.title} • ${property.location}, ${property.city}</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">${property.title} â€¢ ${property.location}, ${property.city}</p>
 </div>
 <a class="font-label-sm text-label-sm font-semibold text-tertiary-fixed bg-tertiary-container hover:bg-tertiary px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-colors shadow-xs"
    target="_blank"
@@ -434,7 +434,7 @@
     var detailMap = L.map('propertyDetailMap').setView([targetLat, targetLng], 14);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '© OpenStreetMap'
+      attribution: 'Â© OpenStreetMap'
     }).addTo(detailMap);
 
     // Detect User GPS location and place "My Location" marker
@@ -444,7 +444,7 @@
         var uLng = pos.coords.longitude;
         var myIcon = L.divIcon({
           className: 'user-gps-marker',
-          html: '<div style="background:#00503a; color:white; border:2px solid white; border-radius:12px; padding:4px 8px; font-size:10px; font-weight:800; box-shadow:0 2px 6px rgba(0,0,0,0.3);">📍 My Location</div>',
+          html: '<div style="background:#00503a; color:white; border:2px solid white; border-radius:12px; padding:4px 8px; font-size:10px; font-weight:800; box-shadow:0 2px 6px rgba(0,0,0,0.3);">ðŸ“ My Location</div>',
           iconSize: [90, 25]
         });
         L.marker([uLat, uLng], { icon: myIcon }).addTo(detailMap).bindPopup("<b>Your Current Location</b>");
@@ -457,8 +457,8 @@
     marker.bindPopup(
       '<div style="font-family: Inter, sans-serif; padding: 4px;">' +
       '  <div style="font-weight: 700; font-size: 13px; color: #450081;">${property.title}</div>' +
-      '  <div style="font-weight: 800; font-size: 14px; color: #181c23; margin-top: 2px;">₹ ${property.price}</div>' +
-      '  <div style="font-size: 11px; color: #4b4452; margin-top: 2px; margin-bottom: 6px;">📍 ${property.location}, ${property.city}</div>' +
+      '  <div style="font-weight: 800; font-size: 14px; color: #181c23; margin-top: 2px;">â‚¹ ${property.price}</div>' +
+      '  <div style="font-size: 11px; color: #4b4452; margin-top: 2px; margin-bottom: 6px;">ðŸ“ ${property.location}, ${property.city}</div>' +
       '  <a href="' + gMapsDirUrl + '" target="_blank" style="display:block; text-align: center; background: #00503a; color: white; padding: 5px 8px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700;">Get Directions on Google Maps</a>' +
       '</div>'
     ).openPopup();
@@ -538,7 +538,7 @@
 </div>
 <div class="flex flex-wrap items-center justify-between text-caption font-caption text-on-surface-variant pt-3 border-t border-surface-container-high">
 <span>Locality Benchmark: <strong>${property.location}, ${property.city}</strong></span>
-<span>Listing Price: <strong>₹ ${property.price}</strong></span>
+<span>Listing Price: <strong>â‚¹ ${property.price}</strong></span>
 </div>
 </div>
 </section>
@@ -644,7 +644,7 @@
 <c:forEach items="${similarProperties}" var="sp">
 <div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col border border-outline-variant/30">
 <div class="relative h-48 overflow-hidden bg-surface-container">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="${sp.primaryImageUrl}" alt="${sp.title}" />
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="${sp.primaryImageUrl}" alt="${sp.title}"  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';" />
 <span class="absolute top-3 left-3 bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2.5 py-0.5 rounded-full font-semibold flex items-center gap-1">
 <span class="material-symbols-outlined text-[13px]">location_on</span> Locality Match
 </span>
@@ -652,7 +652,7 @@
 <div class="p-4 space-y-2 flex-1 flex flex-col justify-between">
 <div>
 <div class="flex items-baseline justify-between mb-1">
-<span class="font-headline-md text-headline-md font-bold text-on-surface">₹ ${sp.price}</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">â‚¹ ${sp.price}</span>
 <span class="text-[10px] font-bold text-primary uppercase">${sp.purpose}</span>
 </div>
 <h3 class="font-label-md text-label-md font-bold text-on-surface truncate group-hover:text-primary transition-colors">
@@ -663,9 +663,9 @@
 </p>
 <div class="flex items-center gap-2 pt-2 text-on-surface font-caption text-caption">
 <span><strong>${sp.bedrooms}</strong> Beds</span>
-<span>•</span>
+<span>â€¢</span>
 <span><strong>${sp.areaSqft}</strong> sq.ft</span>
-<span>•</span>
+<span>â€¢</span>
 <span class="truncate"><strong>${sp.categoryName}</strong></span>
 </div>
 </div>
@@ -702,7 +702,7 @@ View Details
       });
     }
   </script>
-</div></main><footer class="w-full bg-inverse-surface text-inverse-on-surface pt-gutter-2xl pb-gutter-xl"><div class="max-w-container-max mx-auto px-gutter-lg"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-xl mb-gutter-2xl"><div class="space-y-gutter-md"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span><span class="font-headline-md text-headline-md text-surface-container-lowest tracking-tight">EstateHub</span></div><p class="font-body-sm text-body-sm text-surface-variant max-w-xs">India's trusted real estate portal for verified homes, apartments, and commercial spaces.</p><div class="pt-gutter-xs flex items-center gap-gutter-sm"><span class="flex items-center gap-1 bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2.5 py-1 rounded-full"><span class="material-symbols-outlined text-[14px]">verified</span> 100% RERA Verified</span></div></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Popular Searches</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="rent-properties" href="javascript:void(0)">Flats in Mumbai</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Flats in Bangalore</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="new-projects" href="javascript:void(0)">Apartments in Gurgaon</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Villas in Hyderabad</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="commercial-spaces" href="javascript:void(0)">Offices in Pune</a></li></ul></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Quick Links</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="about-us" href="javascript:void(0)">About Us</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="careers" href="javascript:void(0)">Careers</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="research-insights" href="javascript:void(0)">Research &amp; Insights</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="contact-support" href="javascript:void(0)">Contact Support</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="terms-privacy" href="javascript:void(0)">Terms &amp; Privacy</a></li></ul></div><div class="space-y-gutter-md"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Experience on Mobile</h3><p class="font-body-sm text-body-sm text-surface-variant">Download EstateHub App for instant notifications and direct agent chats.</p><div class="flex flex-col gap-2"><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">play_arrow</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">GET IT ON</p><p class="font-label-sm text-label-sm font-semibold">Google Play</p></div></div><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">install_mobile</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">DOWNLOAD ON</p><p class="font-label-sm text-label-sm font-semibold">App Store</p></div></div></div></div></div><div class="pt-gutter-lg mt-gutter-xl border-t border-outline/20 flex flex-col md:flex-row items-center justify-between gap-gutter-md font-caption text-caption text-surface-variant"><div>© 2025 EstateHub Technologies Private Limited. All rights reserved.</div><div class="flex items-center gap-gutter-xs text-surface-dim"><span class="material-symbols-outlined text-tertiary-fixed text-[16px]">shield</span><span>Made with trust for home seekers across India</span></div></div></div></footer><script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script></body></html>
+</div></main><footer class="w-full bg-inverse-surface text-inverse-on-surface pt-gutter-2xl pb-gutter-xl"><div class="max-w-container-max mx-auto px-gutter-lg"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-xl mb-gutter-2xl"><div class="space-y-gutter-md"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span><span class="font-headline-md text-headline-md text-surface-container-lowest tracking-tight">EstateHub</span></div><p class="font-body-sm text-body-sm text-surface-variant max-w-xs">India's trusted real estate portal for verified homes, apartments, and commercial spaces.</p><div class="pt-gutter-xs flex items-center gap-gutter-sm"><span class="flex items-center gap-1 bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2.5 py-1 rounded-full"><span class="material-symbols-outlined text-[14px]">verified</span> 100% RERA Verified</span></div></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Popular Searches</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="rent-properties" href="javascript:void(0)">Flats in Mumbai</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Flats in Bangalore</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="new-projects" href="javascript:void(0)">Apartments in Gurgaon</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Villas in Hyderabad</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="commercial-spaces" href="javascript:void(0)">Offices in Pune</a></li></ul></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Quick Links</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="about-us" href="javascript:void(0)">About Us</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="careers" href="javascript:void(0)">Careers</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="research-insights" href="javascript:void(0)">Research &amp; Insights</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="contact-support" href="javascript:void(0)">Contact Support</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="terms-privacy" href="javascript:void(0)">Terms &amp; Privacy</a></li></ul></div><div class="space-y-gutter-md"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Experience on Mobile</h3><p class="font-body-sm text-body-sm text-surface-variant">Download EstateHub App for instant notifications and direct agent chats.</p><div class="flex flex-col gap-2"><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">play_arrow</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">GET IT ON</p><p class="font-label-sm text-label-sm font-semibold">Google Play</p></div></div><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">install_mobile</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">DOWNLOAD ON</p><p class="font-label-sm text-label-sm font-semibold">App Store</p></div></div></div></div></div><div class="pt-gutter-lg mt-gutter-xl border-t border-outline/20 flex flex-col md:flex-row items-center justify-between gap-gutter-md font-caption text-caption text-surface-variant"><div>Â© 2025 EstateHub Technologies Private Limited. All rights reserved.</div><div class="flex items-center gap-gutter-xs text-surface-dim"><span class="material-symbols-outlined text-tertiary-fixed text-[16px]">shield</span><span>Made with trust for home seekers across India</span></div></div></div></footer><script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script></body></html>
 
 
 

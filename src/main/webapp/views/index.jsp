@@ -224,7 +224,7 @@ Hinjewadi
 <c:forEach items="${properties}" var="p">
         <div class="group bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
           <div class="relative w-full aspect-video overflow-hidden bg-surface-container">
-            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${p.primaryImageUrl}" alt="${p.title}" />
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${p.primaryImageUrl}" alt="${p.title}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';"/>
             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1">
               <span class="inline-flex items-center gap-1 bg-surface-container-lowest/90 backdrop-blur-md text-tertiary font-caption text-caption font-bold px-2 py-0.5 rounded-md shadow-xs">
                 <span class="material-symbols-outlined text-[14px] text-tertiary-fixed-dim">verified</span> Verified

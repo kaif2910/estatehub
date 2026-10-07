@@ -28,7 +28,6 @@ import java.util.List;
 public class BrokerVerificationServlet extends HttpServlet {
 
     private final VerificationService verificationService = new VerificationService();
-    private static final String UPLOAD_DIR = "C:\\Users\\admin\\OneDrive\\Desktop\\sem1\\EstateHub\\uploads";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -67,15 +66,23 @@ public class BrokerVerificationServlet extends HttpServlet {
             return;
         }
 
-        // Limit to 25 KB
-        if (filePart.getSize() > 25 * 1024) {
-            session.setAttribute("errorMessage", "Certificate document size must not exceed 25 KB.");
+        // Limit to 2 MB
+        if (filePart.getSize() > 2 * 1024 * 1024) {
+            session.setAttribute("errorMessage", "Certificate document size must not exceed 2 MB.");
             response.sendRedirect(request.getContextPath() + "/broker/verification");
             return;
         }
 
         String fileName = System.currentTimeMillis() + "_" + getSubmittedFileName(filePart);
-        String savePath = UPLOAD_DIR + File.separator + fileName;
+        String uploadDir = getServletContext().getRealPath("/uploads");
+        if (uploadDir == null) {
+            uploadDir = System.getProperty("java.io.tmpdir") + File.separator + "estatehub-uploads";
+        }
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        String savePath = uploadDir + File.separator + fileName;
         filePart.write(savePath);
 
         List<VerificationDocument> docs = new ArrayList<>();

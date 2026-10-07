@@ -75,9 +75,17 @@ public class OtpVerifyServlet extends HttpServlet {
 
             // Auto-login user
             user.setEmailVerified(true);
-            user.setVerificationStatus(User.VerificationStatus.VERIFIED);
+            
+            if (user.getRole() == com.realestate.model.User.Role.CUSTOMER) {
+                user.setVerificationStatus(com.realestate.model.User.VerificationStatus.VERIFIED);
+                userDAO.updateUserVerificationStatus(user.getUserId(), com.realestate.model.User.VerificationStatus.VERIFIED, "OTP Verified");
+            } else {
+                // Brokers/Sellers need manual KYC
+                user.setVerificationStatus(com.realestate.model.User.VerificationStatus.UNVERIFIED);
+                userDAO.updateUserVerificationStatus(user.getUserId(), com.realestate.model.User.VerificationStatus.UNVERIFIED, "Email verified, pending KYC");
+            }
+            
             userDAO.setEmailVerified(user.getUserId(), true);
-            userDAO.updateUserVerificationStatus(user.getUserId(), User.VerificationStatus.VERIFIED, "OTP Verified");
 
             session.setAttribute("currentUser", new com.realestate.model.SessionUser(user));
             session.setAttribute("userId", user.getUserId());

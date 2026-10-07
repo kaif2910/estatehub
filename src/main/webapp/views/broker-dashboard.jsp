@@ -42,6 +42,12 @@
 </div></div></header>
 <main class="w-full pt-20 bg-surface min-h-[calc(100vh-140px)]">
 <div class="flex flex-col w-full">
+<c:if test="${sessionScope.currentUser.verificationStatus == 'UNVERIFIED'}">
+  <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 mx-4 mt-4" role="alert">
+    <p class="font-bold">Action Required: KYC Pending</p>
+    <p>Your account is currently unverified. Please <a href="${pageContext.request.contextPath}/views/verification.jsp" class="underline font-semibold">upload your KYC certificate</a> to verify your account.</p>
+  </div>
+</c:if>
 <div class="w-full bg-gradient-to-r from-primary via-primary-container to-primary text-on-primary shadow-xl">
 <div class="max-w-[1280px] mx-auto px-gutter-lg py-gutter-xl">
 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-gutter-lg">

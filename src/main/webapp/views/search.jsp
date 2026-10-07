@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -290,7 +290,7 @@
                   
                   <!-- PHOTO IMAGE -->
                   <div class="md:w-5/12 h-56 md:h-auto bg-surface-container relative overflow-hidden shrink-0">
-                    <img src="${p.primaryImageUrl}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                    <img src="${p.primaryImageUrl}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';" />
                     <span class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md text-tertiary text-[11px] font-bold px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1">
                       <span class="material-symbols-outlined text-[14px]">verified</span> Verified
                     </span>
@@ -303,7 +303,7 @@
                   <div class="p-6 md:w-7/12 flex flex-col justify-between space-y-4">
                     <div>
                       <div class="flex items-baseline justify-between mb-1">
-                        <span class="font-heading text-2xl font-extrabold text-on-surface">₹ ${p.price}</span>
+                        <span class="font-heading text-2xl font-extrabold text-on-surface">â‚¹ ${p.price}</span>
                         <span class="text-xs font-bold text-primary uppercase">${p.purpose}</span>
                       </div>
 
@@ -385,7 +385,7 @@
 <!-- FOOTER -->
 <footer class="w-full bg-surface-container-low border-t border-surface-container-high py-6 px-6">
   <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
-    <p>© 2026 EstateHub Technologies Pvt. Ltd. All rights reserved.</p>
+    <p>Â© 2026 EstateHub Technologies Pvt. Ltd. All rights reserved.</p>
     <div class="flex items-center gap-6">
       <a href="#" class="hover:underline">Privacy Policy</a>
       <a href="#" class="hover:underline">Terms of Service</a>
@@ -443,7 +443,7 @@
     var map = L.map('searchMap').setView([defaultLat, defaultLng], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '© OpenStreetMap'
+      attribution: 'Â© OpenStreetMap'
     }).addTo(map);
 
     var bounds = [];
@@ -455,7 +455,7 @@
         var uLng = pos.coords.longitude;
         var myIcon = L.divIcon({
           className: 'user-gps-marker',
-          html: '<div style="background:#00503a; color:white; border:2px solid white; border-radius:12px; padding:3px 7px; font-size:10px; font-weight:800; shadow:0 2px 6px rgba(0,0,0,0.3);">📍 My Location</div>',
+          html: '<div style="background:#00503a; color:white; border:2px solid white; border-radius:12px; padding:3px 7px; font-size:10px; font-weight:800; shadow:0 2px 6px rgba(0,0,0,0.3);">ðŸ“ My Location</div>',
           iconSize: [80, 25]
         });
         L.marker([uLat, uLng], { icon: myIcon }).addTo(map).bindPopup("<b>You are here!</b>");
@@ -484,8 +484,8 @@
         '<div style="width: 180px; font-family: Inter, sans-serif;">' +
         '  <img src="' + item.image + '" style="width: 100%; height: 85px; object-fit: cover; border-radius: 6px; margin-bottom: 6px;"/>' +
         '  <div style="font-weight: 700; font-size: 12px; color: #181c23; margin-bottom: 2px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">' + item.title + '</div>' +
-        '  <div style="font-weight: 800; font-size: 13px; color: #450081; margin-bottom: 4px;">₹ ' + item.price + '</div>' +
-        '  <div style="font-size: 11px; color: #4b4452; margin-bottom: 6px;">📍 ' + item.location + ', ' + item.city + '</div>' +
+        '  <div style="font-weight: 800; font-size: 13px; color: #450081; margin-bottom: 4px;">â‚¹ ' + item.price + '</div>' +
+        '  <div style="font-size: 11px; color: #4b4452; margin-bottom: 6px;">ðŸ“ ' + item.location + ', ' + item.city + '</div>' +
         '  <div style="display: flex; gap: 4px;">' +
         '    <a href="' + item.url + '" style="flex:1; text-align: center; background: #450081; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">View</a>' +
         '    <a href="' + gMapsDirUrl + '" target="_blank" style="flex:1; text-align: center; background: #00503a; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">Directions</a>' +

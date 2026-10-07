@@ -7,16 +7,24 @@ import com.realestate.model.VerificationDocument;
 import com.realestate.model.VerificationRequest;
 import com.realestate.service.VerificationService;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/seller/verification")
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 10,
+    maxFileSize = 1024 * 1024 * 2,
+    maxRequestSize = 1024 * 1024 * 2
+)
 public class SellerVerificationServlet extends HttpServlet {
 
     private final VerificationService verificationService = new VerificationService();
@@ -50,14 +58,38 @@ public class SellerVerificationServlet extends HttpServlet {
         String licenseNumber = request.getParameter("licenseNumber");
         String taxId = request.getParameter("taxId");
         String docTypeStr = request.getParameter("documentType");
-        String docPath = request.getParameter("documentPath");
+
+        Part filePart = request.getPart("certificate");
+        if (filePart == null || filePart.getSize() == 0) {
+            session.setAttribute("errorMessage", "Please upload a certificate document.");
+            response.sendRedirect(request.getContextPath() + "/seller/verification");
+            return;
+        }
+
+        if (filePart.getSize() > 2 * 1024 * 1024) {
+            session.setAttribute("errorMessage", "Certificate document size must not exceed 2 MB.");
+            response.sendRedirect(request.getContextPath() + "/seller/verification");
+            return;
+        }
+
+        String fileName = System.currentTimeMillis() + "_" + getSubmittedFileName(filePart);
+        String uploadDir = getServletContext().getRealPath("/uploads");
+        if (uploadDir == null) {
+            uploadDir = System.getProperty("java.io.tmpdir") + File.separator + "estatehub-uploads";
+        }
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        String savePath = uploadDir + File.separator + fileName;
+        filePart.write(savePath);
 
         List<VerificationDocument> docs = new ArrayList<>();
         VerificationDocument doc = new VerificationDocument();
         doc.setDocumentType(docTypeStr != null ? VerificationDocument.DocumentType.valueOf(docTypeStr) : VerificationDocument.DocumentType.GOVT_ID);
-        doc.setFilePath(docPath != null && !docPath.isEmpty() ? docPath : "uploads/verification/" + currentUser.getUserId() + "_id_document.pdf");
-        doc.setOriginalFileName("verification_credential.pdf");
-        doc.setFileSizeKb(1240);
+        doc.setFilePath(fileName);
+        doc.setOriginalFileName(getSubmittedFileName(filePart));
+        doc.setFileSizeKb((int) (filePart.getSize() / 1024));
         docs.add(doc);
 
         int reqId = verificationService.submitVerificationRequest(currentUser.getUserId(), businessName, licenseNumber, taxId, docs);
@@ -68,5 +100,14 @@ public class SellerVerificationServlet extends HttpServlet {
         }
 
         response.sendRedirect(request.getContextPath() + "/seller/verification");
+    }
+
+    private String getSubmittedFileName(Part part) {
+        for (String cd : part.getHeader("content-disposition").split(";")) {
+            if (cd.trim().startsWith("filename")) {
+                return cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return "unknown";
     }
 }

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -78,7 +78,7 @@
 </div>
 <p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5 mt-0.5">
 <span class="material-symbols-outlined text-[15px] text-tertiary-container">location_on</span>
-              Targeting: Andheri, Powai, Chembur • Pre-approved Loan: ₹2.8 Cr
+              Targeting: Andheri, Powai, Chembur â€¢ Pre-approved Loan: â‚¹2.8 Cr
             </p>
 </div>
 </div>
@@ -129,7 +129,7 @@
           </h2>
 <p class="font-body-md text-body-md text-primary-fixed">
             Personalized curated properties matching your profile preferences:
-            <span class="font-semibold text-surface-container-lowest">Budget ₹1.8 Cr - ₹2.8 Cr</span>,
+            <span class="font-semibold text-surface-container-lowest">Budget â‚¹1.8 Cr - â‚¹2.8 Cr</span>,
             <span class="font-semibold text-surface-container-lowest">2-3 BHK</span> in
             <span class="font-semibold text-surface-container-lowest">Andheri West, Powai, Goregaon</span>,
             with Commute <span class="font-semibold text-surface-container-lowest">&lt; 30 mins to BKC</span>.
@@ -150,7 +150,7 @@
 <div class="w-10 h-6 bg-surface-container-lowest/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary-fixed"></div>
 <span class="ml-2.5 font-label-sm text-label-sm text-surface-container-lowest">Show Only Verified &amp; Clear Title listings</span>
 </label>
-<span class="hidden md:inline text-primary-fixed">•</span>
+<span class="hidden md:inline text-primary-fixed">â€¢</span>
 <span class="hidden md:flex items-center gap-1 text-primary-fixed">
 <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">schedule</span>
             Refreshed 12 mins ago
@@ -173,7 +173,7 @@
 <article class="rounded-2xl bg-surface-container-lowest p-gutter-lg shadow-sm hover:shadow-md transition-all duration-300">
 <div class="flex flex-col md:flex-row gap-gutter-lg">
 <div class="relative w-full md:w-5/12 aspect-[16/9] md:aspect-auto rounded-xl overflow-hidden shrink-0">
-<img class="w-full h-full object-cover" alt="${rec.property.title}" src="${rec.property.primaryImageUrl}"/>
+<img class="w-full h-full object-cover" alt="${rec.property.title}" src="${rec.property.primaryImageUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';" />
 <div class="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container text-tertiary-fixed font-label-sm text-label-sm font-bold shadow-md">
 <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">arrow_back_ios_new</span>
 <span>${rec.matchScore}% MATCH</span>
@@ -192,7 +192,7 @@ ${rec.property.location}
 </p>
 </div>
 <div class="text-right">
-<span class="font-headline-lg text-headline-lg text-primary font-bold block">₹${rec.property.price}</span>
+<span class="font-headline-lg text-headline-lg text-primary font-bold block">â‚¹${rec.property.price}</span>
 </div>
 </div>
 <div class="flex flex-wrap items-center gap-2 my-gutter-sm font-label-sm text-label-sm text-on-surface">
@@ -280,8 +280,8 @@ View Full Details
 <!-- Inline SVG Visualizer Trend Sparkline Chart -->
 <div class="w-full p-2 rounded-lg bg-surface-container-low">
 <div class="flex justify-between font-caption text-caption text-on-surface-variant mb-1 px-1">
-<span>Past 12M: ₹21.4k/sqft</span>
-<span class="text-tertiary-container font-semibold">Future 12M: ₹22.3k/sqft</span>
+<span>Past 12M: â‚¹21.4k/sqft</span>
+<span class="text-tertiary-container font-semibold">Future 12M: â‚¹22.3k/sqft</span>
 </div>
 <svg class="w-full h-24 text-tertiary-container" fill="none" preserveaspectratio="none" viewbox="0 0 300 100">
 <!-- Grid lines -->
@@ -358,7 +358,7 @@ View Full Details
 <div class="relative z-10 space-y-2">
 <div class="flex items-center justify-between">
 <span class="px-2 py-0.5 rounded bg-surface-container-lowest/20 font-caption text-caption uppercase text-surface-bright">HDFC Verified</span>
-<span class="font-headline-sm text-headline-sm font-bold text-surface-container-lowest">₹2.80 Cr</span>
+<span class="font-headline-sm text-headline-sm font-bold text-surface-container-lowest">â‚¹2.80 Cr</span>
 </div>
 <h4 class="font-label-md text-label-md text-surface-container-lowest">Loan Pre-Approval Status</h4>
 <p class="font-body-sm text-body-sm text-primary-fixed">
@@ -393,7 +393,7 @@ View Full Details
       });
     }
   </script>
-</div></main><footer class="w-full bg-inverse-surface text-inverse-on-surface pt-gutter-2xl pb-gutter-xl"><div class="max-w-container-max mx-auto px-gutter-lg"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-xl mb-gutter-2xl"><div class="space-y-gutter-md"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span><span class="font-headline-md text-headline-md text-surface-container-lowest tracking-tight">EstateHub</span></div><p class="font-body-sm text-body-sm text-surface-variant max-w-xs">India's trusted real estate portal for verified homes, apartments, and commercial spaces.</p><div class="pt-gutter-xs flex items-center gap-gutter-sm"><span class="flex items-center gap-1 bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2.5 py-1 rounded-full"><span class="material-symbols-outlined text-[14px]">verified</span> 100% RERA Verified</span></div></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Popular Searches</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="rent-properties" href="javascript:void(0)">Flats in Mumbai</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Flats in Bangalore</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="new-projects" href="javascript:void(0)">Apartments in Gurgaon</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Villas in Hyderabad</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="commercial-spaces" href="javascript:void(0)">Offices in Pune</a></li></ul></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Quick Links</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="about-us" href="javascript:void(0)">About Us</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="careers" href="javascript:void(0)">Careers</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="research-insights" href="javascript:void(0)">Research &amp; Insights</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="contact-support" href="javascript:void(0)">Contact Support</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="terms-privacy" href="javascript:void(0)">Terms &amp; Privacy</a></li></ul></div><div class="space-y-gutter-md"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Experience on Mobile</h3><p class="font-body-sm text-body-sm text-surface-variant">Download EstateHub App for instant notifications and direct agent chats.</p><div class="flex flex-col gap-2"><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">play_arrow</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">GET IT ON</p><p class="font-label-sm text-label-sm font-semibold">Google Play</p></div></div><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">install_mobile</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">DOWNLOAD ON</p><p class="font-label-sm text-label-sm font-semibold">App Store</p></div></div></div></div></div><div class="pt-gutter-lg mt-gutter-xl border-t border-outline/20 flex flex-col md:flex-row items-center justify-between gap-gutter-md font-caption text-caption text-surface-variant"><div>© 2025 EstateHub Technologies Private Limited. All rights reserved.</div><div class="flex items-center gap-gutter-xs text-surface-dim"><span class="material-symbols-outlined text-tertiary-fixed text-[16px]">shield</span><span>Made with trust for home seekers across India</span></div></div></div></footer></body></html>
+</div></main><footer class="w-full bg-inverse-surface text-inverse-on-surface pt-gutter-2xl pb-gutter-xl"><div class="max-w-container-max mx-auto px-gutter-lg"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-xl mb-gutter-2xl"><div class="space-y-gutter-md"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span><span class="font-headline-md text-headline-md text-surface-container-lowest tracking-tight">EstateHub</span></div><p class="font-body-sm text-body-sm text-surface-variant max-w-xs">India's trusted real estate portal for verified homes, apartments, and commercial spaces.</p><div class="pt-gutter-xs flex items-center gap-gutter-sm"><span class="flex items-center gap-1 bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2.5 py-1 rounded-full"><span class="material-symbols-outlined text-[14px]">verified</span> 100% RERA Verified</span></div></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Popular Searches</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="rent-properties" href="javascript:void(0)">Flats in Mumbai</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Flats in Bangalore</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="new-projects" href="javascript:void(0)">Apartments in Gurgaon</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Villas in Hyderabad</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="commercial-spaces" href="javascript:void(0)">Offices in Pune</a></li></ul></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Quick Links</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="about-us" href="javascript:void(0)">About Us</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="careers" href="javascript:void(0)">Careers</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="research-insights" href="javascript:void(0)">Research &amp; Insights</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="contact-support" href="javascript:void(0)">Contact Support</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="terms-privacy" href="javascript:void(0)">Terms &amp; Privacy</a></li></ul></div><div class="space-y-gutter-md"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Experience on Mobile</h3><p class="font-body-sm text-body-sm text-surface-variant">Download EstateHub App for instant notifications and direct agent chats.</p><div class="flex flex-col gap-2"><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">play_arrow</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">GET IT ON</p><p class="font-label-sm text-label-sm font-semibold">Google Play</p></div></div><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">install_mobile</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">DOWNLOAD ON</p><p class="font-label-sm text-label-sm font-semibold">App Store</p></div></div></div></div></div><div class="pt-gutter-lg mt-gutter-xl border-t border-outline/20 flex flex-col md:flex-row items-center justify-between gap-gutter-md font-caption text-caption text-surface-variant"><div>Â© 2025 EstateHub Technologies Private Limited. All rights reserved.</div><div class="flex items-center gap-gutter-xs text-surface-dim"><span class="material-symbols-outlined text-tertiary-fixed text-[16px]">shield</span><span>Made with trust for home seekers across India</span></div></div></div></footer></body></html>
 
 
 
