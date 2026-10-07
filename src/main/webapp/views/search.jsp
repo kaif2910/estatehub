@@ -420,8 +420,7 @@
           id: ${p.propertyId},
           title: "${fn:escapeXml(p.title)}",
           location: "${fn:escapeXml(p.location)}",
-          city: "${fn:escapeXml(p.city)}",
-          price: "${p.price}",
+          city: "${fn:escapeXml(p.city)}",          price: "${p.formattedPrice}",
           image: "${p.primaryImageUrl}",
           url: "${pageContext.request.contextPath}/property/details?id=${p.propertyId}"
         }${!loop.last ? ',' : ''}
@@ -443,7 +442,7 @@
     var map = L.map('searchMap').setView([defaultLat, defaultLng], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: 'Â© OpenStreetMap'
+      attribution: '© OpenStreetMap'
     }).addTo(map);
 
     var bounds = [];
@@ -455,7 +454,7 @@
         var uLng = pos.coords.longitude;
         var myIcon = L.divIcon({
           className: 'user-gps-marker',
-          html: '<div style="background:#00503a; color:white; border:2px solid white; border-radius:12px; padding:3px 7px; font-size:10px; font-weight:800; shadow:0 2px 6px rgba(0,0,0,0.3);">ðŸ“ My Location</div>',
+          html: '<div style="background:#00503a; color:white; border:2px solid white; border-radius:12px; padding:3px 7px; font-size:10px; font-weight:800; shadow:0 2px 6px rgba(0,0,0,0.3);">📍 My Location</div>',
           iconSize: [80, 25]
         });
         L.marker([uLat, uLng], { icon: myIcon }).addTo(map).bindPopup("<b>You are here!</b>");
@@ -484,8 +483,13 @@
         '<div style="width: 180px; font-family: Inter, sans-serif;">' +
         '  <img src="' + item.image + '" style="width: 100%; height: 85px; object-fit: cover; border-radius: 6px; margin-bottom: 6px;" onerror="this.onerror=null; this.src=\'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80\';"/>' +
         '  <div style="font-weight: 700; font-size: 12px; color: #181c23; margin-bottom: 2px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">' + item.title + '</div>' +
-        '  <div style="font-weight: 800; font-size: 13px; color: #450081; margin-bottom: 4px;">â‚¹ ' + item.price + '</div>' +
-        '  <div style="font-size: 11px; color: #4b4452; margin-bottom: 6px;">ðŸ“ ' + item.location + ', ' + item.city + '</div>' +
+        '  <div style="font-weight: 800; font-size: 13px; color: #450081; margin-bottom: 4px;">' + item.price + '</div>' +
+        '  <div style="font-size: 11px; color: #4b4452; margin-bottom: 6px;">📍 ' + item.location + ', ' + item.city + '</div>' +
+        '  <div style="display: flex; gap: 4px;">' +
+        '    <a href="' + item.url + '" style="flex:1; text-align: center; background: #450081; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">View</a>' +
+        '    <a href="' + gMapsDirUrl + '" target="_blank" style="flex:1; text-align: center; background: #00503a; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">Directions</a>' +
+        '  </div>' +
+        '</div>';.city + '</div>' +
         '  <div style="display: flex; gap: 4px;">' +
         '    <a href="' + item.url + '" style="flex:1; text-align: center; background: #450081; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">View</a>' +
         '    <a href="' + gMapsDirUrl + '" target="_blank" style="flex:1; text-align: center; background: #00503a; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">Directions</a>' +

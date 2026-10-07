@@ -237,7 +237,7 @@ Hinjewadi
           <div class="p-4 flex-1 flex flex-col justify-between">
             <div>
               <div class="flex items-baseline justify-between mb-1">
-                <span class="font-headline-md text-headline-md font-extrabold text-on-surface">₹ ${p.price}</span>
+                <span class="font-headline-md text-headline-md font-extrabold text-on-surface">${p.formattedPrice}</span>
               </div>
               <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface truncate group-hover:text-primary transition-colors">
                 <a href="${pageContext.request.contextPath}/property/details?id=${p.propertyId}">${p.title}</a>

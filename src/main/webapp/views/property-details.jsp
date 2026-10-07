@@ -604,7 +604,7 @@
 <div class="p-4 space-y-2 flex-1 flex flex-col justify-between">
 <div>
 <div class="flex items-baseline justify-between mb-1">
-<span class="font-headline-md text-headline-md font-bold text-on-surface">â‚¹ ${sp.price}</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">${sp.formattedPrice}</span>
 <span class="text-[10px] font-bold text-primary uppercase">${sp.purpose}</span>
 </div>
 <h3 class="font-label-md text-label-md font-bold text-on-surface truncate group-hover:text-primary transition-colors">

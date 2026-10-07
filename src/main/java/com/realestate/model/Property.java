@@ -165,26 +165,26 @@ public class Property implements Serializable {
 
     public String getFormattedPrice() {
         if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
-            return "₹ 0";
+            return "\u20B9 0";
         }
         double val = price.doubleValue();
         if (val >= 10000000.0) {
             double cr = val / 10000000.0;
             if (cr == Math.floor(cr)) {
-                return String.format("₹ %.0f Cr", cr);
+                return String.format("\u20B9 %.2f Cr", cr).replace(".00", "");
             } else {
-                return String.format("₹ %.2f Cr", cr);
+                return String.format("\u20B9 %.2f Cr", cr);
             }
         } else if (val >= 100000.0) {
             double lakh = val / 100000.0;
             if (lakh == Math.floor(lakh)) {
-                return String.format("₹ %.0f Lakh", lakh);
+                return String.format("\u20B9 %.2f Lakh", lakh).replace(".00", "");
             } else {
-                return String.format("₹ %.2f Lakh", lakh);
+                return String.format("\u20B9 %.2f Lakh", lakh);
             }
         } else {
             java.text.NumberFormat nf = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("en", "IN"));
-            return nf.format(val).replace("INR", "₹").trim();
+            return nf.format(val).replace("INR", "\u20B9").trim();
         }
     }
 }

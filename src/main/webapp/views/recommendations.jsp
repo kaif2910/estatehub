@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -192,7 +192,7 @@ ${rec.property.location}
 </p>
 </div>
 <div class="text-right">
-<span class="font-headline-lg text-headline-lg text-primary font-bold block">â‚¹${rec.property.price}</span>
+<span class="font-headline-lg text-headline-lg text-primary font-bold block">${rec.property.formattedPrice}</span>
 </div>
 </div>
 <div class="flex flex-wrap items-center gap-2 my-gutter-sm font-label-sm text-label-sm text-on-surface">
