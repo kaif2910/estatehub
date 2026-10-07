@@ -62,15 +62,26 @@ public class EmailUtil {
     }
 
     /**
-     * Sends an HTML email using Gmail SMTP or logs to console if credentials not provided
+     * Sends an HTML email using Brevo REST API (HTTPS Port 443) or SMTP
      */
     public static boolean sendEmail(String recipientEmail, String subject, String htmlContent) {
-        final String smtpHost = getSecret("SMTP_HOST", "smtp.gmail.com");
+        final String brevoApiKey = getSecret("BREVO_API_KEY", "");
+        final String fromEmail = getSecret("SMTP_FROM_EMAIL", getSecret("SMTP_EMAIL", "propertywallah28@gmail.com"));
+        final String fromName = getSecret("SMTP_FROM_NAME", "EstateHub Support");
+
+        // 1. Try Brevo HTTPS REST API first if BREVO_API_KEY is configured (Bypasses all SMTP port & IP restrictions)
+        if (brevoApiKey != null && !brevoApiKey.trim().isEmpty() && !brevoApiKey.contains("your_")) {
+            boolean httpSuccess = sendViaBrevoRestApi(brevoApiKey, fromEmail, fromName, recipientEmail, subject, htmlContent);
+            if (httpSuccess) {
+                return true;
+            }
+            LOGGER.warning("Brevo REST API call failed, falling back to SMTP...");
+        }
+
+        final String smtpHost = getSecret("SMTP_HOST", "smtp-relay.brevo.com");
         final String smtpPort = getSecret("SMTP_PORT", "587");
         final String smtpEmail = getSecret("SMTP_EMAIL", "");
         final String smtpPassword = getSecret("SMTP_APP_PASSWORD", "");
-        final String fromEmail = getSecret("SMTP_FROM_EMAIL", smtpEmail);
-        final String fromName = getSecret("SMTP_FROM_NAME", "EstateHub Support");
 
         // If credentials are not configured, simulate delivery in development/demo mode
         if (smtpEmail.isEmpty() || smtpPassword.isEmpty() || smtpEmail.contains("your_email")) {
@@ -106,12 +117,84 @@ public class EmailUtil {
             message.setContent(htmlContent, "text/html; charset=UTF-8");
 
             Transport.send(message);
-            LOGGER.info("Email successfully sent to " + recipientEmail);
+            LOGGER.info("Email successfully sent via SMTP to " + recipientEmail);
             return true;
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to send email via SMTP to " + recipientEmail + ": " + e.getMessage(), e);
             return false;
         }
+    }
+
+    /**
+     * Dispatches email over HTTPS using Brevo REST API v3 (Port 443).
+     * Works on all cloud platforms (Railway, Render, AWS, Heroku) with zero IP blocking.
+     */
+    private static boolean sendViaBrevoRestApi(String apiKey, String fromEmail, String fromName, String toEmail, String subject, String htmlContent) {
+        try {
+            java.net.URI uri = java.net.URI.create("https://api.brevo.com/v3/smtp/email");
+            
+            // Build JSON payload safely
+            StringBuilder json = new StringBuilder();
+            json.append("{")
+                .append("\"sender\":{\"name\":\"").append(escapeJson(fromName)).append("\",\"email\":\"").append(escapeJson(fromEmail)).append("\"},")
+                .append("\"to\":[{\"email\":\"").append(escapeJson(toEmail)).append("\"}],")
+                .append("\"subject\":\"").append(escapeJson(subject)).append("\",")
+                .append("\"htmlContent\":\"").append(escapeJson(htmlContent)).append("\"")
+                .append("}");
+
+            java.net.http.HttpClient client = java.net.http.HttpClient.newBuilder()
+                    .connectTimeout(java.time.Duration.ofSeconds(10))
+                    .build();
+
+            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                    .uri(uri)
+                    .header("api-key", apiKey.trim())
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .POST(java.net.http.HttpRequest.BodyPublishers.ofString(json.toString(), java.nio.charset.StandardCharsets.UTF_8))
+                    .timeout(java.time.Duration.ofSeconds(15))
+                    .build();
+
+            java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                LOGGER.info("Email successfully dispatched via Brevo HTTPS REST API to " + toEmail + " (Status: " + response.statusCode() + ")");
+                return true;
+            } else {
+                LOGGER.warning("Brevo REST API returned error status " + response.statusCode() + ": " + response.body());
+                return false;
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Exception while sending email via Brevo REST API: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    private static String escapeJson(String input) {
+        if (input == null) return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            char ch = input.charAt(i);
+            switch (ch) {
+                case '"': sb.append("\\\""); break;
+                case '\\': sb.append("\\\\"); break;
+                case '\b': sb.append("\\b"); break;
+                case '\f': sb.append("\\f"); break;
+                case '\n': sb.append("\\n"); break;
+                case '\r': sb.append("\\r"); break;
+                case '\t': sb.append("\\t"); break;
+                default:
+                    if (ch < ' ') {
+                        String hex = Integer.toHexString(ch);
+                        sb.append("\\u");
+                        for (int k = 0; k < 4 - hex.length(); k++) sb.append('0');
+                        sb.append(hex);
+                    } else {
+                        sb.append(ch);
+                    }
+            }
+        }
+        return sb.toString();
     }
 
     /**
