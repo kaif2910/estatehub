@@ -163,7 +163,7 @@ All (${fn:length(favorites)})
         </div>
         <div class="p-4 space-y-2">
           <div class="flex items-baseline justify-between gap-2 mb-1">
-            <span class="font-headline-xl text-headline-xl text-on-surface font-extrabold text-primary">â‚¹ ${fav.price}</span>
+            <span class="font-headline-xl text-headline-xl font-extrabold text-primary">${fav.formattedPrice}</span>
             <span class="font-caption text-caption text-on-surface-variant font-semibold uppercase">${fav.purpose}</span>
           </div>
           <h3 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate group-hover:text-primary transition-colors">

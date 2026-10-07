@@ -255,7 +255,7 @@
                                                 </a>
                                             </div>
                                             <div class="p-4 space-y-1">
-                                                <div class="font-bold text-lg text-primary">₹ ${fav.price}</div>
+                                                <div class="font-bold text-lg text-primary">${fav.formattedPrice}</div>
                                                 <h3 class="font-semibold text-sm text-on-surface truncate">${fav.title}</h3>
                                                 <p class="text-xs text-on-surface-variant flex items-center gap-1">
                                                     <span class="material-symbols-outlined text-sm">location_on</span>
@@ -306,7 +306,7 @@
                                         <img class="w-full h-full object-cover" src="${rec.property.primaryImageUrl}" alt="${rec.property.title}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';"/>
                                     </div>
                                     <div class="space-y-1 min-w-0 flex-1">
-                                        <div class="font-bold text-sm text-primary">₹ ${rec.property.price}</div>
+                                        <div class="font-bold text-sm text-primary">${rec.property.formattedPrice}</div>
                                         <h3 class="font-semibold text-xs text-on-surface truncate">${rec.property.title}</h3>
                                         <p class="text-xs text-on-surface-variant truncate">${rec.property.location}, ${rec.property.city}</p>
                                         <a href="${pageContext.request.contextPath}/property/details?id=${rec.property.propertyId}" class="inline-block text-xs text-primary font-semibold hover:underline">View Details &rarr;</a>

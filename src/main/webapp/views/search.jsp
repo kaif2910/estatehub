@@ -303,7 +303,7 @@
                   <div class="p-6 md:w-7/12 flex flex-col justify-between space-y-4">
                     <div>
                       <div class="flex items-baseline justify-between mb-1">
-                        <span class="font-heading text-2xl font-extrabold text-on-surface">â‚¹ ${p.price}</span>
+                        <span class="font-heading text-2xl font-extrabold text-primary">${p.formattedPrice}</span>
                         <span class="text-xs font-bold text-primary uppercase">${p.purpose}</span>
                       </div>
 

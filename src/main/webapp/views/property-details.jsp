@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -189,7 +189,7 @@
 <div class="flex flex-col sm:flex-row sm:items-baseline justify-between pb-4 border-b border-surface-container-high gap-3">
 <div>
 <div class="flex items-baseline gap-2">
-<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold text-primary">â‚¹ ${property.price}</span>
+<span class="font-headline-xl text-headline-xl font-extrabold text-primary">${property.formattedPrice}</span>
 <span class="font-body-md text-body-md text-on-surface-variant font-medium">(${property.purpose})</span>
 </div>
 <p class="font-caption text-caption text-on-surface-variant mt-0.5">Verified Direct Owner Listing</p>
@@ -457,7 +457,7 @@
     marker.bindPopup(
       '<div style="font-family: Inter, sans-serif; padding: 4px;">' +
       '  <div style="font-weight: 700; font-size: 13px; color: #450081;">${property.title}</div>' +
-      '  <div style="font-weight: 800; font-size: 14px; color: #181c23; margin-top: 2px;">â‚¹ ${property.price}</div>' +
+      '  <div style="font-weight: 800; font-size: 14px; color: #181c23; margin-top: 2px;">${property.formattedPrice}</div>' +
       '  <div style="font-size: 11px; color: #4b4452; margin-top: 2px; margin-bottom: 6px;">ðŸ“ ${property.location}, ${property.city}</div>' +
       '  <a href="' + gMapsDirUrl + '" target="_blank" style="display:block; text-align: center; background: #00503a; color: white; padding: 5px 8px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700;">Get Directions on Google Maps</a>' +
       '</div>'
@@ -538,7 +538,7 @@
 </div>
 <div class="flex flex-wrap items-center justify-between text-caption font-caption text-on-surface-variant pt-3 border-t border-surface-container-high">
 <span>Locality Benchmark: <strong>${property.location}, ${property.city}</strong></span>
-<span>Listing Price: <strong>â‚¹ ${property.price}</strong></span>
+<span>Listing Price: <strong>${property.formattedPrice}</strong></span>
 </div>
 </div>
 </section>
