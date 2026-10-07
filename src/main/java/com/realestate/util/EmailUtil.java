@@ -69,6 +69,7 @@ public class EmailUtil {
         final String smtpPort = getSecret("SMTP_PORT", "587");
         final String smtpEmail = getSecret("SMTP_EMAIL", "");
         final String smtpPassword = getSecret("SMTP_APP_PASSWORD", "");
+        final String fromEmail = getSecret("SMTP_FROM_EMAIL", smtpEmail);
         final String fromName = getSecret("SMTP_FROM_NAME", "EstateHub Support");
 
         // If credentials are not configured, simulate delivery in development/demo mode
@@ -86,7 +87,10 @@ public class EmailUtil {
             props.put("mail.smtp.port", smtpPort);
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            props.put("mail.smtp.ssl.protocols", "TLSv1.2 TLSv1.3");
+            props.put("mail.smtp.ssl.trust", smtpHost);
+            props.put("mail.smtp.connectiontimeout", "10000");
+            props.put("mail.smtp.timeout", "10000");
 
             Session session = Session.getInstance(props, new Authenticator() {
                 @Override
@@ -96,7 +100,7 @@ public class EmailUtil {
             });
 
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(smtpEmail, fromName));
+            message.setFrom(new InternetAddress(fromEmail, fromName));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
             message.setSubject(subject, "UTF-8");
             message.setContent(htmlContent, "text/html; charset=UTF-8");
