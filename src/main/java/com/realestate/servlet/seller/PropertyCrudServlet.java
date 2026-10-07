@@ -117,7 +117,7 @@ public class PropertyCrudServlet extends HttpServlet {
         p.setFurnishing(furnishing != null ? Property.Furnishing.valueOf(furnishing) : Property.Furnishing.UNFURNISHED);
         p.setAvailability(availability != null ? Property.Availability.valueOf(availability) : Property.Availability.IMMEDIATE);
         p.setPropertyStatus(Property.PropertyStatus.AVAILABLE);
-        p.setVerificationStatus(Property.VerificationStatus.PENDING); // submitted for admin approval
+        p.setVerificationStatus(Property.VerificationStatus.VERIFIED); // Auto-approved as requested by user
 
         List<String> errors = new ArrayList<>();
         if (p.getTitle() == null || p.getTitle().isEmpty()) {
@@ -150,7 +150,7 @@ public class PropertyCrudServlet extends HttpServlet {
             // Handle image uploads for Edit (Optional)
             handleImageUploads(request, p.getPropertyId());
 
-            session.setAttribute("successMessage", "Property updated and re-submitted for admin verification.");
+            session.setAttribute("successMessage", "Property updated successfully.");
         } else {
             // Create
             int newId = propertyDAO.createProperty(p);
@@ -167,7 +167,7 @@ public class PropertyCrudServlet extends HttpServlet {
                     propertyDAO.addImage(img);
                 }
 
-                session.setAttribute("successMessage", "Property submitted successfully! It is currently PENDING review by the admin team.");
+                session.setAttribute("successMessage", "Property submitted successfully and is now active!");
             } else {
                 session.setAttribute("errorMessage", "Failed to submit property. Please check the inputs.");
             }
