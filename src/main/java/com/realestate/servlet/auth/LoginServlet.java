@@ -32,11 +32,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
         String csrfToken = request.getParameter("csrf_token");
         
-        if (session == null || !com.realestate.util.CsrfTokenUtil.validateToken(session, csrfToken)) {
-            request.setAttribute("errorMessage", "Invalid CSRF token or session expired.");
+        if (!com.realestate.util.CsrfTokenUtil.validateToken(session, csrfToken)) {
+            request.setAttribute("errorMessage", "Invalid security token. Please try again.");
             request.getRequestDispatcher("/views/login.jsp").forward(request, response);
             return;
         }
