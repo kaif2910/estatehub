@@ -145,35 +145,7 @@
 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
 </button>
 </form>
-<div class="relative flex items-center justify-center my-1">
-<div class="w-full h-px bg-surface-variant"></div>
-<span class="absolute px-3 bg-surface-container-lowest font-caption text-caption uppercase tracking-wider text-on-surface-variant font-semibold">
-        Or Continue With
-      </span>
-</div>
-<div class="flex flex-col gap-2.5">
-<button class="w-full py-3 px-4 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center gap-3" type="button">
-<svg class="w-5 h-5" viewbox="0 0 24 24">
-<path d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z" fill="#4285F4"></path>
-<path d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24Z" fill="#34A853"></path>
-<path d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.14-1.55.38-2.27V6.58H1.25C.45 8.16 0 9.94 0 12s.45 3.84 1.25 5.42l4.03-3.15Z" fill="#FBBC05"></path>
-<path d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z" fill="#EA4335"></path>
-</svg>
-<span>Continue with Google</span>
-</button>
-<button class="w-full py-3 px-4 rounded-lg bg-tertiary-container/10 hover:bg-tertiary-container/15 text-tertiary font-label-md text-label-md transition-colors flex items-center justify-between px-4" type="button">
-<div class="flex items-center gap-2.5">
-<svg class="w-5 h-5 fill-current text-tertiary-container" viewbox="0 0 24 24">
-<path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.23 8.23 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.49-.4-.42-.56-.43h-.48c-.16 0-.43.06-.66.31-.22.25-.86.84-.86 2.06s.88 2.39 1 2.56c.13.17 1.73 2.64 4.19 3.7.59.25 1.04.4 1.4.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28Z"></path>
-</svg>
-<span class="font-semibold text-on-surface">Login via WhatsApp</span>
-</div>
-<span class="px-2 py-0.5 rounded-full bg-tertiary-container text-on-tertiary font-label-sm text-[11px] font-bold tracking-wide flex items-center gap-1">
-<span class="material-symbols-outlined text-[13px]">bolt</span> Instant OTP
-        </span>
-</button>
-</div>
-<div class="text-center pt-2">
+<div class="text-center pt-3">
 <p class="font-body-sm text-body-sm text-on-surface-variant">
         Don't have an EstateHub account? 
         <a class="font-label-md text-label-md text-primary-container font-semibold hover:underline" data-path="register" href="${pageContext.request.contextPath}/views/register.jsp">

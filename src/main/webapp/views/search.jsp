@@ -153,11 +153,24 @@
   </section>
 
   <!-- TWO COLUMN LAYOUT (FILTERS SIDEBAR & PROPERTY CARDS) -->
-  <div class="max-w-[1280px] mx-auto px-6 py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    
+    <!-- MOBILE FILTER TOGGLE BUTTON -->
+    <div class="lg:hidden w-full flex items-center justify-between bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant/30 shadow-sm mb-4">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">tune</span>
+        <span class="font-heading text-sm font-bold text-on-surface">Filters & Sort</span>
+      </div>
+      <button type="button" onclick="document.getElementById('searchFiltersSidebar').classList.toggle('hidden')" class="px-3.5 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-transform cursor-pointer">
+        <span>Toggle Filters</span>
+        <span class="material-symbols-outlined text-[16px]">expand_more</span>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
       
       <!-- SIDEBAR FILTERS (3 COLUMNS) -->
-      <aside class="lg:col-span-4 w-full bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant/30 space-y-6">
+      <aside id="searchFiltersSidebar" class="hidden lg:block lg:col-span-4 w-full bg-surface-container-lowest p-5 sm:p-6 rounded-2xl shadow-sm border border-outline-variant/30 space-y-6">
         <form action="${pageContext.request.contextPath}/search" method="GET" class="space-y-6">
           <c:if test="${not empty keyword}">
             <input type="hidden" name="keyword" value="${keyword}"/>
@@ -383,9 +396,9 @@
 </main>
 
 <!-- FOOTER -->
-<footer class="w-full bg-surface-container-low border-t border-surface-container-high py-6 px-6">
+<footer class="w-full bg-surface-container-low border-t border-surface-container-high py-6 px-6 pb-24 md:pb-6">
   <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
-    <p>Â© 2026 EstateHub Technologies Pvt. Ltd. All rights reserved.</p>
+    <p>© 2026 EstateHub Technologies Pvt. Ltd. All rights reserved.</p>
     <div class="flex items-center gap-6">
       <a href="#" class="hover:underline">Privacy Policy</a>
       <a href="#" class="hover:underline">Terms of Service</a>
@@ -394,6 +407,41 @@
   </div>
 </footer>
 
+<!-- MOBILE BOTTOM NAVIGATION BAR -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-surface-container-high px-4 py-2 flex items-center justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+  <a href="${pageContext.request.contextPath}/" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors">
+    <span class="material-symbols-outlined text-[22px]">explore</span>
+    <span>Explore</span>
+  </a>
+  <a href="${pageContext.request.contextPath}/search" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-primary transition-colors">
+    <span class="material-symbols-outlined text-[22px]">search</span>
+    <span>Search</span>
+  </a>
+  <a href="${pageContext.request.contextPath}/views/add-property.jsp" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-white bg-primary rounded-full p-2.5 -mt-5 shadow-lg border-2 border-white hover:scale-105 active:scale-95 transition-transform">
+    <span class="material-symbols-outlined text-[20px]">add</span>
+  </a>
+  <a href="${pageContext.request.contextPath}/views/favorites.jsp" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-on-surface-variant hover:text-secondary-container transition-colors relative">
+    <span class="material-symbols-outlined text-[22px]">favorite</span>
+    <span>Saved</span>
+  </a>
+  <c:choose>
+    <c:when test="${not empty sessionScope.currentUser}">
+      <c:set var="mDashUrl" value="${pageContext.request.contextPath}/customer/dashboard" />
+      <c:if test="${sessionScope.currentUser.role == 'ADMIN'}"><c:set var="mDashUrl" value="${pageContext.request.contextPath}/admin/dashboard" /></c:if>
+      <c:if test="${sessionScope.currentUser.role == 'BROKER'}"><c:set var="mDashUrl" value="${pageContext.request.contextPath}/broker/dashboard" /></c:if>
+      <c:if test="${sessionScope.currentUser.role == 'SELLER'}"><c:set var="mDashUrl" value="${pageContext.request.contextPath}/seller/dashboard" /></c:if>
+      <a href="${mDashUrl}" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-[22px]">account_circle</span>
+        <span>Account</span>
+      </a>
+    </c:when>
+    <c:otherwise>
+      <a href="${pageContext.request.contextPath}/views/login.jsp" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-[22px]">login</span>
+        <span>Login</span>
+      </a>
+    </c:otherwise>
+  </c:choose>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     var mapContainer = document.getElementById('searchMap');
@@ -420,7 +468,8 @@
           id: ${p.propertyId},
           title: "${fn:escapeXml(p.title)}",
           location: "${fn:escapeXml(p.location)}",
-          city: "${fn:escapeXml(p.city)}",          price: "${p.formattedPrice}",
+          city: "${fn:escapeXml(p.city)}",
+          price: "${p.formattedPrice}",
           image: "${p.primaryImageUrl}",
           url: "${pageContext.request.contextPath}/property/details?id=${p.propertyId}"
         }${!loop.last ? ',' : ''}
@@ -485,11 +534,6 @@
         '  <div style="font-weight: 700; font-size: 12px; color: #181c23; margin-bottom: 2px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">' + item.title + '</div>' +
         '  <div style="font-weight: 800; font-size: 13px; color: #450081; margin-bottom: 4px;">' + item.price + '</div>' +
         '  <div style="font-size: 11px; color: #4b4452; margin-bottom: 6px;">📍 ' + item.location + ', ' + item.city + '</div>' +
-        '  <div style="display: flex; gap: 4px;">' +
-        '    <a href="' + item.url + '" style="flex:1; text-align: center; background: #450081; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">View</a>' +
-        '    <a href="' + gMapsDirUrl + '" target="_blank" style="flex:1; text-align: center; background: #00503a; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">Directions</a>' +
-        '  </div>' +
-        '</div>';.city + '</div>' +
         '  <div style="display: flex; gap: 4px;">' +
         '    <a href="' + item.url + '" style="flex:1; text-align: center; background: #450081; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">View</a>' +
         '    <a href="' + gMapsDirUrl + '" target="_blank" style="flex:1; text-align: center; background: #00503a; color: white; padding: 5px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: 700;">Directions</a>' +
