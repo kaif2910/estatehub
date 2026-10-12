@@ -359,7 +359,14 @@
                           <span class="material-symbols-outlined text-base">directions</span>
                           <span>Directions</span>
                         </a>
-                        <a href="https://wa.me/${p.ownerWhatsapp}" target="_blank" 
+                        <a href="#" target="_blank" 
+                           data-wa-chat="true"
+                           data-phone="${not empty p.ownerWhatsapp ? p.ownerWhatsapp : p.ownerPhone}"
+                           data-owner="${fn:escapeXml(p.ownerName)}"
+                           data-title="${fn:escapeXml(p.title)}"
+                           data-id="${p.propertyId}"
+                           data-price="${p.price}"
+                           data-location="${fn:escapeXml(p.location)}, ${fn:escapeXml(p.city)}"
                            class="px-4 py-2 rounded-xl bg-tertiary-container hover:bg-tertiary text-on-tertiary text-xs font-bold shadow-xs transition-all flex items-center gap-1.5">
                           <span class="material-symbols-outlined text-base">chat</span>
                           <span>Contact Owner</span>
@@ -547,9 +554,34 @@
       map.fitBounds(bounds, { padding: [30, 30] });
     }
   });
+
+  // Ensure WhatsApp buttons construct formatted pre-filled message with property details
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('a[data-wa-chat]');
+    if (!btn) return;
+    var phone = btn.getAttribute('data-phone') || '';
+    phone = phone.replace(/[^0-9]/g, '');
+    if (phone.length === 10) phone = '91' + phone;
+    if (!phone) {
+      alert('Owner contact number is not available.');
+      e.preventDefault();
+      return;
+    }
+    var owner = btn.getAttribute('data-owner') || 'Owner';
+    var title = btn.getAttribute('data-title') || 'Property';
+    var id = btn.getAttribute('data-id') || '';
+    var price = btn.getAttribute('data-price') || '';
+    var loc = btn.getAttribute('data-location') || '';
+    var msg = "Hello " + owner + ", I am interested in your property listing on EstateHub:\n" +
+              "🏠 '" + title + "' (ID: #" + id + ")\n" +
+              "📍 Location: " + loc + "\n" +
+              "💰 Price: ₹" + price + "\n\n" +
+              "Is this property still available for visit/discussion?";
+    btn.href = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
+  });
 </script>
 
-<script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script>
+<script src="${pageContext.request.contextPath}/js/optimistic-ui.js?v=<%= System.currentTimeMillis() %>"></script>
 </body>
 </html>
 

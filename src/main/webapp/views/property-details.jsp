@@ -542,9 +542,15 @@
 <span>Send Inquiry</span>
 </button>
 </form>
-<!-- Instant WhatsApp Connect Pill Button -->
 <a class="w-full py-2.5 px-4 rounded-xl bg-tertiary-container/20 hover:bg-tertiary-container/30 text-tertiary-fixed-variant font-label-md text-label-md font-bold flex items-center justify-center gap-2 transition-colors mt-2" 
-   href="${whatsappUrl}" target="_blank">
+   href="${whatsappUrl}" target="_blank"
+   data-wa-chat="true"
+   data-phone="${not empty property.ownerWhatsapp ? property.ownerWhatsapp : property.ownerPhone}"
+   data-owner="${fn:escapeXml(property.ownerName)}"
+   data-title="${fn:escapeXml(property.title)}"
+   data-id="${property.propertyId}"
+   data-price="${property.price}"
+   data-location="${fn:escapeXml(property.location)}, ${fn:escapeXml(property.city)}">
 <span class="material-symbols-outlined text-[20px] text-tertiary-fixed-variant">chat</span>
 <span>Instant WhatsApp Chat</span>
 </a>
@@ -665,7 +671,15 @@ View Details
     </a>
   </c:if>
   <c:if test="${not empty whatsappUrl}">
-    <a href="${whatsappUrl}" target="_blank" class="flex-1 py-2.5 px-3 rounded-xl bg-tertiary-container/20 text-tertiary-fixed-variant font-label-md text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-transform">
+    <a href="${whatsappUrl}" target="_blank" 
+       data-wa-chat="true"
+       data-phone="${not empty property.ownerWhatsapp ? property.ownerWhatsapp : property.ownerPhone}"
+       data-owner="${fn:escapeXml(property.ownerName)}"
+       data-title="${fn:escapeXml(property.title)}"
+       data-id="${property.propertyId}"
+       data-price="${property.price}"
+       data-location="${fn:escapeXml(property.location)}, ${fn:escapeXml(property.city)}"
+       class="flex-1 py-2.5 px-3 rounded-xl bg-tertiary-container/20 text-tertiary-fixed-variant font-label-md text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-transform">
       <span class="material-symbols-outlined text-[18px]">chat</span>
       <span>WhatsApp</span>
     </a>
@@ -676,7 +690,33 @@ View Details
   </button>
 </div>
 
-<script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script></body></html>
+<script>
+  // Ensure WhatsApp buttons construct formatted pre-filled message with property details
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('a[data-wa-chat]');
+    if (!btn) return;
+    var phone = btn.getAttribute('data-phone') || '';
+    phone = phone.replace(/[^0-9]/g, '');
+    if (phone.length === 10) phone = '91' + phone;
+    if (!phone) {
+      alert('Owner contact number is not available.');
+      e.preventDefault();
+      return;
+    }
+    var owner = btn.getAttribute('data-owner') || 'Owner';
+    var title = btn.getAttribute('data-title') || 'Property';
+    var id = btn.getAttribute('data-id') || '';
+    var price = btn.getAttribute('data-price') || '';
+    var loc = btn.getAttribute('data-location') || '';
+    var msg = "Hello " + owner + ", I am interested in your property listing on EstateHub:\n" +
+              "🏠 '" + title + "' (ID: #" + id + ")\n" +
+              "📍 Location: " + loc + "\n" +
+              "💰 Price: ₹" + price + "\n\n" +
+              "Is this property still available for visit/discussion?";
+    btn.href = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
+  });
+</script>
+<script src="${pageContext.request.contextPath}/js/optimistic-ui.js?v=<%= System.currentTimeMillis() %>"></script></body></html>
 
 
 

@@ -52,11 +52,20 @@ public class PropertyDetailServlet extends HttpServlet {
             }
 
             // Generate WhatsApp wa.me click-to-chat link
-            String rawPhone = property.getOwnerWhatsapp() != null ? property.getOwnerWhatsapp() : property.getOwnerPhone();
+            String rawPhone = (property.getOwnerWhatsapp() != null && !property.getOwnerWhatsapp().trim().isEmpty())
+                    ? property.getOwnerWhatsapp() : property.getOwnerPhone();
             String cleanPhone = rawPhone != null ? rawPhone.replaceAll("[^0-9]", "") : "";
-            String defaultWaMsg = "Hello " + property.getOwnerName() + ", I am interested in your property listing on EstateHub: '" + property.getTitle() + "' ($" + property.getPrice() + "). Is it still available?";
+            if (cleanPhone.length() == 10) {
+                cleanPhone = "91" + cleanPhone;
+            }
+            String defaultWaMsg = "Hello " + (property.getOwnerName() != null ? property.getOwnerName() : "Owner") + 
+                    ", I am interested in your property listing on EstateHub:\n" +
+                    "🏠 '" + property.getTitle() + "' (ID: #" + property.getPropertyId() + ")\n" +
+                    "📍 Location: " + property.getLocation() + ", " + property.getCity() + "\n" +
+                    "💰 Price: ₹" + property.getPrice() + "\n\n" +
+                    "Is this property still available for visit/discussion?";
             String encodedMsg = URLEncoder.encode(defaultWaMsg, StandardCharsets.UTF_8);
-            String whatsappUrl = "https://wa.me/" + cleanPhone + "?text=" + encodedMsg;
+            String whatsappUrl = cleanPhone.isEmpty() ? "#" : ("https://wa.me/" + cleanPhone + "?text=" + encodedMsg);
 
             request.setAttribute("property", property);
             request.setAttribute("similarProperties", similar);

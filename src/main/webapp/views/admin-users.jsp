@@ -182,7 +182,7 @@
         </div>
     </main>
 </div>
-<script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script></body>
+<script src="${pageContext.request.contextPath}/js/optimistic-ui.js?v=<%= System.currentTimeMillis() %>"></script></body>
 </html>
 
 

@@ -187,4 +187,30 @@ public class Property implements Serializable {
             return nf.format(val).replace("INR", "\u20B9").trim();
         }
     }
+
+    public String getWhatsappLink() {
+        String rawPhone = (ownerWhatsapp != null && !ownerWhatsapp.trim().isEmpty()) ? ownerWhatsapp : ownerPhone;
+        if (rawPhone == null || rawPhone.trim().isEmpty()) {
+            return "#";
+        }
+        String cleanPhone = rawPhone.replaceAll("[^0-9]", "");
+        if (cleanPhone.length() == 10) {
+            cleanPhone = "91" + cleanPhone;
+        }
+        if (cleanPhone.isEmpty()) {
+            return "#";
+        }
+        String msg = "Hello " + (ownerName != null ? ownerName : "Owner") + 
+                     ", I am interested in your property listing on EstateHub:\n" +
+                     "🏠 '" + (title != null ? title : "Property") + "' (ID: #" + propertyId + ")\n" +
+                     "📍 Location: " + (location != null ? location : "") + ", " + (city != null ? city : "") + "\n" +
+                     "💰 Price: ₹" + price + "\n\n" +
+                     "Is this property still available for visit/discussion?";
+        try {
+            String encoded = java.net.URLEncoder.encode(msg, java.nio.charset.StandardCharsets.UTF_8);
+            return "https://wa.me/" + cleanPhone + "?text=" + encoded;
+        } catch (Exception e) {
+            return "https://wa.me/" + cleanPhone;
+        }
+    }
 }

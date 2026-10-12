@@ -40,13 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const formData = new URLSearchParams(new FormData(form));
-            fetch(form.action, {
+            const actionUrl = form.getAttribute('action') || '';
+            fetch(actionUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
             })
             .then(res => {
-                if(res.redirected) window.location.href = res.url;
+                if(res.redirected && res.url.includes('/login')) {
+                    window.location.href = res.url;
+                    return;
+                }
                 if(!res.ok) throw new Error();
             })
             .catch(err => {
@@ -74,13 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const formData = new URLSearchParams(new FormData(form));
-            fetch(form.action, {
+            const actionUrl = form.getAttribute('action') || '';
+            fetch(actionUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
             })
             .then(res => {
-                if(res.redirected) window.location.href = res.url;
+                if(res.redirected && res.url.includes('/login')) {
+                    window.location.href = res.url;
+                    return;
+                }
                 if(!res.ok) throw new Error();
             })
             .catch(err => {
@@ -99,13 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = form.closest('.group, tr');
             if (row) row.style.display = 'none';
             const formData = new URLSearchParams(new FormData(form));
-            fetch(form.action, {
+            const actionUrl = form.getAttribute('action') || '';
+            fetch(actionUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
             })
             .then(res => {
-                if(res.redirected) window.location.href = res.url;
+                if(res.redirected && res.url.includes('/login')) {
+                    window.location.href = res.url;
+                    return;
+                }
                 if(!res.ok) throw new Error();
             })
             .catch(err => {

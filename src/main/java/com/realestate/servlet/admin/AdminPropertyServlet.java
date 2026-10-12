@@ -48,6 +48,6 @@ public class AdminPropertyServlet extends HttpServlet {
             if (session != null) session.setAttribute("successMessage", "Property REJECTED. Rejection reason recorded.");
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/properties?verification=" + ("approve".equalsIgnoreCase(action) ? "VERIFIED" : "REJECTED"));
+        response.sendRedirect(request.getContextPath() + "/admin/properties");
     }
 }

@@ -195,7 +195,16 @@
         </div>
     </main>
 </div>
-<script src="${pageContext.request.contextPath}/js/optimistic-ui.js"></script>
+<script>
+    // Safeguard to ensure form.action returns the URL string even if cached JS runs
+    document.querySelectorAll('form[data-optimistic]').forEach(function(f) {
+        Object.defineProperty(f, 'action', {
+            get: function() { return f.getAttribute('action') || ''; },
+            configurable: true
+        });
+    });
+</script>
+<script src="${pageContext.request.contextPath}/js/optimistic-ui.js?v=<%= System.currentTimeMillis() %>"></script>
 </body>
 </html>
 
