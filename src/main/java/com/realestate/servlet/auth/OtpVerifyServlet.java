@@ -54,8 +54,12 @@ public class OtpVerifyServlet extends HttpServlet {
         }
 
         if ("true".equalsIgnoreCase(resend)) {
-            otpService.generateAndSendOtp(user, purpose);
-            request.setAttribute("successMessage", "A new 6-digit verification code has been sent to " + user.getEmail());
+            boolean sent = otpService.generateAndSendOtp(user, purpose);
+            if (sent) {
+                request.setAttribute("successMessage", "A new 6-digit verification code has been sent to " + user.getEmail());
+            } else {
+                request.setAttribute("errorMessage", com.realestate.util.EmailUtil.getLastDeliveryError());
+            }
             String view = (adminUserId != null) ? "/views/admin-login-otp.jsp" : "/views/otp-verify.jsp";
             request.getRequestDispatcher(view).forward(request, response);
             return;
@@ -79,10 +83,12 @@ public class OtpVerifyServlet extends HttpServlet {
             if (user.getRole() == com.realestate.model.User.Role.CUSTOMER) {
                 user.setVerificationStatus(com.realestate.model.User.VerificationStatus.VERIFIED);
                 userDAO.updateUserVerificationStatus(user.getUserId(), com.realestate.model.User.VerificationStatus.VERIFIED, "OTP Verified");
-            } else {
+            } else if (user.getRole() == com.realestate.model.User.Role.BROKER || user.getRole() == com.realestate.model.User.Role.SELLER) {
                 // Brokers/Sellers need manual KYC
-                user.setVerificationStatus(com.realestate.model.User.VerificationStatus.UNVERIFIED);
-                userDAO.updateUserVerificationStatus(user.getUserId(), com.realestate.model.User.VerificationStatus.UNVERIFIED, "Email verified, pending KYC");
+                // Email verification must not reset a submitted or reviewed KYC request.
+                if (user.getVerificationStatus() == null) {
+                    user.setVerificationStatus(com.realestate.model.User.VerificationStatus.UNVERIFIED);
+                }
             }
             
             userDAO.setEmailVerified(user.getUserId(), true);

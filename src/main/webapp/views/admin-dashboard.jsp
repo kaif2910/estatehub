@@ -68,7 +68,7 @@
                     <span class="material-symbols-outlined text-[20px] text-on-surface-variant group-hover:text-on-surface">verified_user</span>
                     <span class="font-label-md text-label-md">KYC &amp; Verification</span>
                 </div>
-                <span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-semibold">${pendingVerifications} Review</span>
+                <span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-semibold">${pendingVerifications.size()} Review</span>
             </a>
             <a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group" href="${pageContext.request.contextPath}/admin/users">
                 <div class="flex items-center gap-3">

@@ -64,6 +64,7 @@ public class SendOtpApiServlet extends HttpServlet {
         if (sent) {
             response.getWriter().write("{\"success\": true, \"message\": \"OTP sent successfully\"}");
         } else {
+            session.removeAttribute("reg_otp_" + email);
             response.getWriter().write("{\"success\": false, \"message\": \"Failed to send OTP email\"}");
         }
     }

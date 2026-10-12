@@ -25,9 +25,12 @@ public class AdminVerificationServlet extends HttpServlet {
         if (statusFilter == null || statusFilter.isEmpty()) {
             statusFilter = "PENDING";
         }
+        if (!java.util.Set.of("PENDING", "APPROVED", "REJECTED", "ALL").contains(statusFilter)) {
+            statusFilter = "PENDING";
+        }
 
         List<VerificationRequest> requests = verificationService.getAllRequests(statusFilter);
-        request.setAttribute("requests", requests);
+        request.setAttribute("verificationRequests", requests);
         request.setAttribute("selectedStatus", statusFilter);
 
         request.getRequestDispatcher("/views/admin-verification.jsp").forward(request, response);
@@ -44,11 +47,26 @@ public class AdminVerificationServlet extends HttpServlet {
         }
 
         String action = request.getParameter("action");
-        int requestId = Integer.parseInt(request.getParameter("requestId"));
+        if (!"approve".equalsIgnoreCase(action) && !"reject".equalsIgnoreCase(action)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid review action.");
+            return;
+        }
+        int requestId;
+        try {
+            requestId = Integer.parseInt(request.getParameter("requestId"));
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid verification request.");
+            return;
+        }
         String adminNotes = request.getParameter("adminNotes");
 
         boolean approved = "approve".equalsIgnoreCase(action);
-        verificationService.reviewRequest(requestId, approved, adminNotes, adminUser.getUserId());
+        boolean reviewed = verificationService.reviewRequest(requestId, approved, adminNotes, adminUser.getUserId());
+        if (!reviewed) {
+            session.setAttribute("errorMessage", "Could not save the verification review. Please try again.");
+            response.sendRedirect(request.getContextPath() + "/admin/verification");
+            return;
+        }
 
         if (session != null) {
             session.setAttribute("successMessage", approved ?

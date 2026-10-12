@@ -75,10 +75,10 @@
 <span class="material-symbols-outlined text-[18px]">edit</span>
 </button>
 </div>
-<c:if test="${not empty errorMessage}">
+<c:if test="${not empty requestScope.errorMessage}">
     <div class="p-3 mb-2 rounded-lg bg-error-container text-on-error-container font-label-md text-label-md flex items-center gap-2 w-full justify-center">
         <span class="material-symbols-outlined text-[18px]">error</span>
-        ${errorMessage}
+        ${requestScope.errorMessage}
     </div>
 </c:if>
 <c:if test="${not empty sessionScope.errorMessage}">
@@ -88,6 +88,7 @@
         <c:remove var="errorMessage" scope="session"/>
     </div>
 </c:if>
+<c:if test="${not empty requestScope.successMessage}"><div class="p-4 mb-4 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed" role="status"><c:out value="${requestScope.successMessage}"/></div></c:if>
 <c:if test="${not empty sessionScope.successMessage}">
     <div class="p-3 mb-2 rounded-lg bg-green-100 text-green-800 font-label-md text-label-md flex items-center gap-2 w-full justify-center">
         <span class="material-symbols-outlined text-[18px]">check_circle</span>

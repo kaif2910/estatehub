@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%
+if (request.getDispatcherType() == jakarta.servlet.DispatcherType.REQUEST) {
+    response.sendRedirect(request.getContextPath() + "/admin/verification");
+    return;
+}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,6 +121,13 @@
                 </div>
             </c:if>
 
+            <form action="${pageContext.request.contextPath}/admin/verification" method="get" class="flex items-center gap-3">
+                <label for="statusFilter">Request status</label>
+                <select id="statusFilter" name="status" class="p-2 rounded border">
+                    <c:forEach items="${['PENDING','APPROVED','REJECTED','ALL']}" var="statusOption"><option value="${statusOption}" ${selectedStatus == statusOption ? 'selected' : ''}>${statusOption}</option></c:forEach>
+                </select>
+                <button class="px-4 py-2 bg-primary text-on-primary rounded" type="submit">Filter</button>
+            </form>
             <div class="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden p-6">
                 <div class="overflow-x-auto w-full"><table class="w-full text-left border-collapse">
                     <thead>
@@ -137,10 +150,16 @@
                                     <span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-caption text-caption font-semibold uppercase tracking-wider"><c:out value="${vr.userRole}"/></span>
                                 </td>
                                 <td class="py-3 px-4">
-                                    <div class="font-body-sm text-on-surface font-semibold"><c:out value="${vr.documentType}"/></div>
-                                    <a href="${pageContext.request.contextPath}/uploads/${vr.documentPath}" target="_blank" class="text-primary hover:underline font-caption text-caption flex items-center mt-1">
-                                        <span class="material-symbols-outlined text-[14px] mr-1">visibility</span> View Document
-                                    </a>
+                                    <div class="font-body-sm text-on-surface font-semibold"><c:out value="${vr.businessName}"/></div>
+                                    <div class="font-caption text-on-surface-variant">License: <c:out value="${vr.licenseNumber}"/></div>
+                                    <c:forEach items="${vr.documents}" var="doc">
+                                        <div class="mt-2"><c:out value="${doc.documentType}"/></div>
+                                        <c:url var="documentUrl" value="/uploads/${doc.filePath}"/>
+                                        <a href="${documentUrl}" target="_blank" rel="noopener" class="text-primary hover:underline font-caption text-caption flex items-center mt-1">
+                                            <span class="material-symbols-outlined text-[14px] mr-1">visibility</span> View Document: <c:out value="${doc.originalFileName}"/>
+                                        </a>
+                                    </c:forEach>
+                                    <c:if test="${empty vr.documents}"><span class="text-error">No document attached</span></c:if>
                                 </td>
                                 <td class="py-3 px-4">
                                     <span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">
@@ -148,7 +167,7 @@
                                     </span>
                                 </td>
                                 <td class="py-3 px-4 text-right">
-                                    <div class="flex items-center justify-end gap-2">
+                                    <c:if test="${vr.status == 'PENDING'}"><div class="flex items-center justify-end gap-2">
                                         <form action="${pageContext.request.contextPath}/admin/verification" method="post" class="inline">
                                             <input type="hidden" name="action" value="approve">
                                             <input type="hidden" name="requestId" value="${vr.requestId}">
@@ -165,7 +184,8 @@
                                                 Reject
                                             </button>
                                         </form>
-                                    </div>
+                                    </div></c:if>
+                                    <c:if test="${vr.status != 'PENDING'}"><c:out value="${vr.adminNotes}"/></c:if>
                                 </td>
                             </tr>
                         </c:forEach>

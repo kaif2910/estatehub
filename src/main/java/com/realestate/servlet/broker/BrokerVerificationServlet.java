@@ -1,5 +1,6 @@
 package com.realestate.servlet.broker;
 
+import com.realestate.dao.UserDAO;
 import com.realestate.model.SessionUser;
 import com.realestate.model.User;
 import com.realestate.model.VerificationDocument;
@@ -23,7 +24,7 @@ import java.util.List;
 @MultipartConfig(
     fileSizeThreshold = 1024 * 10,
     maxFileSize = 1024 * 1024 * 2,
-    maxRequestSize = 1024 * 1024 * 2
+    maxRequestSize = 1024 * 1024 * 2 + 64 * 1024
 )
 public class BrokerVerificationServlet extends HttpServlet {
 
@@ -39,6 +40,7 @@ public class BrokerVerificationServlet extends HttpServlet {
             return;
         }
 
+        refreshSessionUser(session, currentUser.getUserId());
         VerificationRequest req = verificationService.getStatusForUser(currentUser.getUserId());
         request.setAttribute("verification", req);
         request.getRequestDispatcher("/views/verification.jsp").forward(request, response);
@@ -54,12 +56,38 @@ public class BrokerVerificationServlet extends HttpServlet {
             return;
         }
 
+        VerificationRequest existing = verificationService.getStatusForUser(currentUser.getUserId());
+        if (existing != null && existing.getStatus() != VerificationRequest.Status.REJECTED) {
+            session.setAttribute("errorMessage", "Your verification request is already " + existing.getStatus().name().toLowerCase() + ".");
+            response.sendRedirect(request.getContextPath() + "/broker/verification");
+            return;
+        }
+        Part filePart;
+        try {
+            filePart = request.getPart("certificate");
+        } catch (IllegalStateException | ServletException e) {
+            session.setAttribute("errorMessage", "Please upload a PDF or image no larger than 2 MB.");
+            response.sendRedirect(request.getContextPath() + "/broker/verification");
+            return;
+        }
         String businessName = request.getParameter("businessName");
         String licenseNumber = request.getParameter("licenseNumber");
         String taxId = request.getParameter("taxId");
         String docTypeStr = request.getParameter("documentType");
-
-        Part filePart = request.getPart("certificate");
+        if (businessName == null || businessName.isBlank() || licenseNumber == null || licenseNumber.isBlank()
+                || taxId == null || taxId.isBlank()) {
+            session.setAttribute("errorMessage", "Business name, license number and tax ID are required.");
+            response.sendRedirect(request.getContextPath() + "/broker/verification");
+            return;
+        }
+        VerificationDocument.DocumentType docType;
+        try {
+            docType = VerificationDocument.DocumentType.valueOf(docTypeStr == null ? "BROKER_LICENSE" : docTypeStr);
+        } catch (IllegalArgumentException e) {
+            session.setAttribute("errorMessage", "Please select a supported document type.");
+            response.sendRedirect(request.getContextPath() + "/broker/verification");
+            return;
+        }
         if (filePart == null || filePart.getSize() == 0) {
             session.setAttribute("errorMessage", "Please upload a certificate document.");
             response.sendRedirect(request.getContextPath() + "/broker/verification");
@@ -73,7 +101,14 @@ public class BrokerVerificationServlet extends HttpServlet {
             return;
         }
 
-        String fileName = System.currentTimeMillis() + "_" + getSubmittedFileName(filePart);
+        String originalFileName = getSubmittedFileName(filePart).replace('\\', '/');
+        originalFileName = originalFileName.substring(originalFileName.lastIndexOf('/') + 1);
+        if (!originalFileName.toLowerCase(java.util.Locale.ROOT).matches(".*\\.(pdf|jpg|jpeg|png)$")) {
+            session.setAttribute("errorMessage", "Certificate must be a PDF, JPG or PNG file.");
+            response.sendRedirect(request.getContextPath() + "/broker/verification");
+            return;
+        }
+        String fileName = System.currentTimeMillis() + "_" + originalFileName.replaceAll("[^a-zA-Z0-9._-]", "_");
         String uploadDir = getServletContext().getRealPath("/uploads");
         if (uploadDir == null) {
             uploadDir = System.getProperty("java.io.tmpdir") + File.separator + "estatehub-uploads";
@@ -87,20 +122,30 @@ public class BrokerVerificationServlet extends HttpServlet {
 
         List<VerificationDocument> docs = new ArrayList<>();
         VerificationDocument doc = new VerificationDocument();
-        doc.setDocumentType(docTypeStr != null ? VerificationDocument.DocumentType.valueOf(docTypeStr) : VerificationDocument.DocumentType.BROKER_LICENSE);
+        doc.setDocumentType(docType);
         doc.setFilePath(fileName);
-        doc.setOriginalFileName(getSubmittedFileName(filePart));
+        doc.setOriginalFileName(originalFileName);
         doc.setFileSizeKb((int) (filePart.getSize() / 1024));
         docs.add(doc);
 
         int reqId = verificationService.submitVerificationRequest(currentUser.getUserId(), businessName, licenseNumber, taxId, docs);
         if (reqId > 0) {
+            refreshSessionUser(session, currentUser.getUserId());
             session.setAttribute("successMessage", "Broker verification documents submitted. Awaiting Administrator approval.");
         } else {
             session.setAttribute("errorMessage", "Failed to submit verification documents.");
         }
 
         response.sendRedirect(request.getContextPath() + "/broker/verification");
+    }
+
+    private void refreshSessionUser(HttpSession session, int userId) {
+        User latestUser = new UserDAO().findById(userId);
+        if (latestUser != null) {
+            SessionUser refreshed = new SessionUser(latestUser);
+            session.setAttribute("currentUser", refreshed);
+            session.setAttribute("verificationStatus", refreshed.getVerificationStatus());
+        }
     }
 
     private String getSubmittedFileName(Part part) {

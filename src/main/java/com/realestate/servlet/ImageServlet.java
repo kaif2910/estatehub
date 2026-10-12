@@ -27,9 +27,12 @@ public class ImageServlet extends HttpServlet {
             return;
         }
 
-        File file = new File(UPLOAD_DIR, requestedFile);
+        String deployedUploads = getServletContext().getRealPath("/uploads");
+        File file = findUpload(requestedFile.substring(1), new File(UPLOAD_DIR),
+                deployedUploads == null ? null : new File(deployedUploads),
+                new File(System.getProperty("java.io.tmpdir"), "estatehub-uploads"));
         
-        if (!file.exists() || !file.isFile()) {
+        if (file == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
@@ -50,5 +53,17 @@ public class ImageServlet extends HttpServlet {
                 out.write(buffer, 0, bytesRead);
             }
         }
+    }
+
+    static File findUpload(String relativePath, File... roots) throws IOException {
+        for (File root : roots) {
+            if (root == null) continue;
+            java.nio.file.Path base = root.getCanonicalFile().toPath();
+            java.nio.file.Path candidate = base.resolve(relativePath).toFile().getCanonicalFile().toPath();
+            if (candidate.startsWith(base) && Files.isRegularFile(candidate)) {
+                return candidate.toFile();
+            }
+        }
+        return null;
     }
 }

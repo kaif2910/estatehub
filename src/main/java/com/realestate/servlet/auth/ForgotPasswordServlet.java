@@ -51,9 +51,12 @@ public class ForgotPasswordServlet extends HttpServlet {
         String htmlBody = "<p>Hello " + user.getName() + ",</p>" +
                           "<p>Click the link below to reset your password. It is valid for 30 minutes.</p>" +
                           "<p><a href='" + resetLink + "'>Reset Password</a></p>";
-        com.realestate.util.EmailUtil.sendEmail(user.getEmail(), subject, htmlBody);
-
-        request.setAttribute("successMessage", "Password reset link sent successfully! Please check your email.");
+        boolean sent = com.realestate.util.EmailUtil.sendEmail(user.getEmail(), subject, htmlBody);
+        if (sent) {
+            request.setAttribute("successMessage", "Password reset link sent successfully! Please check your email.");
+        } else {
+            request.setAttribute("errorMessage", com.realestate.util.EmailUtil.getLastDeliveryError());
+        }
         request.getRequestDispatcher("/views/forgot-password.jsp").forward(request, response);
     }
 }

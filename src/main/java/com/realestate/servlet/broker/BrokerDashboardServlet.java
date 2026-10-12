@@ -3,6 +3,7 @@ package com.realestate.servlet.broker;
 import com.realestate.dao.InquiryDAO;
 import com.realestate.dao.PropertyDAO;
 import com.realestate.dao.VerificationDAO;
+import com.realestate.dao.UserDAO;
 import com.realestate.model.Inquiry;
 import com.realestate.model.Property;
 import com.realestate.model.SessionUser;
@@ -35,6 +36,12 @@ public class BrokerDashboardServlet extends HttpServlet {
         }
 
         int userId = currentUser.getUserId();
+        User latestUser = new UserDAO().findById(userId);
+        if (latestUser != null) {
+            currentUser = new SessionUser(latestUser);
+            session.setAttribute("currentUser", currentUser);
+            session.setAttribute("verificationStatus", currentUser.getVerificationStatus());
+        }
         List<Property> properties = propertyDAO.findByUser(userId);
         List<Inquiry> inquiries = inquiryDAO.findBySellerId(userId);
         VerificationRequest verification = verificationDAO.findLatestByUserId(userId);

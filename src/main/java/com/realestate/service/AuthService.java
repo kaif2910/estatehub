@@ -73,9 +73,8 @@ public class AuthService {
         if (userId > 0) {
             user.setUserId(userId);
             if (!preVerified) {
-                // Send registration OTP legacy flow
-                otpService.generateAndSendOtp(user, "REGISTRATION");
-                return new AuthResult(true, "Registration successful! Please check your email for verification OTP.", user);
+                // The registration servlet sends one OTP and handles delivery failures.
+                return new AuthResult(true, "Registration successful! Please verify your email.", user);
             } else {
                 return new AuthResult(true, "Registration successful!", user);
             }

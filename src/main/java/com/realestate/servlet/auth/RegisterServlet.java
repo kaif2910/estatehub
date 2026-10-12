@@ -29,10 +29,7 @@ public class RegisterServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String role = request.getParameter("role");
         String whatsapp = request.getParameter("whatsappNumber");
-        String otp = request.getParameter("otp");
-
         HttpSession session = request.getSession(true);
-        String expectedOtp = (String) session.getAttribute("reg_otp_" + email.toLowerCase().trim());
         boolean preVerified = false;
 
         AuthService.AuthResult result = authService.register(name, email, password, phone, role, whatsapp, preVerified);
@@ -42,12 +39,16 @@ public class RegisterServlet extends HttpServlet {
             
             // Generate and send REAL OTP via Gmail
             com.realestate.service.OtpService otpService = new com.realestate.service.OtpService();
-            otpService.generateAndSendOtp(user, "REGISTRATION");
+            boolean sent = otpService.generateAndSendOtp(user, "REGISTRATION");
             
             session.setAttribute("pendingOtpUserId", user.getUserId());
             session.setAttribute("pendingOtpEmail", user.getEmail());
             session.setAttribute("pendingOtpName", user.getName());
-            session.setAttribute("successMessage", "Account created successfully! An OTP has been sent to your email to verify your account.");
+            if (sent) {
+                session.setAttribute("successMessage", "Account created successfully! An OTP has been sent to your email to verify your account.");
+            } else {
+                session.setAttribute("errorMessage", "Account created, but the OTP email could not be sent. " + com.realestate.util.EmailUtil.getLastDeliveryError());
+            }
             response.sendRedirect(request.getContextPath() + "/views/otp-verify.jsp");
         } else {
             request.setAttribute("errorMessage", result.getMessage());

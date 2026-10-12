@@ -180,7 +180,7 @@ public class UserDAO {
     }
 
     // OTP operations
-    public void createOtp(int userId, String otpCode, String purpose, int expiryMinutes) {
+    public boolean createOtp(int userId, String otpCode, String purpose, int expiryMinutes) {
         String sql = "INSERT INTO otp_verifications (user_id, otp_code, purpose, expires_at) VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL ? MINUTE))";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -188,10 +188,11 @@ public class UserDAO {
             ps.setString(2, otpCode);
             ps.setString(3, purpose);
             ps.setInt(4, expiryMinutes);
-            ps.executeUpdate();
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public boolean verifyOtp(int userId, String otpCode, String purpose) {

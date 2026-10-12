@@ -53,23 +53,33 @@ public class LoginServlet extends HttpServlet {
             }
             if (user.getRole() == User.Role.ADMIN) {
                 com.realestate.service.OtpService otpService = new com.realestate.service.OtpService();
-                otpService.generateAndSendOtp(user, "REGISTRATION");
+                boolean sent = otpService.generateAndSendOtp(user, "REGISTRATION");
                 
                 session.setAttribute("pendingAdminUserId", user.getUserId());
                 session.setAttribute("pendingAdminEmail", user.getEmail());
                 session.setAttribute("pendingAdminName", user.getName());
-                session.setAttribute("successMessage", "An OTP has been sent to your email for Admin Verification.");
+                if (sent) {
+                    session.setAttribute("successMessage", "An OTP has been sent to your email for Admin Verification.");
+                } else {
+                    session.setAttribute("errorMessage", com.realestate.util.EmailUtil.getLastDeliveryError());
+                }
                 
                 response.sendRedirect(request.getContextPath() + "/views/admin-login-otp.jsp");
                 return;
             }
 
             if (!user.isEmailVerified()) {
-                com.realestate.dao.UserDAO userDAO = new com.realestate.dao.UserDAO();
-                user.setEmailVerified(true);
-                user.setVerificationStatus(User.VerificationStatus.VERIFIED);
-                userDAO.setEmailVerified(user.getUserId(), true);
-                userDAO.updateUserVerificationStatus(user.getUserId(), User.VerificationStatus.VERIFIED, "Auto-verified on login");
+                boolean sent = new com.realestate.service.OtpService().generateAndSendOtp(user, "REGISTRATION");
+                session.setAttribute("pendingOtpUserId", user.getUserId());
+                session.setAttribute("pendingOtpEmail", user.getEmail());
+                session.setAttribute("pendingOtpName", user.getName());
+                if (sent) {
+                    session.setAttribute("successMessage", "Please verify your email using the OTP we sent.");
+                } else {
+                    session.setAttribute("errorMessage", com.realestate.util.EmailUtil.getLastDeliveryError());
+                }
+                response.sendRedirect(request.getContextPath() + "/views/otp-verify.jsp");
+                return;
             }
 
             session.setAttribute("currentUser", new com.realestate.model.SessionUser(user));

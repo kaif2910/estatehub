@@ -1,9 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%
+if (request.getDispatcherType() == jakarta.servlet.DispatcherType.REQUEST) {
+    com.realestate.model.SessionUser user = (com.realestate.model.SessionUser) session.getAttribute("currentUser");
+    String route = user == null ? "/views/login.jsp" : user.getRole() == com.realestate.model.User.Role.SELLER ? "/seller/verification" : "/broker/verification";
+    response.sendRedirect(request.getContextPath() + route);
+    return;
+}
+%>
+<c:set var="providerPath" value="${sessionScope.currentUser.role == 'SELLER' ? 'seller' : 'broker'}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<title>Broker Verification | EstateHub</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -12,7 +22,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style>
 <script src="https://cdn.tailwindcss.com"></script>
-<script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"inverse-surface":"#2d3138","surface":"#f9f9ff","outline":"#7d7483","on-secondary-fixed-variant":"#92001b","on-primary-fixed":"#2a0053","on-surface":"#181c23","outline-variant":"#cec3d4","on-error":"#ffffff","on-tertiary-fixed-variant":"#00513b","surface-container-high":"#e5e8f2","surface-bright":"#f9f9ff","primary":"#450081","on-primary-container":"#cca0ff","surface-container-lowest":"#ffffff","surface-container-highest":"#dfe2ec","tertiary-fixed-dim":"#50ddad","on-tertiary-fixed":"#002116","on-secondary-container":"#60000e","surface-dim":"#d7dae3","on-primary":"#ffffff","secondary-container":"#ff5a5f","primary-fixed-dim":"#dab9ff","primary-fixed":"#eedbff","on-tertiary-container":"#36ca9b","on-primary-fixed-variant":"#5f259e","inverse-primary":"#dab9ff","background":"#f9f9ff","surface-tint":"#7841b8","error":"#ba1a1a","tertiary-fixed":"#71fac8","on-surface-variant":"#4b4452","surface-container-low":"#f1f3fd","secondary":"#b52330","primary-container":"#5e239d","secondary-fixed":"#ffdad8","on-background":"#181c23","inverse-on-surface":"#eef0fa","on-error-container":"#93000a","on-tertiary":"#ffffff","on-secondary":"#ffffff","tertiary-container":"#00503a","error-container":"#ffdad6","tertiary":"#003727","surface-container":"#ebeef7","on-secondary-fixed":"#410007","surface-variant":"#dfe2ec","secondary-fixed-dim":"#ffb3b0"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-xl":"2rem","gutter-xs":"0.25rem","search-bar-height":"4rem","gutter-sm":"0.5rem","container-max":"1280px","gutter-2xl":"3rem","gutter-lg":"1.5rem","gutter-md":"1rem"},"fontFamily":{"body-lg":["Inter"],"label-sm":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"caption":["Inter"],"headline-md":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-xl":["Plus Jakarta Sans"]},"fontSize":{"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"0","fontWeight":"600"}],"display-hero-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"800"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"headline-xl-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"700"}],"caption":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"display-hero":["44px",{"lineHeight":"54px","letterSpacing":"-0.025em","fontWeight":"800"}],"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0","fontWeight":"400"}],"headline-xl":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}]}}}</script>
+<script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"inverse-surface":"#2d3138","surface":"#f9f9ff","outline":"#7d7483","on-secondary-fixed-variant":"#92001b","on-primary-fixed":"#2a0053","on-surface":"#181c23","outline-variant":"#cec3d4","on-error":"#ffffff","on-tertiary-fixed-variant":"#00513b","surface-container-high":"#e5e8f2","surface-bright":"#f9f9ff","primary":"#450081","on-primary-container":"#cca0ff","surface-container-lowest":"#ffffff","surface-container-highest":"#dfe2ec","tertiary-fixed-dim":"#50ddad","on-tertiary-fixed":"#002116","on-secondary-container":"#60000e","surface-dim":"#d7dae3","on-primary":"#ffffff","secondary-container":"#ff5a5f","primary-fixed-dim":"#dab9ff","primary-fixed":"#eedbff","on-tertiary-container":"#36ca9b","on-primary-fixed-variant":"#5f259e","inverse-primary":"#dab9ff","background":"#f9f9ff","surface-tint":"#7841b8","error":"#ba1a1a","tertiary-fixed":"#71fac8","on-surface-variant":"#4b4452","surface-container-low":"#f1f3fd","secondary":"#b52330","primary-container":"#5e239d","secondary-fixed":"#ffdad8","on-background":"#181c23","inverse-on-surface":"#eef0fa","on-error-container":"#93000a","on-tertiary":"#ffffff","on-secondary":"#ffffff","tertiary-container":"#00503a","error-container":"#ffdad6","tertiary":"#003727","surface-container":"#ebeef7","on-secondary-fixed":"#410007","surface-variant":"#dfe2ec","secondary-fixed-dim":"#ffb3b0"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-xl":"2rem","gutter-xs":"0.25rem","search-bar-height":"4rem","gutter-sm":"0.5rem","container-max":"1280px","gutter-2xl":"3rem","gutter-lg":"1.5rem","gutter-md":"1rem"},"fontFamily":{"body-lg":["Inter"],"label-sm":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"caption":["Inter"],"headline-md":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-xl":["Plus Jakarta Sans"]},"fontSize":{"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"0","fontWeight":"600"}],"display-hero-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"800"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"headline-xl-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"700"}],"caption":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"display-hero":["44px",{"lineHeight":"54px","letterSpacing":"-0.025em","fontWeight":"800"}],"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0","fontWeight":"400"}],"headline-xl":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}]}}}}</script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
@@ -22,11 +32,14 @@
 </div>
 <nav class="hidden xl:flex items-center gap-gutter-xs bg-surface-container-low p-1.5 rounded-xl">
 <a class="px-3 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="${pageContext.request.contextPath}/">Home</a>
-<a class="px-3 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="${pageContext.request.contextPath}/broker/dashboard">Dashboard</a>
+<a class="px-3 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="${pageContext.request.contextPath}/${providerPath}/dashboard">Dashboard</a>
 </nav>
 </div></header>
 <main class="w-full pt-20 bg-surface min-h-[calc(100vh-140px)]">
 <div class="relative w-full max-w-[1280px] mx-auto px-gutter-lg pt-6 pb-16">
+<c:if test="${not empty sessionScope.successMessage}"><div class="p-4 mb-4 bg-tertiary-fixed text-on-tertiary-fixed rounded-lg" role="status"><c:out value="${sessionScope.successMessage}"/></div><c:remove var="successMessage" scope="session"/></c:if>
+<c:if test="${not empty sessionScope.errorMessage}"><div class="p-4 mb-4 bg-error-container text-on-error-container rounded-lg" role="alert"><c:out value="${sessionScope.errorMessage}"/></div><c:remove var="errorMessage" scope="session"/></c:if>
+
 <div class="bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-sm mb-8 relative overflow-hidden">
 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6">
 <div class="flex items-start sm:items-center gap-4">
@@ -41,34 +54,57 @@
 </div>
 </div>
 <div class="lg:col-span-8 flex flex-col gap-6">
+<c:if test="${not empty verification}">
+<section class="bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-sm">
+<h2 class="font-headline-md text-headline-md mb-4">Submitted Verification Request</h2>
+<p class="mb-3">Request #<c:out value="${verification.requestId}"/> - <strong><c:out value="${verification.status}"/></strong></p>
+<c:choose>
+<c:when test="${verification.status == 'PENDING'}"><p class="mb-4" role="status">Your certificate has been received and is awaiting administrator review.</p></c:when>
+<c:when test="${verification.status == 'APPROVED'}"><p class="mb-4" role="status">Your verification request has been approved.</p></c:when>
+<c:otherwise><p class="mb-4" role="alert">Your request was rejected. Review the feedback and submit corrected documents below.</p></c:otherwise>
+</c:choose>
+<dl class="space-y-2">
+<div><dt class="font-semibold">Business Name</dt><dd><c:out value="${verification.businessName}"/></dd></div>
+<div><dt class="font-semibold">License Number / RERA ID</dt><dd><c:out value="${verification.licenseNumber}"/></dd></div>
+<div><dt class="font-semibold">Submitted</dt><dd><c:out value="${verification.createdAt}"/></dd></div>
+</dl>
+<c:if test="${not empty verification.adminNotes}"><p class="mt-4"><strong>Administrator feedback:</strong> <c:out value="${verification.adminNotes}"/></p></c:if>
+<h3 class="font-semibold mt-4">Uploaded Documents</h3>
+<ul class="mt-2 space-y-2"><c:forEach items="${verification.documents}" var="doc"><li><c:out value="${doc.originalFileName}"/> (<c:out value="${doc.fileSizeKb}"/> KB)</li></c:forEach></ul>
+<c:if test="${empty verification.documents}"><p>No document record is available. Contact support before resubmitting.</p></c:if>
+<a class="inline-block mt-5 text-primary underline" href="${pageContext.request.contextPath}/${providerPath}/dashboard">Back to Dashboard</a>
+</section>
+</c:if>
+<c:if test="${empty verification or verification.status == 'REJECTED'}">
+
 <div class="bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-sm">
 <h2 class="font-headline-md text-headline-md text-on-surface mb-4">Verification Details</h2>
-<form action="${pageContext.request.contextPath}/broker/verification" method="POST" enctype="multipart/form-data" class="space-y-4">
+<form action="${pageContext.request.contextPath}/${providerPath}/verification" method="POST" enctype="multipart/form-data" class="space-y-4">
 <div>
-<label class="block font-label-md text-label-md text-on-surface mb-2">Business Name <span class="text-secondary font-bold">*</span></label>
-<input type="text" name="businessName" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none"/>
+<label for="businessName" class="block font-label-md text-label-md text-on-surface mb-2">Business Name <span class="text-secondary font-bold">*</span></label>
+<input type="text" id="businessName" name="businessName" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none"/>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div>
-<label class="block font-label-md text-label-md text-on-surface mb-2">License Number / RERA ID <span class="text-secondary font-bold">*</span></label>
-<input type="text" name="licenseNumber" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none"/>
+<label for="licenseNumber" class="block font-label-md text-label-md text-on-surface mb-2">License Number / RERA ID <span class="text-secondary font-bold">*</span></label>
+<input type="text" id="licenseNumber" name="licenseNumber" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none"/>
 </div>
 <div>
-<label class="block font-label-md text-label-md text-on-surface mb-2">Tax ID / PAN / GSTIN <span class="text-secondary font-bold">*</span></label>
-<input type="text" name="taxId" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none"/>
+<label for="taxId" class="block font-label-md text-label-md text-on-surface mb-2">Tax ID / PAN / GSTIN <span class="text-secondary font-bold">*</span></label>
+<input type="text" id="taxId" name="taxId" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none"/>
 </div>
 </div>
 <div>
-<label class="block font-label-md text-label-md text-on-surface mb-2">Document Type <span class="text-secondary font-bold">*</span></label>
-<select name="documentType" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none">
+<label for="documentType" class="block font-label-md text-label-md text-on-surface mb-2">Document Type <span class="text-secondary font-bold">*</span></label>
+<select id="documentType" name="documentType" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none">
     <option value="BROKER_LICENSE">Broker License / RERA ID</option>
-    <option value="COMPANY_REGISTRATION">Company Registration</option>
-    <option value="TAX_ID">Tax ID (PAN/GST)</option>
+    <option value="BUSINESS_REGISTRATION">Company Registration</option>
+    <option value="GOVT_ID">Government ID</option>
 </select>
 </div>
 <div>
-<label class="block font-label-md text-label-md text-on-surface mb-2">Registration Certificate (PDF/Image max 25KB) <span class="text-secondary font-bold">*</span></label>
-<input type="file" name="certificate" accept=".pdf,.jpg,.png,.jpeg" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none"/>
+<label for="certificate" class="block font-label-md text-label-md text-on-surface mb-2">Registration Certificate (PDF/Image max 2 MB) <span class="text-secondary font-bold">*</span></label>
+<input type="file" id="certificate" name="certificate" accept=".pdf,.jpg,.png,.jpeg" required class="w-full bg-surface-container-low p-3 rounded-lg focus:outline-none"/>
 </div>
 <div class="flex justify-end mt-4">
 <button type="submit" class="px-6 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-all flex items-center gap-2 shadow-sm">
@@ -78,6 +114,7 @@
 </div>
 </form>
 </div>
+</c:if>
 </div>
 </div>
 </main>
