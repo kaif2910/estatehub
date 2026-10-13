@@ -23,7 +23,7 @@
 </div>
 <nav class="flex items-center gap-gutter-lg" data-active-classes="text-primary font-bold">
 <a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="explore" href="${pageContext.request.contextPath}/search">Explore Properties</a>
-<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="help" href="#">Need Help?</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="help" href="${pageContext.request.contextPath}/views/information.jsp#support">Need Help?</a>
 </nav>
 <div class="flex items-center gap-gutter-md">
 <c:choose>
@@ -198,9 +198,9 @@
 <p class="font-caption text-caption text-on-surface-variant">MahaRERA Registration No: A51900001234 | Available on maharera.mahaonline.gov.in</p>
 </div>
 <div class="flex items-center gap-2 sm:gap-gutter-lg">
-<a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="terms-of-service" href="#">Terms of Service</a>
-<a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacy-policy" href="#">Privacy Policy</a>
-<a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="support" href="#">Support</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="terms-of-service" href="${pageContext.request.contextPath}/views/information.jsp#terms">Terms of Service</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacy-policy" href="${pageContext.request.contextPath}/views/information.jsp#privacy">Privacy Policy</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-on-surface transition-colors" data-path="support" href="${pageContext.request.contextPath}/views/information.jsp#support">Support</a>
 </div>
 </div>
 </footer>

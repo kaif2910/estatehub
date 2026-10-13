@@ -28,8 +28,8 @@ public class ForgotPasswordServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");
-        if (email == null || email.trim().isEmpty()) {
-            request.setAttribute("errorMessage", "Please provide an email address.");
+        if (!com.realestate.util.ValidationUtil.isValidEmail(email)) {
+            request.setAttribute("errorMessage", "Please provide a valid email address.");
             request.getRequestDispatcher("/views/forgot-password.jsp").forward(request, response);
             return;
         }
@@ -37,7 +37,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         User user = userDAO.findByEmail(email.trim().toLowerCase());
         if (user == null) {
             // For security, do not reveal if the email exists or not
-            request.setAttribute("successMessage", "If an account with that email exists, a password reset OTP has been sent.");
+            request.setAttribute("successMessage", "If an account with that email exists, a password reset link has been sent.");
             request.getRequestDispatcher("/views/forgot-password.jsp").forward(request, response);
             return;
         }
@@ -55,7 +55,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         if (sent) {
             request.setAttribute("successMessage", "Password reset link sent successfully! Please check your email.");
         } else {
-            request.setAttribute("errorMessage", com.realestate.util.EmailUtil.getLastDeliveryError());
+            request.setAttribute("errorMessage", "Unable to send the reset email right now. Please try again later.");
         }
         request.getRequestDispatcher("/views/forgot-password.jsp").forward(request, response);
     }

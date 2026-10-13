@@ -54,8 +54,9 @@
     }
   };
 </script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
-<body class="bg-surface font-body text-on-surface min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary">
+<body class="responsive-page listing-page bg-surface font-body text-on-surface min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary">
 
 <!-- HEADER -->
 <header class="fixed top-0 left-0 right-0 w-full z-40 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,0,0,0.06)] border-b border-surface-container-high">
@@ -439,9 +440,9 @@
   <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
     <p>© 2026 EstateHub Technologies Pvt. Ltd. All rights reserved.</p>
     <div class="flex items-center gap-6">
-      <a href="#" class="hover:underline">Privacy Policy</a>
-      <a href="#" class="hover:underline">Terms of Service</a>
-      <a href="#" class="hover:underline">Contact Support</a>
+      <a href="${pageContext.request.contextPath}/views/information.jsp#privacy" class="hover:underline">Privacy Policy</a>
+      <a href="${pageContext.request.contextPath}/views/information.jsp#terms" class="hover:underline">Terms of Service</a>
+      <a href="${pageContext.request.contextPath}/views/information.jsp#support" class="hover:underline">Contact Support</a>
     </div>
   </div>
 </footer>

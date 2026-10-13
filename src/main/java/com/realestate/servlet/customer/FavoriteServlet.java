@@ -30,6 +30,7 @@ public class FavoriteServlet extends HttpServlet {
 
         List<Property> favorites = favoriteDAO.getFavoritesByUser(currentUser.getUserId());
         request.setAttribute("favorites", favorites);
+        session.setAttribute("favoriteCount", favorites.size());
         request.getRequestDispatcher("/views/favorites.jsp").forward(request, response);
     }
 
@@ -50,7 +51,10 @@ public class FavoriteServlet extends HttpServlet {
             try {
                 int propertyId = Integer.parseInt(propIdStr);
                 if ("remove".equalsIgnoreCase(action)) {
-                    favoriteDAO.removeFavorite(currentUser.getUserId(), propertyId);
+                    if (!favoriteDAO.removeFavorite(currentUser.getUserId(), propertyId)) {
+                        response.sendError(HttpServletResponse.SC_CONFLICT, "The saved property could not be removed. Reload and try again.");
+                        return;
+                    }
                 } else {
                     favoriteDAO.addFavorite(currentUser.getUserId(), propertyId);
                 }

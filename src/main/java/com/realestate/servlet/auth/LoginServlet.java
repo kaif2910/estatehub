@@ -44,6 +44,11 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
+        if (!com.realestate.util.ValidationUtil.isValidEmail(email) || password == null || password.isBlank()) {
+            request.setAttribute("errorMessage", "Enter a valid email address and your password.");
+            request.getRequestDispatcher("/views/login.jsp").forward(request, response);
+            return;
+        }
         AuthService.AuthResult result = authService.login(email, password);
 
         if (result.isSuccess()) {

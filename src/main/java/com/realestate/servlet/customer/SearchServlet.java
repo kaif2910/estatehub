@@ -36,6 +36,7 @@ public class SearchServlet extends HttpServlet {
             keyword = request.getParameter("q");
         }
         String categoryIdStr = request.getParameter("categoryId");
+        String categorySlug = request.getParameter("category");
         String purpose = request.getParameter("purpose");
         String minPriceStr = request.getParameter("minPrice");
         String maxPriceStr = request.getParameter("maxPrice");
@@ -68,12 +69,25 @@ public class SearchServlet extends HttpServlet {
         List<Property> properties = propertyDAO.searchProperties(
                 keyword, categoryId, purpose, minPrice, maxPrice,
                 bedrooms, bathrooms, minArea, maxArea,
-                furnishing, availability, sortBy, page, pageSize
+                furnishing, availability, sortBy, page, pageSize, categorySlug
         );
 
         List<PropertyCategory> categories = categoryDAO.findAll();
 
         request.setAttribute("properties", properties);
+        if (categories.isEmpty()) {
+            categories = List.of(
+                new PropertyCategory(0, "Apartment", "apartment", "", ""),
+                new PropertyCategory(0, "Luxury Villa", "villa", "", ""),
+                new PropertyCategory(0, "Independent House", "house", "", ""),
+                new PropertyCategory(0, "Commercial Office", "office", "", ""),
+                new PropertyCategory(0, "Retail Shop", "shop", "", ""),
+                new PropertyCategory(0, "Residential Plot", "plot", "", ""),
+                new PropertyCategory(0, "Studio Penthouse", "penthouse", "", ""),
+                new PropertyCategory(0, "PG / Co-Living", "pg", "", ""));
+            request.setAttribute("categoryNotice", "Showing standard categories. Live category data is currently unavailable.");
+        }
+        request.setAttribute("categorySlug", categorySlug);
         request.setAttribute("categories", categories);
         request.setAttribute("keyword", keyword);
         request.setAttribute("categoryId", categoryId);

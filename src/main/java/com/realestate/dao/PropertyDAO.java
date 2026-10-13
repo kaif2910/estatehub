@@ -222,6 +222,10 @@ public class PropertyDAO {
     }
 
     public List<Property> searchProperties(String keyword, Integer categoryId, String purpose, BigDecimal minPrice, BigDecimal maxPrice, Integer minBedrooms, Integer minBathrooms, BigDecimal minArea, BigDecimal maxArea, String furnishing, String availability, String sortBy, int page, int pageSize) {
+        return searchProperties(keyword, categoryId, purpose, minPrice, maxPrice, minBedrooms, minBathrooms, minArea, maxArea, furnishing, availability, sortBy, page, pageSize, null);
+    }
+
+    public List<Property> searchProperties(String keyword, Integer categoryId, String purpose, BigDecimal minPrice, BigDecimal maxPrice, Integer minBedrooms, Integer minBathrooms, BigDecimal minArea, BigDecimal maxArea, String furnishing, String availability, String sortBy, int page, int pageSize, String categorySlug) {
         List<Property> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT p.*, c.name AS category_name, u.name AS owner_name, u.email AS owner_email, u.phone AS owner_phone, u.whatsapp_number AS owner_whatsapp, u.role AS owner_role, u.verification_status AS owner_verification_status, " +
                 "(SELECT image_url FROM property_images pi WHERE pi.property_id = p.property_id ORDER BY pi.is_primary DESC, pi.image_id ASC LIMIT 1) AS primary_image_url " +
@@ -248,6 +252,10 @@ public class PropertyDAO {
                     sql.append(")");
                 }
             }
+        }
+        if (categorySlug != null && !categorySlug.isBlank()) {
+            sql.append(" AND c.slug = ?");
+            params.add(categorySlug);
         }
         if (categoryId != null && categoryId > 0) {
             sql.append(" AND p.category_id = ?");

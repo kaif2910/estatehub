@@ -29,7 +29,7 @@
 </div>
 <nav class="flex items-center gap-gutter-lg" data-active-classes="text-primary font-bold">
 <a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="explore" href="${pageContext.request.contextPath}/search">Explore Properties</a>
-<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="help" href="#">Need Help?</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="help" href="${pageContext.request.contextPath}/views/information.jsp#support">Need Help?</a>
 </nav>
 <div class="flex items-center gap-gutter-md">
 <c:choose>

@@ -1,3 +1,4 @@
+<% if (request.getAttribute("favorites") == null) { response.sendRedirect(request.getContextPath() + "/favorites"); return; } %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
@@ -52,223 +53,62 @@
 </c:choose>
 </div>
 </div>
-</header><main class="flex-1 w-full bg-surface"><div class="flex flex-col w-full">
-<!-- Top Sub-Navigation / Profile Header Bar -->
-<section class="w-full bg-surface-container-low shadow-sm">
-<div class="max-w-container-max mx-auto px-gutter-lg pt-gutter-lg pb-0">
-<!-- Profile Status Bar -->
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-gutter-md pb-gutter-md">
-<div class="flex items-center gap-gutter-md">
-<div class="relative">
-<div class="w-14 h-14 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-headline-md text-headline-md shadow-md">${fn:substring(sessionScope.currentUser.name, 0, 1)}</div>
-<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-tertiary-container text-tertiary-fixed flex items-center justify-center shadow-sm" title="Verified User">
-<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">verified</span>
-</span>
+</header><main class="max-w-[1280px] mx-auto w-full px-6 py-8 pb-24">
+<h1 class="text-3xl font-bold">My Shortlisted Properties</h1>
+<p class="my-4">${fn:length(favorites)} homes saved</p>
+<div class="flex flex-wrap gap-4 my-4">
+<label>Sort by <select id="saved-sort" class="p-2 rounded border"><option value="recent">Recently saved</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="area">Area: Largest First</option></select></label>
+<button type="button" id="compare-button" class="p-2 rounded border" disabled>Compare selected (0)</button>
+<button type="button" id="alert-button" class="p-2 rounded border">Manage Alert Preferences</button>
 </div>
-<div>
-<div class="flex items-center gap-2">
-<h1 class="font-headline-lg text-headline-lg text-on-surface">${sessionScope.currentUser.name}</h1>
-<span class="bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
-<span class="material-symbols-outlined text-[13px]">verified_user</span> Verified Account
-</span>
+<p id="saved-status" role="status" class="my-4"></p>
+<div id="saved-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<c:forEach items="${favorites}" var="fav" varStatus="row">
+<article class="bg-white rounded-xl shadow p-5" data-price="${fav.price}" data-area="${fav.areaSqft}" data-order="${row.index}">
+<c:if test="${not empty fav.primaryImageUrl}"><img class="w-full h-48 object-cover rounded-lg mb-4" src="${fn:escapeXml(fav.primaryImageUrl)}" alt="${fn:escapeXml(fav.title)}"></c:if>
+<h2 class="text-xl font-bold"><a href="${pageContext.request.contextPath}/property/details?id=${fav.propertyId}"><c:out value="${fav.title}"/></a></h2>
+<p data-spec="Location"><c:out value="${fav.location}"/>, <c:out value="${fav.city}"/></p>
+<p data-spec="Price"><c:out value="${fav.formattedPrice}"/></p>
+<p data-spec="Purpose"><c:out value="${fav.purpose}"/></p>
+<p data-spec="Bedrooms">${fav.bedrooms}</p><p data-spec="Bathrooms">${fav.bathrooms}</p>
+<p data-spec="Area">${fav.areaSqft} sq.ft</p><p data-spec="Furnishing"><c:out value="${fav.furnishing}"/></p>
+<label class="block my-3"><input type="checkbox" class="compare-choice"> Compare this property</label>
+<form action="${pageContext.request.contextPath}/favorites" method="post">
+<input type="hidden" name="action" value="remove"><input type="hidden" name="propertyId" value="${fav.propertyId}">
+<input type="hidden" name="redirect" value="${pageContext.request.contextPath}/favorites">
+<button type="submit" class="underline">Remove from saved</button></form>
+</article>
+</c:forEach>
+<c:if test="${empty favorites}"><div class="col-span-full bg-white p-8 rounded-xl"><h2 class="text-xl">No Shortlisted Properties Yet</h2><p>Save listings using the heart button while browsing.</p><a class="underline" href="${pageContext.request.contextPath}/search">Explore Properties</a></div></c:if>
 </div>
-<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-2 mt-0.5">
-<span>Role: ${sessionScope.currentUser.role}</span>
-<span class="w-1 h-1 rounded-full bg-outline"></span>
-<span class="text-primary-container font-semibold">${sessionScope.currentUser.email}</span>
-</p>
-</div>
-</div>
-</div>
-<!-- Navigation Tabs Strip -->
-<div class="flex items-center gap-gutter-sm overflow-x-auto scrollbar-none pt-2">
-<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface py-3 px-3 transition-colors flex items-center gap-1.5 whitespace-nowrap" href="${pageContext.request.contextPath}/customer/dashboard">
-<span class="material-symbols-outlined text-[18px]">dashboard</span>
-<span>Dashboard</span>
-</a>
-<a class="font-label-md text-label-md text-on-primary bg-primary-container py-2.5 px-4 rounded-t-lg shadow-sm flex items-center gap-2 whitespace-nowrap font-bold" href="${pageContext.request.contextPath}/favorites">
-<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">bookmark</span>
-<span>Favorites &amp; Shortlist</span>
-<span class="bg-secondary-container text-on-secondary font-caption text-[11px] px-1.5 py-0.5 rounded-full font-bold">${fn:length(favorites)}</span>
-</a>
-</div>
-</div>
-</section>
-<!-- Main Content Layout -->
-<div class="max-w-container-max mx-auto w-full px-gutter-lg py-gutter-xl">
-<!-- Header Controls: Title & Bulk Utilities -->
-<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-gutter-md mb-gutter-lg">
-<div>
-<div class="flex items-center gap-3">
-<h2 class="font-headline-xl text-headline-xl text-on-surface">My Shortlisted Properties</h2>
-<span class="bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm px-2.5 py-0.5 rounded-full font-bold">${fn:length(favorites)} Homes Saved</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface-variant mt-1">
-Manage your saved listings and view detailed property information.
-</p>
-</div>
-</div>
-<!-- Filter & Sorter Toolbar -->
-<div class="bg-surface-container-lowest p-gutter-md rounded-xl shadow-sm mb-gutter-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-gutter-md">
-<!-- Quick Filter Chips -->
-<div class="flex items-center gap-1.5 flex-wrap">
-<span class="bg-primary-container text-on-primary font-label-sm text-label-sm px-3 py-1.5 rounded-full font-semibold shadow-sm">
-All (${fn:length(favorites)})
-</span>
-<button class="bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
-<span>Price Dropped (2)</span>
-</button>
-<button class="bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm px-3 py-1.5 rounded-full transition-colors">
-          Ready to Move (5)
-        </button>
-<button class="bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm px-3 py-1.5 rounded-full transition-colors">
-          Under Construction (3)
-        </button>
-<button class="bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm px-3 py-1.5 rounded-full transition-colors">
-          Direct Owner (3)
-        </button>
-</div>
-<!-- Sorting Select -->
-<div class="flex items-center gap-2 self-end md:self-auto shrink-0">
-<span class="font-caption text-caption text-on-surface-variant whitespace-nowrap">Sort by:</span>
-<div class="relative">
-<select class="bg-surface-container-low text-on-surface font-label-sm text-label-sm py-1.5 pl-3 pr-8 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-container">
-<option selected="">Date Saved (Recent first)</option>
-<option>Price: Low to High</option>
-<option>Price: High to Low</option>
-<option>Highest Match Score (AI)</option>
-<option>Area: Largest First</option>
-</select>
-<span class="material-symbols-outlined text-[16px] text-on-surface-variant absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
-</div>
-</div>
-</div>
-<!-- Properties Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter-lg">
-<c:choose>
-  <c:when test="${not empty favorites}">
-    <c:forEach items="${favorites}" var="fav">
-      <div class="group bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-outline-variant/30">
-        <div class="relative aspect-video w-full overflow-hidden bg-surface-container-high">
-          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${fav.primaryImageUrl}" alt="${fav.title}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80';" />
-          <div class="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
-            <span class="bg-tertiary-container/95 backdrop-blur text-tertiary-fixed font-caption text-caption px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
-              <span class="material-symbols-outlined text-[14px]">verified</span> Verified
-            </span>
-          </div>
-          <a href="${pageContext.request.contextPath}/favorites?action=remove&propertyId=${fav.propertyId}&redirect=${pageContext.request.contextPath}/favorites" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-surface-container-lowest/95 backdrop-blur flex items-center justify-center text-secondary-container shadow-md hover:scale-110 transition-transform" title="Remove from favorites" data-optimistic="remove-favorite">
-            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
-          </a>
-        </div>
-        <div class="p-4 space-y-2">
-          <div class="flex items-baseline justify-between gap-2 mb-1">
-            <span class="font-headline-xl text-headline-xl font-extrabold text-primary">${fav.formattedPrice}</span>
-            <span class="font-caption text-caption text-on-surface-variant font-semibold uppercase">${fav.purpose}</span>
-          </div>
-          <h3 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate group-hover:text-primary transition-colors">
-            <a href="${pageContext.request.contextPath}/property/details?id=${fav.propertyId}">${fav.title}</a>
-          </h3>
-          <p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
-            <span class="material-symbols-outlined text-primary text-[16px]">location_on</span>
-            <span>${fav.location}, ${fav.city}</span>
-          </p>
-          <div class="grid grid-cols-3 gap-2 my-3 p-2 rounded-lg bg-surface-container-low text-center font-caption text-caption">
-            <div>
-              <p class="text-[10px] uppercase text-on-surface-variant">BHK</p>
-              <p class="font-bold text-on-surface">${fav.bedrooms} Beds</p>
-            </div>
-            <div class="border-x border-outline-variant/30">
-              <p class="text-[10px] uppercase text-on-surface-variant">Area</p>
-              <p class="font-bold text-on-surface">${fav.areaSqft} sq.ft</p>
-            </div>
-            <div>
-              <p class="text-[10px] uppercase text-on-surface-variant">Baths</p>
-              <p class="font-bold text-on-surface">${fav.bathrooms} Baths</p>
-            </div>
-          </div>
-        </div>
-        <div class="p-4 pt-0 flex items-center gap-2">
-          <a href="${pageContext.request.contextPath}/property/details?id=${fav.propertyId}" class="flex-1 bg-primary-container hover:bg-primary text-on-primary py-2.5 px-3 rounded-xl font-label-md text-label-md font-semibold transition-all shadow-sm text-center block">
-            View Details
-          </a>
-          <a href="https://www.google.com/maps/dir/?api=1&destination=${fn:escapeXml(fav.location)}+${fn:escapeXml(fav.city)}" target="_blank" class="px-3.5 py-2.5 rounded-xl bg-tertiary-container hover:bg-tertiary text-on-tertiary font-label-md text-label-md font-semibold transition-all shadow-sm flex items-center gap-1">
-            <span class="material-symbols-outlined text-base">directions</span>
-            <span>Directions</span>
-          </a>
-        </div>
-      </div>
-    </c:forEach>
-  </c:when>
-  <c:otherwise>
-    <div class="col-span-full bg-surface-container-lowest p-12 rounded-3xl shadow-sm border border-outline-variant/30 text-center flex flex-col items-center space-y-4">
-      <div class="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
-        <span class="material-symbols-outlined text-3xl">favorite_border</span>
-      </div>
-      <h3 class="font-heading text-xl font-bold text-on-surface">No Shortlisted Properties Yet</h3>
-      <p class="text-sm text-on-surface-variant max-w-md">Save properties by clicking the heart icon on search listings or property detail pages.</p>
-      <a href="${pageContext.request.contextPath}/search" class="mt-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-bold text-xs shadow-md transition-all">Explore Properties</a>
-    </div>
-  </c:otherwise>
-</c:choose>
-</div>
-<!-- Empty State / Helpful Guidance Strip -->
-<div class="mt-gutter-2xl p-gutter-lg rounded-2xl bg-surface-container-low flex flex-col md:flex-row items-center justify-between gap-gutter-md">
-<div class="flex items-center gap-gutter-md">
-<div class="w-12 h-12 rounded-xl bg-tertiary-container text-tertiary-fixed flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-[28px]">notifications_active</span>
-</div>
-<div>
-<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">Never miss a price reduction or direct developer deal</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Instant WhatsApp &amp; SMS alerts are active for all your 8 shortlisted projects.</p>
-</div>
-</div>
-<button class="bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md px-4 py-2.5 rounded-lg shadow-sm font-semibold transition-all whitespace-nowrap">
-        Manage Alert Preferences
-      </button>
-</div>
-</div>
-<!-- Floating Sticky Compare Drawer Bar -->
-<div class="sticky bottom-4 z-40 max-w-container-max mx-auto px-gutter-lg w-full" id="compare-bar">
-<div class="bg-inverse-surface/95 backdrop-blur-md text-inverse-on-surface p-3.5 sm:p-4 rounded-xl shadow-[0_12px_40px_rgba(30,34,41,0.24)] flex flex-col sm:flex-row items-center justify-between gap-gutter-md">
-<!-- Selection Summary -->
-<div class="flex items-center gap-3">
-<span class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-label-sm font-bold">
-          2
-        </span>
-<div>
-<p class="font-label-md text-label-md text-surface-container-lowest font-bold">
-            Properties selected to compare:
-          </p>
-<p class="font-caption text-caption text-surface-variant flex items-center gap-1.5 truncate max-w-sm sm:max-w-md">
-<span class="text-primary-fixed font-semibold">Oberoi Sky City</span>
-<span class="text-outline">vs</span>
-<span class="text-primary-fixed font-semibold">Adani Western Heights</span>
-</p>
-</div>
-</div>
-<!-- Action Buttons -->
-<div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
-<button class="font-label-sm text-label-sm text-surface-variant hover:text-surface-bright px-2 py-1.5 transition-colors" id="clear-compare">
-          Clear
-        </button>
-<button class="bg-secondary-container hover:bg-secondary text-on-secondary px-5 py-2.5 rounded-lg font-label-md text-label-md font-bold transition-all shadow-md flex items-center gap-2 shrink-0">
-<span class="material-symbols-outlined text-[18px]">balance</span>
-<span>Compare Detailed Specs side-by-side</span>
-</button>
-</div>
-</div>
-</div>
-</div>
+<dialog id="compare-dialog" class="rounded-xl p-6 max-w-[95vw]"><h2 class="text-xl font-bold">Property comparison</h2><div id="comparison-content" class="overflow-x-auto my-4"></div><form method="dialog"><button class="p-2 border rounded">Close</button></form></dialog>
+<dialog id="alerts-dialog" class="rounded-xl p-6 max-w-lg"><h2 class="text-xl font-bold">Alert preferences</h2><p class="my-4">Automatic price-drop, WhatsApp and SMS alerts are not available yet. No alert subscription is active.</p><a class="underline" href="${pageContext.request.contextPath}/preferences">Edit your property search preferences</a><form method="dialog"><button class="p-2 border rounded mt-4">Close</button></form></dialog>
 <script>
-  // Simple micro-interaction for clearing comparison selection
-  document.getElementById('clear-compare')?.addEventListener('click', function() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(cb => cb.checked = false);
-    const bar = document.getElementById('compare-bar');
-    if (bar) bar.style.display = 'none';
-  });
-</script></main><footer class="w-full bg-inverse-surface text-inverse-on-surface pt-gutter-2xl pb-24 md:pb-gutter-xl"><div class="max-w-container-max mx-auto px-gutter-lg"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-xl mb-gutter-2xl"><div class="space-y-gutter-md"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span><span class="font-headline-md text-headline-md text-surface-container-lowest tracking-tight">EstateHub</span></div><p class="font-body-sm text-body-sm text-surface-variant max-w-xs">India's trusted real estate portal for verified homes, apartments, and commercial spaces.</p><div class="pt-gutter-xs flex items-center gap-gutter-sm"><span class="flex items-center gap-1 bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2.5 py-1 rounded-full"><span class="material-symbols-outlined text-[14px]">verified</span> 100% RERA Verified</span></div></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Popular Searches</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="rent-properties" href="javascript:void(0)">Flats in Mumbai</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Flats in Bangalore</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="new-projects" href="javascript:void(0)">Apartments in Gurgaon</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="javascript:void(0)">Villas in Hyderabad</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="commercial-spaces" href="javascript:void(0)">Offices in Pune</a></li></ul></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Quick Links</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="about-us" href="javascript:void(0)">About Us</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="careers" href="javascript:void(0)">Careers</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="research-insights" href="javascript:void(0)">Research &amp; Insights</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="contact-support" href="javascript:void(0)">Contact Support</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="terms-privacy" href="javascript:void(0)">Terms &amp; Privacy</a></li></ul></div><div class="space-y-gutter-md"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Experience on Mobile</h3><p class="font-body-sm text-body-sm text-surface-variant">Download EstateHub App for instant notifications and direct agent chats.</p><div class="flex flex-col gap-2"><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">play_arrow</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">GET IT ON</p><p class="font-label-sm text-label-sm font-semibold">Google Play</p></div></div><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">install_mobile</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">DOWNLOAD ON</p><p class="font-label-sm text-label-sm font-semibold">App Store</p></div></div></div></div></div><div class="pt-gutter-lg mt-gutter-xl border-t border-outline/20 flex flex-col md:flex-row items-center justify-between gap-gutter-md font-caption text-caption text-surface-variant"><div>© 2025 EstateHub Technologies Private Limited. All rights reserved.</div><div class="flex items-center gap-gutter-xs text-surface-dim"><span class="material-symbols-outlined text-tertiary-fixed text-[16px]">shield</span><span>Made with trust for home seekers across India</span></div></div></div></footer>
+const choices = [...document.querySelectorAll('.compare-choice')];
+const compareButton = document.getElementById('compare-button');
+choices.forEach(box => box.addEventListener('change', () => {
+ const count = choices.filter(c => c.checked).length;
+ compareButton.textContent = 'Compare selected (' + count + ')'; compareButton.disabled = count < 2;
+ document.getElementById('saved-status').textContent = count === 1 ? 'Select one more property to compare.' : '';
+}));
+compareButton.addEventListener('click', () => {
+ const cards = choices.filter(c => c.checked).map(c => c.closest('article'));
+ const table = document.createElement('table'); table.className='border-collapse';
+ const heading = table.insertRow(); heading.insertCell().textContent='Property';
+ cards.forEach(c => heading.insertCell().textContent=c.querySelector('h2').textContent);
+ ['Location','Price','Purpose','Bedrooms','Bathrooms','Area','Furnishing'].forEach(spec => {
+  const row=table.insertRow(); row.insertCell().textContent=spec;
+  cards.forEach(c => row.insertCell().textContent=c.querySelector('[data-spec="'+spec+'"]').textContent);
+ });
+ table.querySelectorAll('td').forEach(td => {td.style.padding='12px';td.style.border='1px solid #ddd';});
+ document.getElementById('comparison-content').replaceChildren(table); document.getElementById('compare-dialog').showModal();
+});
+document.getElementById('alert-button').addEventListener('click', () => document.getElementById('alerts-dialog').showModal());
+document.getElementById('saved-sort').addEventListener('change', e => {
+ const grid=document.getElementById('saved-grid');
+ [...grid.querySelectorAll('article')].sort((a,b) => e.target.value==='low' ? a.dataset.price-b.dataset.price : e.target.value==='high' ? b.dataset.price-a.dataset.price : e.target.value==='area' ? b.dataset.area-a.dataset.area : a.dataset.order-b.dataset.order).forEach(c => grid.append(c));
+});
+</script></main><footer class="w-full bg-inverse-surface text-inverse-on-surface pt-gutter-2xl pb-24 md:pb-gutter-xl"><div class="max-w-container-max mx-auto px-gutter-lg"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-xl mb-gutter-2xl"><div class="space-y-gutter-md"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-[32px] font-bold">real_estate_agent</span><span class="font-headline-md text-headline-md text-surface-container-lowest tracking-tight">EstateHub</span></div><p class="font-body-sm text-body-sm text-surface-variant max-w-xs">India's trusted real estate portal for verified homes, apartments, and commercial spaces.</p><div class="pt-gutter-xs flex items-center gap-gutter-sm"><span class="flex items-center gap-1 bg-tertiary-container text-tertiary-fixed font-caption text-caption px-2.5 py-1 rounded-full"><span class="material-symbols-outlined text-[14px]">verified</span> 100% RERA Verified</span></div></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Popular Searches</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="rent-properties" href="${pageContext.request.contextPath}/search?keyword=Mumbai">Flats in Mumbai</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="${pageContext.request.contextPath}/search?keyword=Bangalore">Flats in Bangalore</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="new-projects" href="${pageContext.request.contextPath}/search?keyword=Gurgaon">Apartments in Gurgaon</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="buy-properties" href="${pageContext.request.contextPath}/search?keyword=Hyderabad">Villas in Hyderabad</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="commercial-spaces" href="${pageContext.request.contextPath}/search?keyword=Pune">Offices in Pune</a></li></ul></div><div class="space-y-gutter-sm"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Quick Links</h3><ul class="space-y-2 font-body-sm text-body-sm text-surface-variant"><li><a class="hover:text-surface-bright transition-colors" data-path="about-us" href="${pageContext.request.contextPath}/views/information.jsp#about">About Us</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="careers" href="${pageContext.request.contextPath}/views/information.jsp#careers">Careers</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="research-insights" href="${pageContext.request.contextPath}/views/information.jsp#research">Research &amp; Insights</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="contact-support" href="${pageContext.request.contextPath}/views/information.jsp#support">Contact Support</a></li><li><a class="hover:text-surface-bright transition-colors" data-path="terms-privacy" href="${pageContext.request.contextPath}/views/information.jsp#terms">Terms &amp; Privacy</a></li></ul></div><div class="space-y-gutter-md"><h3 class="font-label-md text-label-md text-surface-container-lowest uppercase tracking-wider">Experience on Mobile</h3><p class="font-body-sm text-body-sm text-surface-variant">Download EstateHub App for instant notifications and direct agent chats.</p><div class="flex flex-col gap-2"><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">play_arrow</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">GET IT ON</p><p class="font-label-sm text-label-sm font-semibold">Google Play</p></div></div><div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-high/10 hover:bg-surface-container-high/20 text-surface-bright transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary-fixed">install_mobile</span><div class="text-left"><p class="font-caption text-[10px] text-surface-variant uppercase">DOWNLOAD ON</p><p class="font-label-sm text-label-sm font-semibold">App Store</p></div></div></div></div></div><div class="pt-gutter-lg mt-gutter-xl border-t border-outline/20 flex flex-col md:flex-row items-center justify-between gap-gutter-md font-caption text-caption text-surface-variant"><div>© 2025 EstateHub Technologies Private Limited. All rights reserved.</div><div class="flex items-center gap-gutter-xs text-surface-dim"><span class="material-symbols-outlined text-tertiary-fixed text-[16px]">shield</span><span>Made with trust for home seekers across India</span></div></div></div></footer>
 
 <!-- MOBILE BOTTOM NAVIGATION BAR -->
 <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-surface-container-high px-4 py-2 flex items-center justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
@@ -283,7 +123,7 @@ All (${fn:length(favorites)})
   <a href="${pageContext.request.contextPath}/views/add-property.jsp" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-white bg-primary rounded-full p-2.5 -mt-5 shadow-lg border-2 border-white hover:scale-105 active:scale-95 transition-transform">
     <span class="material-symbols-outlined text-[20px]">add</span>
   </a>
-  <a href="${pageContext.request.contextPath}/views/favorites.jsp" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-primary relative">
+  <a href="${pageContext.request.contextPath}/favorites" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-primary relative">
     <span class="material-symbols-outlined text-[22px]">favorite</span>
     <span>Saved</span>
   </a>

@@ -59,8 +59,9 @@
     }
   };
 </script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
-<body class="bg-surface font-body text-on-surface min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary">
+<body class="responsive-page search-page bg-surface font-body text-on-surface min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary">
 
 <!-- HEADER -->
 <header class="sticky top-0 z-50 w-full bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,0,0,0.06)] border-b border-surface-container-high">
@@ -184,13 +185,14 @@
             <a href="${pageContext.request.contextPath}/search" class="text-xs text-primary font-bold hover:underline">Reset All</a>
           </div>
 
+          <c:if test="${not empty categoryNotice}"><p role="status"><c:out value="${categoryNotice}"/></p></c:if>
           <!-- CATEGORY FILTER -->
           <div>
             <label class="block font-heading text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">Category</label>
-            <select name="categoryId" onchange="this.form.submit()" class="w-full h-11 px-3 bg-surface-container-low rounded-xl text-sm font-medium border border-outline-variant/40 outline-none focus:ring-2 focus:ring-primary">
+            <select name="category"  class="w-full h-11 px-3 bg-surface-container-low rounded-xl text-sm font-medium border border-outline-variant/40 outline-none focus:ring-2 focus:ring-primary">
               <option value="">All Categories</option>
               <c:forEach items="${categories}" var="cat">
-                <option value="${cat.categoryId}" ${categoryId == cat.categoryId ? 'selected' : ''}>${cat.name}</option>
+                <option value="${cat.slug}" ${categorySlug == cat.slug || categoryId == cat.categoryId ? 'selected' : ''}>${cat.name}</option>
               </c:forEach>
             </select>
           </div>
@@ -200,11 +202,11 @@
             <label class="block font-heading text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">Listing Purpose</label>
             <div class="grid grid-cols-2 gap-2">
               <label class="flex items-center justify-center py-2.5 px-3 rounded-xl border border-outline-variant/40 cursor-pointer font-bold text-xs transition-colors ${purpose == 'SALE' ? 'bg-primary-container text-on-primary border-primary-container' : 'bg-surface-container-low text-on-surface hover:bg-surface-container'}">
-                <input type="radio" name="purpose" value="SALE" ${purpose == 'SALE' ? 'checked' : ''} onchange="this.form.submit()" class="sr-only"/>
+                <input type="radio" name="purpose" value="SALE" ${purpose == 'SALE' ? 'checked' : ''}  class="sr-only"/>
                 For Sale
               </label>
               <label class="flex items-center justify-center py-2.5 px-3 rounded-xl border border-outline-variant/40 cursor-pointer font-bold text-xs transition-colors ${purpose == 'RENT' ? 'bg-primary-container text-on-primary border-primary-container' : 'bg-surface-container-low text-on-surface hover:bg-surface-container'}">
-                <input type="radio" name="purpose" value="RENT" ${purpose == 'RENT' ? 'checked' : ''} onchange="this.form.submit()" class="sr-only"/>
+                <input type="radio" name="purpose" value="RENT" ${purpose == 'RENT' ? 'checked' : ''}  class="sr-only"/>
                 For Rent
               </label>
             </div>
@@ -213,7 +215,7 @@
           <!-- BEDROOMS FILTER -->
           <div>
             <label class="block font-heading text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">Bedrooms (BHK)</label>
-            <select name="bedrooms" onchange="this.form.submit()" class="w-full h-11 px-3 bg-surface-container-low rounded-xl text-sm font-medium border border-outline-variant/40 outline-none focus:ring-2 focus:ring-primary">
+            <select name="bedrooms"  class="w-full h-11 px-3 bg-surface-container-low rounded-xl text-sm font-medium border border-outline-variant/40 outline-none focus:ring-2 focus:ring-primary">
               <option value="">Any Bedrooms</option>
               <option value="1" ${bedrooms == 1 ? 'selected' : ''}>1 BHK</option>
               <option value="2" ${bedrooms == 2 ? 'selected' : ''}>2 BHK</option>
@@ -225,7 +227,7 @@
           <!-- FURNISHING FILTER -->
           <div>
             <label class="block font-heading text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">Furnishing Status</label>
-            <select name="furnishing" onchange="this.form.submit()" class="w-full h-11 px-3 bg-surface-container-low rounded-xl text-sm font-medium border border-outline-variant/40 outline-none focus:ring-2 focus:ring-primary">
+            <select name="furnishing"  class="w-full h-11 px-3 bg-surface-container-low rounded-xl text-sm font-medium border border-outline-variant/40 outline-none focus:ring-2 focus:ring-primary">
               <option value="">Any Furnishing</option>
               <option value="UNFURNISHED" ${furnishing == 'UNFURNISHED' ? 'selected' : ''}>Unfurnished</option>
               <option value="SEMI_FURNISHED" ${furnishing == 'SEMI_FURNISHED' ? 'selected' : ''}>Semi-Furnished</option>
@@ -407,9 +409,9 @@
   <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
     <p>© 2026 EstateHub Technologies Pvt. Ltd. All rights reserved.</p>
     <div class="flex items-center gap-6">
-      <a href="#" class="hover:underline">Privacy Policy</a>
-      <a href="#" class="hover:underline">Terms of Service</a>
-      <a href="#" class="hover:underline">Contact Support</a>
+      <a href="${pageContext.request.contextPath}/views/information.jsp#privacy" class="hover:underline">Privacy Policy</a>
+      <a href="${pageContext.request.contextPath}/views/information.jsp#terms" class="hover:underline">Terms of Service</a>
+      <a href="${pageContext.request.contextPath}/views/information.jsp#support" class="hover:underline">Contact Support</a>
     </div>
   </div>
 </footer>
@@ -427,7 +429,7 @@
   <a href="${pageContext.request.contextPath}/views/add-property.jsp" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-white bg-primary rounded-full p-2.5 -mt-5 shadow-lg border-2 border-white hover:scale-105 active:scale-95 transition-transform">
     <span class="material-symbols-outlined text-[20px]">add</span>
   </a>
-  <a href="${pageContext.request.contextPath}/views/favorites.jsp" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-on-surface-variant hover:text-secondary-container transition-colors relative">
+  <a href="${pageContext.request.contextPath}/favorites" class="flex flex-col items-center gap-0.5 text-xs font-semibold text-on-surface-variant hover:text-secondary-container transition-colors relative">
     <span class="material-symbols-outlined text-[22px]">favorite</span>
     <span>Saved</span>
   </a>
@@ -582,7 +584,14 @@
 </script>
 
 <script src="${pageContext.request.contextPath}/js/optimistic-ui.js?v=<%= System.currentTimeMillis() %>"></script>
-</body>
+<script>
+const filterForm = document.querySelector('#searchFiltersSidebar form');
+filterForm.addEventListener('submit', () => {
+ let keyword = filterForm.querySelector('[name="keyword"]');
+ if (!keyword) { keyword = document.createElement('input'); keyword.type='hidden'; keyword.name='keyword'; filterForm.append(keyword); }
+ keyword.value = document.querySelector('input[name="keyword"]:not([type="hidden"])').value;
+});
+</script></body>
 </html>
 
 
